@@ -1,0 +1,13 @@
+{
+"name": "cuisine-machine",
+"version": "0.0.1",
+"dependencies": {
+    "jquery":"2.2.x",
+    "angular": "latest",
+    "angular-resource": "latest",
+    "angular-route": "latest",
+    "bootstrap": "latest",
+    "angular-bootstrap": "0.10.0",
+    "angular-ui-router": "#master"
+    }
+}
