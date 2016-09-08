@@ -19,4 +19,9 @@ app.config( function($routeProvider) {
         templateUrl: "partials/create.html",
         controller: "cuisineMachineController"
     });
+    .when("/create/banana_crepes", {
+        templateUrl: "partials/create_the_crepes.html",
+        controller: "cuisineMachineController"
+    });
+
 });
