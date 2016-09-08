@@ -17,7 +17,7 @@
                     <img class="create-recipe" src='../images/banana_crepes.jpg' />
                 </div>
                 <div class="col-sm-3 text-center text-middle">
-                    <a href="#create/banana_crepes">
+                    <a ng-click="startCooking()">
                         <img src="../images/bowl.png" />
                         <br />
                         <span class="recipe-header">Let's do this!</span>
@@ -81,10 +81,41 @@
             </ul>
             <hr />
             <h3 class="recipe-header">Get Started</h3>
+
+            <div id="cooking-popup">
+                <p>
+                    Sift 1 cup flour and 1/4 cup powdered sugar into a mixing bowl.
+                </p>
+                <p>
+                    Add 2 eggs, 1 cup milk, 3 tablespoons melted butter, 1 teaspoon vanilla extract, and 1/4 teaspoon salt.
+                </p>
+                <p>
+                    Beat together until smooth.
+                </p>
+                <hr />
+                <div class="container-fluid">
+                    <div class="row text-center">
+                        <div class="col-sm-3">
+                            <button class="button" id="back-button">Go back</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="button" id="read-button">Read instructions</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="button" id="timer-button">Set a timer</button>
+                        </div>
+                        <div class="col-sm-3">
+                            <button class="button" id="next-button">Next step</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <ol>
-                <li class="recipe-text">
+                <li id="first-step" class="recipe-text">
                     Sift flour and powdered sugar into a mixing bowl. Add eggs, milk, butter, vanilla, and salt; beat until smooth.
                 </li>
+
                 <br />
                 <li class="recipe-text">
                     Heat a lightly greased 6 inch skillet. Add about 3 tablespoons batter. Tilt skillet so that batter spreads to almost cover the bottom of skillet. Cook until lightly browned; turn and brown the other side. Repeat process with remaining batter, grease skillet

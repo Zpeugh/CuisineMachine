@@ -3,10 +3,6 @@
     src: url("../fonts/GeosansLight.ttf");
 }
 
-html{
-
-}
-
 .background-primary{
     background-color: transparent;
 }
@@ -172,4 +168,22 @@ a>img.recipe-header:active{
     vertical-align: middle;
     height: 600px;
     padding-top: 250px;
+}
+.button{
+    background-color: black;
+    color: lightgrey;
+    border: 1px solid lightgrey;
+    border-radius: 0px;
+}
+
+#cooking-popup{
+    display: none;
+    height: 200px;
+    width: 100%;
+    color: black;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 1000;
+    font-size: 24px;
+    box-shadow: 0 60px 80px 0 rgba(0, 0, 0, 0.3), 0 60px 80px 0 rgba(0, 0, 0, 0.3);
+
 }
