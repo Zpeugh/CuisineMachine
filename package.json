@@ -3,5 +3,9 @@
   "version": "0.0.0",
   "description": "A mechanized sous chef web application",
   "repository": "https://github.com/Zpeugh/CuisineMachine",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.14.0",
+    "watson-developer-cloud": "^2.2.0"
+  }
 }
