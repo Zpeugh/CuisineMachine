@@ -48,8 +48,9 @@ body{
     background-size: cover;
 }
 
-.cuisineMachineHeader{
-    font-size: 65px;
+#cuisineMachineHeader{
+    font-size: 5em;
+    font-weight: bold;
     color: white;
 }
 
@@ -62,9 +63,9 @@ body{
 }
 
 .searchbox{
-    width: 400px;
-    height: 40px;
-    font-size: 18px;
+    width: 600px;
+    height: 50px;
+    font-size: 2em;
     text-align: center;
     /*background-color: rgba(142,196,77,0.35);*/
     background-color: rgba(0,0,0,0.40);
@@ -77,8 +78,9 @@ body{
 
 #search-button {
     background-color: black;
-    height: 35px;
-    width: 80px;
+    font-size: 2em;
+    height: 50px;
+    width: 120px;
     border: 1px solid darkgrey;
     color: lightgrey;
 }
@@ -111,13 +113,13 @@ body{
 }
 
 .caption-header{
-    font-size: 26px;
+    font-size: 2em;
     font-weight: bold;
     font-style: italic;
 }
 
 .caption-description{
-    font-size: 20px;
+    font-size: 1.5em;
     font-weight: bold;
 }
 
@@ -141,13 +143,13 @@ body{
 
 .recipe-header{
     color: white;
-    font-size: 32px;
+    font-size: 3em;
     font-weight: bold;
 }
 
 .recipe-text{
     color: black;
-    font-size: 24px;
+    font-size: 2em;
     font-weight: bold;
 }
 

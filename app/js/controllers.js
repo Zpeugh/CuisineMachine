@@ -1,7 +1,8 @@
-app.controller("cuisineMachineController", function($scope, $location, TextToSpeechService) {
+app.controller("cuisineMachineController", function($scope, $location, RandRService) {
 
-    $scope.testData = "";
-    $scope.responseData = "";
+    $scope.searchText = "";
+    // $scope.testData = "";
+    // $scope.responseData = "";
     $scope.cookingPopup = false;
     // Utility functions
     var scrollTo = function(selector, time) {
@@ -10,14 +11,15 @@ app.controller("cuisineMachineController", function($scope, $location, TextToSpe
         }, time);
     }
 
-
     $scope.onSubmit = function() {
         console.log("testData: " + $scope.testData);
         $scope.responseData = TextToSpeechService.speakText($scope.testData);
-        console.log($scope.responseData)
+        console.log($scope.responseData);
     }
 
     $scope.search = function() {
+        RandRService.sendRequest($scope.searchText);
+        console.log("sending: " + ($scope.searchText));
         $location.path("/discover");
     }
 
