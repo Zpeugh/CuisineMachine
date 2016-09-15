@@ -20,10 +20,12 @@ var retrieve_and_rank = new RetrieveAndRankV1({
 // });
 
 // add document to cluster
-var solrClient = retrieve_and_rank.createSolrClient({
+params = {
   cluster_id: 'scdaa8d3b3_4828_4657_ac16_41b7f7510237',
   collection_name: 'Cuisine Machine Recipe Cluster'
-});
+}
+
+var solrClient = retrieve_and_rank.createSolrClient(params);
 
 // retrieve_and_rank.listClusters({},
 //   function (err, response) {
@@ -52,6 +54,13 @@ var solrClient = retrieve_and_rank.createSolrClient({
 
 //TODO: add a collection to the cluster
 
+// retrieve_and_rank.createCollection(params,
+//   function (err, response) {
+//     if (err)
+//       console.log('error:', err);
+//     else
+//       console.log(JSON.stringify(response, null, 2));
+// });
 //TODO: add documents to the cluster
 
 // var doc = { id : 1, title : 'Hello', body: 'some text' };
