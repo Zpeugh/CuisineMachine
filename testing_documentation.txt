@@ -1,0 +1,28 @@
+TESTING OVERVIEW
+
+Karma is command line tool that acts as engine running tests. Spawns a web server and executes test. 
+Jasmine is used for writing the actual tests. 
+
+
+KARMA
+
+Karma configuration file is at /karma.conf.js
+	-Tells karma what to do when run
+	-contains path for all test files (currently anything in test folder that ends with .test.js
+
+To make a new Karma config file: ./node_modules/karma/bin/karma init
+	-Shouldn't have to do this again, just documenting
+	-It will ask you some questions about what browsers to capture, where test files are located, etc
+
+To add new test files:
+	-Add file in tests folder
+	-Name should end in .test.js to be picked up by karma.conf.js
+
+
+JASMINE 
+
+-describe() groups tests together
+-it() defines Individual Tests
+-make assertions 
+	-expect(func).toHaveBeenCalled();
+	-expect(2+2).toEqual(4)
