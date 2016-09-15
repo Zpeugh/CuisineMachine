@@ -2,12 +2,13 @@ var RetrieveAndRankV1 = require('watson-developer-cloud/retrieve-and-rank/v1');
 
 console.log("Bootstrapping Retrieve and Rank engine");
 
+
+
 // authentication
 var retrieve_and_rank = new RetrieveAndRankV1({
   username: '0b8e9940-0890-41aa-9a0f-98b73077a868',
   password: 'nojwL5kgzQES',
 });
-
 // create cluster
 // retrieve_and_rank.createCluster({
 //   cluster_size: '1',
@@ -20,13 +21,14 @@ var retrieve_and_rank = new RetrieveAndRankV1({
 // });
 
 // add document to cluster
-params = {
+
+var solrClient = retrieve_and_rank.createSolrClient({
   cluster_id: 'scdaa8d3b3_4828_4657_ac16_41b7f7510237',
   collection_name: 'Cuisine Machine Recipe Cluster'
-}
+});
 
-var solrClient = retrieve_and_rank.createSolrClient(params);
 
+//
 // retrieve_and_rank.listClusters({},
 //   function (err, response) {
 //     if (err)
@@ -36,48 +38,51 @@ var solrClient = retrieve_and_rank.createSolrClient(params);
 // });
 
 //TODO: Add configuration files
-//
-// var params = {
+
+// retrieve_and_rank.uploadConfig({
 //   cluster_id: 'scdaa8d3b3_4828_4657_ac16_41b7f7510237',
 //   config_name: 'Retrieve and Rank Config',
-//   config_zip_path: '/configs/r_and_r_config.zip'
-// };
-//
-// retrieve_and_rank.uploadConfig(params,
+//   config_zip_path: './config/retreive_and_rank/r_and_r_config.zip'
+// },
 //   function (err, response) {
 //     if (err)
 //       console.log('error:', err);
 //     else
 //       console.log(JSON.stringify(response, null, 2));
 // });
-
+//
 
 //TODO: add a collection to the cluster
 
-// retrieve_and_rank.createCollection(params,
+// retrieve_and_rank.createCollection({
+//   cluster_id: 'scdaa8d3b3_4828_4657_ac16_41b7f7510237',
+//   config_name: 'Retrieve and Rank Config',
+//   collection_name: 'Cuisine Machine Recipe Cluster'
+// },
 //   function (err, response) {
 //     if (err)
-//       console.log('error:', err);
+//       console.log('From Create:', err);
 //     else
 //       console.log(JSON.stringify(response, null, 2));
 // });
-//TODO: add documents to the cluster
 
-// var doc = { id : 1, title : 'Hello', body: 'some text' };
-// solrClient.add(doc, function(err) {
-//   if(err) {
-//     console.log('Error indexing document: ' + err);
-//   } else {
-//     console.log('Indexed a document.');
-//     solrClient.commit(function(err) {
-//       if(err) {
-//         console.log('Error committing change: ' + err);
-//       } else {
-//         console.log('Successfully commited changes.');
-//       }
-//     });
-//   }
-// });
+
+var doc = { id : 1, title : 'Test', picture: 'www.url.com', ingredients: 'Anything; nothing',
+instructions: 'Do what you will', about: 'Whatever', yeild: '2 servings', tags: 'none'  };
+solrClient.add(doc, function(err) {
+  if(err) {
+    console.log('Error indexing document: ' + err);
+  } else {
+    console.log('Indexed a document.');
+    solrClient.commit(function(err) {
+      if(err) {
+        console.log('Error committing change: ' + err);
+      } else {
+        console.log('Successfully commited changes.');
+      }
+    });
+  }
+});
 
 // query
 // var query = solrClient.createQuery();
