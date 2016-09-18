@@ -119,16 +119,13 @@ var solrClient = retrieve_and_rank.createSolrClient({
 
 
 // Export module function to query retrieve and rank cluster
-module.exports = function() {
-    // query
+module.exports = function(sentence, callback) {
+
+    //TODO: Parse the sentence and use the Natural Language Classifier
+    //TODO: To find which parameter(s) to use to send to the retrieve and rank
+    //TODO: and then build a query object to send to the R and R cluster
+    var documents = {};
     var query = solrClient.createQuery();
-    query.q({title: 'Test'});
-    solrClient.search(query, function(err, searchResponse) {
-      if(err) {
-        console.log('Error searching for documents: ' + err);
-      } else {
-        console.log('Found ' + searchResponse.response.numFound + ' document(s).');
-        console.log('First document: ' + JSON.stringify(searchResponse.response.docs[0], null, 2));
-      }
-    });
+    query.q({ingredients: sentence});
+    solrClient.search(query, callback);
 }

@@ -20,13 +20,7 @@ app.service('NLPService', function($http) {
 
 app.service('RandRService', function($http){
     this.sendRequest = function(sentence){
-        $http.get("/api/search?q=" + sentence)
-        .success(function(data){
-            console.log(data);
-            return JSON.stringify(data);
-        }).error(function(data){
-            return "Shit";
-        });
+        return $http.get("/api/search?q=" + sentence);
     }
 });
 

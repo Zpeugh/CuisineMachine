@@ -1,6 +1,8 @@
 app.controller("cuisineMachineController", function($scope, $location, RandRService) {
 
     $scope.searchText = "";
+    $scope.documents = [{title: ['nothing']}];
+    $scope.titles = "";
     // $scope.testData = "";
     // $scope.responseData = "";
     $scope.cookingPopup = false;
@@ -18,8 +20,16 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
     }
 
     $scope.search = function() {
-        RandRService.sendRequest($scope.searchText);
-        console.log("sending: " + ($scope.searchText));
+        RandRService.sendRequest($scope.searchText)
+        .success(function(data){
+            console.log(data[0].title[0]);
+            console.log(data);
+            $scope.titles = data[0].title[0];
+        }).error(function(data){
+            console.log("Error: " + data);
+            $scope.documents = [];
+        });
+        console.log("document title: " + $scope.documents);
         $location.path("/discover");
     }
 
