@@ -44,4 +44,3 @@ The JSON file must be in the format:
     ]
 }
 ```
-

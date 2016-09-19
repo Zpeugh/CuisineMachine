@@ -49,7 +49,9 @@ app.service('RecipeService', function(){
         var instructions = json.instructions[0].split(';');
         for (var i = 0; i < instructions.length ; i++){
             var inst = instructions[i].trim();
-            recipe.instructions[i] = inst.charAt(0).toUpperCase() + inst.slice(1);
+            if (/^([1-9]\d*)$/.test(inst) == false){
+                recipe.instructions.push(inst.charAt(0).toUpperCase() + inst.slice(1));
+            }
         };
         var tags = json.tags[0].split(';');
         for (var i = 0; i < tags.length ; i++){

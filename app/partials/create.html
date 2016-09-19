@@ -28,12 +28,12 @@
         <div class="row text-left">
             <h3 class="recipe-header">Description</h3>
             <p class="recipe-text">
-                French crepes filled with a sweet cream sauce over bananas and topped with whipped cream.
+                {{currentRecipe.about}}
             </p>
             <hr />
             <h3 class="recipe-header">What You'll need</h3>
             <ul>
-                <div ng-repeat="ingredient in currentRecipe.ingredients">
+                <div ng-repeat="ingredient in currentRecipe.ingredients track by $index">
                     <li class="recipe-text">{{ingredient}}</li>
                 </div>
             </ul>
@@ -71,7 +71,7 @@
             </div>
 
             <ul>
-                <div ng-repeat="step in currentRecipe.instructions">
+                <div ng-repeat="step in currentRecipe.instructions track by $index">
                     <li class="recipe-text">{{step}}</li>
                     <br />
                 </div>
