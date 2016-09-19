@@ -1,4 +1,5 @@
 var RetrieveAndRankV1 = require('watson-developer-cloud/retrieve-and-rank/v1');
+var qs = require('qs');
 
 console.log("Bootstrapping Retrieve and Rank engine");
 
@@ -104,10 +105,9 @@ var solrClient = retrieve_and_rank.createSolrClient({
 //   }
 // });
 
-
-
 // Export module function to query retrieve and rank cluster
-module.exports = function(sentence, callback) {
+module.exports = {
+  search: function(sentence, callback) {
 
     //TODO: Parse the sentence and use the Natural Language Classifier
     //TODO: To find which parameter(s) to use to send to the retrieve and rank
@@ -116,4 +116,12 @@ module.exports = function(sentence, callback) {
     var query = solrClient.createQuery();
     query.q({ingredients: sentence});
     solrClient.search(query, callback);
+  },
+  // search_rank will get a 500 internal server error from watson
+  // not sure why
+  search_rank: function(sentence, callback) {
+    var ranker_id = "c852bax18-rank-1134";
+    var query = qs.stringify({q: sentence, ranker_id: ranker_id});
+    solrClient.get('fcselect', query, callback);
+  }
 }
