@@ -1,8 +1,10 @@
-<div class="discover-page container-fluid text-center blur">
+<div class="discover-page container-fluid text-center blur" ng-controller="cuisineMachineController">
     <h1 class="header">Recipes</h1>
     <br />
     <div class="container-fluid">
-        <h1 ng-model="titles">{{titles}}</h1>
+        <h1 ng-bind="recipes[0].title"></h1>
+        <img class="recipe" src= {{recipes[0].pictureUrl}} />
+
     </div>
 </div>
 

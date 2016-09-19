@@ -89,20 +89,8 @@ var solrClient = retrieve_and_rank.createSolrClient({
 //             yield: '2 servings',
 //             tags: 'none'
 //         };
-// solrClient.add(doc, function(err) {
-//   if(err) {
-//     console.log('Error indexing document: ' + err);
-//   } else {
-//     console.log('Indexed a document.');
-//     solrClient.commit(function(err) {
-//       if(err) {
-//         console.log('Error committing change: ' + err);
-//       } else {
-//         console.log('Successfully commited changes.');
-//       }
-//     });
-//   }
-// });
+
+
 
 // query
 // var query = solrClient.createQuery();
