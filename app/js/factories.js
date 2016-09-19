@@ -1,11 +1,8 @@
+app.factory( 'currentRecipe', function(){
 
-app.factory( 'recipesFactory', function(){
+    var recipe = {title: "None"};
 
-    var factory = {};
-
-    factory.recipes = [];
-
-    return factory
+    return recipe
 
 
 } );

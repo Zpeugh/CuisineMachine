@@ -27,6 +27,7 @@ app.service('RandRService', function($http){
 
 app.service('RecipeService', function(){
 
+    var selectedRecipe = {};
     var recipes = [];
 
     this.addRecipe = function(json){
@@ -70,6 +71,14 @@ app.service('RecipeService', function(){
 
     this.clearRecipes = function(){
         recipes = [];
+    }
+
+    this.setSelectedRecipe = function(recipe){
+        selectedRecipe = recipe;
+    }
+
+    this.getSelectedRecipe = function(){
+        return selectedRecipe;
     }
 
 });

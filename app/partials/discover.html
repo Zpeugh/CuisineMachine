@@ -2,9 +2,17 @@
     <h1 class="header">Recipes</h1>
     <br />
     <div class="container-fluid">
-        <h1 ng-bind="recipes[0].title"></h1>
-        <img class="recipe" src= {{recipes[0].pictureUrl}} />
-
+        <div ng-repeat="recipe in recipes">
+             <div class="row text-center">
+                <div class="col-sm-12 text-center">
+                    <div ng-click="selectRecipe(recipe)" class="recipe-box">
+                        <img class="recipe" src= {{recipe.pictureUrl}} />
+                        <p class="caption-header">{{recipe.title}}</p>
+                    </div>
+                </div>
+            </div>
+            <br />
+        </div>
     </div>
 </div>
 
