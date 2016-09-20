@@ -1,5 +1,12 @@
 give me some recipes with chicken and mushroom,recipes
 I want to cook some Mexican food,recipes
+can you find me some popular recipes,recipes
 set a timer for 20 minutes,timer
 create a timer,timer
-can you find me some popular recipes,recipes
+could you setup a timer for 5 minutes,timer
+go to the previous step,nav_prev
+go back,nav_prev
+what's the last step,nav_prev
+go to the next step,nav_next
+next step,nav_next
+what's next,nav_next
