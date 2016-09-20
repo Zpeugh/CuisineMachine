@@ -121,7 +121,7 @@ module.exports = {
   // not sure why
   search_rank: function(sentence, callback) {
     var ranker_id = "c852bax18-rank-1134";
-    var query = qs.stringify({q: sentence, ranker_id: ranker_id});
+    var query = qs.stringify({ingredients: sentence, ranker_id: ranker_id});
     solrClient.get('fcselect', query, callback);
   }
 }
