@@ -1,7 +1,7 @@
 var express = require('express');
 var http = require("http");
-var retrieve_and_rank = require("./retrieve-rank").search;
-var search_rank = require("./retrieve-rank").search_rank;
+var retrieve_and_rank = require("./retrieve-rank/retrieve-rank").search;
+var search_rank = require("./retrieve-rank/retrieve-rank").search_rank;
 
 var app = express();
 const PORT = 8080;
