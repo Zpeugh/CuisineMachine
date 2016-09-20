@@ -3,6 +3,11 @@
     src: url("../fonts/GeosansLight.ttf");
 }
 
+@font-face{
+    font-family: ironandbrine;
+    src: url("../fonts/iron_and_brine.ttf");
+}
+
 .background-primary{
     background-color: transparent;
 }
@@ -98,28 +103,44 @@ body{
 }
 .recipe{
     width: 100%;
-    height: 450px;
     border-bottom: 1px solid black;
+
 }
 
 .recipe-box{
     padding: 0px;
+    max-width: 500px;
     height: auto;
     width: auto;
-    max-width: 500px;
     margin: 0px auto;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45), 0 6px 20px 0 rgba(0, 0, 0, 0.45);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45), 0 6px 20px 0 rgba(0, 0, 0, 0.45);*/
     background-color: white;
-    border: 2px solid black;
+    /*border: 2px solid black;*/
+
 }
+
+
 .caption-header{
     font-size: 2em;
     font-weight: bold;
+    /*font-family: ironandbrine;*/
+    /*background-image: url("../images/cutting_board.jpg");*/
+    /*background-repeat: no-repeat;*/
+    height: auto;
+    width: auto;
+    color: #333333;
+    background-color: white;
+    vertical-align: center;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    /*max-width: 500px;
+    max-height: 250px;*/
 }
 
 .caption-description{
     font-size: 1.5em;
     font-weight: bold;
+
 }
 
 .recipe-box>a{
