@@ -20,6 +20,7 @@ app.controller("cuisineMachineController", function($scope, $location, $localSto
     $scope.search = function() {
         RandRService.sendRequest($scope.searchText)
         .success(function(data){
+            console.log("Found " + data.length + "documents")
             for (var i = 0; i < data.length; i++){
                 RecipeService.addRecipe(data[i]);
             }

@@ -5,10 +5,15 @@ console.log(process.argv[2]);
 
 // Get content from file
 var filename = process.argv[2];
+var start = process.argv[3];
+var end = process.argv[4];
 
 var contents = fs.readFileSync(filename);
 var json = JSON.parse(contents);
 var recipes = json.recipes;
+
+console.log(recipes.length)
+
 
 // authentication
 var retrieve_and_rank = new RetrieveAndRankV1({
@@ -23,8 +28,9 @@ var solrClient = retrieve_and_rank.createSolrClient({
   collection_name: 'Cuisine_Machine_Recipe_Cluster'
 });
 
+
 // Add each file to the cluster
-for (var i = 0; i < recipes.length; i++){
+for (var i = start; i < end; i++){
     solrClient.add(recipes[i], function(err) {
       if(err) {
         console.log('Error indexing document: ' + err);
