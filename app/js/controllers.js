@@ -1,4 +1,4 @@
-app.controller("cuisineMachineController", function($scope, $location, $localStorage, $sessionStorage, RandRService, RecipeService) {
+app.controller("cuisineMachineController", function($scope, $location, RandRService, RecipeService) {
 
     $scope.searchText = "";
     $scope.recipes = RecipeService.getRecipes();
@@ -10,6 +10,11 @@ app.controller("cuisineMachineController", function($scope, $location, $localSto
             scrollTop: $(selector).offset().top
         }, time);
     }
+    
+    $scope.number = 0;
+    $scope.add = function(x, y) {
+        $scope.number = x + y;
+    };
 
     $scope.onSubmit = function() {
         console.log("testData: " + $scope.testData);

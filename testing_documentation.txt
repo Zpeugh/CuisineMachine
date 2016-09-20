@@ -3,6 +3,8 @@ TESTING OVERVIEW
 Karma is command line tool that acts as engine running tests. Spawns a web server and executes test. 
 Jasmine is used for writing the actual tests. 
 
+To run tests: ./node_modules/karma/bin/karma start
+
 
 KARMA
 
