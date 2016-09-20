@@ -20,15 +20,72 @@ app.service('NLPService', function($http) {
 
 app.service('RandRService', function($http){
     this.sendRequest = function(sentence){
-        $http.get("/api/search?q=" + sentence)
-        .success(function(data){
-            console.log(data);
-            return JSON.stringify(data);
-        }).error(function(data){
-            return "Shit";
-        });
+        return $http.get("/api/search?q=" + sentence);
     }
 });
+
+
+app.service('RecipeService', function(){
+
+    var selectedRecipe = {};
+    var recipes = [];
+
+    this.addRecipe = function(json){
+        recipe = {};
+        recipe.id = json.id[0];
+        recipe.title = json.title[0];
+        recipe.ingredients = [];
+        recipe.instructions = [];
+        recipe.tags = [];
+        recipe.pictureUrl = json.picture[0];
+        recipe.yield = json.yield[0];
+        recipe.tags = json.tags[0];
+        recipe.about = json.about[0];
+        var ingredients = json.ingredients[0].split(';');
+        for (var i = 0; i < ingredients.length ; i++){
+            var ingr = ingredients[i].trim();
+            recipe.ingredients[i] = ingr.charAt(0).toUpperCase() + ingr.slice(1);
+        };
+        var instructions = json.instructions[0].split(';');
+        for (var i = 0; i < instructions.length ; i++){
+            var inst = instructions[i].trim();
+            if (/^([1-9]\d*)$/.test(inst) == false){
+                recipe.instructions.push(inst.charAt(0).toUpperCase() + inst.slice(1));
+            }
+        };
+        var tags = json.tags[0].split(';');
+        for (var i = 0; i < tags.length ; i++){
+            var tag = tags[i].trim();
+            recipe.tags[i] = tag.charAt(0).toUpperCase() + tag.slice(1);
+        };
+        recipes.push(recipe);
+
+    }
+
+    this.removeRecipe = function(params){
+        //TODO: remove recipes by any parameter(s)
+    };
+
+
+    this.getRecipes = function(){
+        return recipes;
+    }
+
+    this.clearRecipes = function(){
+        recipes = [];
+    }
+
+    this.setSelectedRecipe = function(recipe){
+        selectedRecipe = recipe;
+    }
+
+    this.getSelectedRecipe = function(){
+        return selectedRecipe;
+    }
+
+});
+
+
 
 
 app.service('TextToSpeechService', function($http) {

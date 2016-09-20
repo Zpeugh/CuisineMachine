@@ -1,8 +1,22 @@
-<div class="discover-page container-fluid text-center blur">
+<div class="discover-page container-fluid text-center blur" ng-controller="cuisineMachineController">
     <h1 class="header">Recipes</h1>
     <br />
     <div class="container-fluid">
-        <div class="row text-center">
+        <div ng-repeat="recipe in recipes">
+             <div class="row text-center">
+                <div class="col-sm-12 text-center">
+                    <div ng-click="selectRecipe(recipe)" class="recipe-box">
+                        <img class="recipe" src= {{recipe.pictureUrl}} />
+                        <p class="caption-header">{{recipe.title}}</p>
+                    </div>
+                </div>
+            </div>
+            <br />
+        </div>
+    </div>
+</div>
+
+        <!-- <div class="row text-center">
             <div class="col-sm-6 text-center">
                 <div class="recipe-box">
                     <a href="#create">
@@ -24,8 +38,8 @@
         </div>
         </br>
         </br>
-        </br>
-        <div class="row text-center">
+        </br> -->
+        <!-- <div class="row text-center">
             <div class="col-sm-6 text-center">
                 <div class="recipe-box">
                     <a href="#create">
@@ -44,6 +58,4 @@
                     </a>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+        </div> -->

@@ -1,13 +1,13 @@
-app.controller("cuisineMachineController", function($scope, $location, RandRService) {
+app.controller("cuisineMachineController", function($scope, $location, $localStorage, $sessionStorage, RandRService, RecipeService) {
 
     $scope.searchText = "";
-    // $scope.testData = "";
-    // $scope.responseData = "";
+    $scope.recipes = RecipeService.getRecipes();
+    $scope.currentRecipe = RecipeService.getSelectedRecipe();
     $scope.cookingPopup = false;
     // Utility functions
     var scrollTo = function(selector, time) {
         $('html,body').animate({
-            scrollTop: $(selector).offset().top + 100
+            scrollTop: $(selector).offset().top
         }, time);
     }
 
@@ -18,9 +18,26 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
     }
 
     $scope.search = function() {
-        RandRService.sendRequest($scope.searchText);
-        console.log("sending: " + ($scope.searchText));
-        $location.path("/discover");
+        RandRService.sendRequest($scope.searchText)
+        .success(function(data){
+            for (var i = 0; i < data.length; i++){
+                RecipeService.addRecipe(data[i]);
+            }
+            $scope.recipes = RecipeService.getRecipes();
+            $location.path("/discover");
+
+        }).error(function(data){
+            console.log("Error: " + data);
+            $scope.documents = [];
+        });
+    }
+
+    $scope.selectRecipe = function(recipe){
+        RecipeService.setSelectedRecipe(recipe);
+        $scope.currentRecipe = RecipeService.getSelectedRecipe();
+        console.log($scope.currentRecipe);
+        $location.path("/create");
+        scrollTo("body", 50);
     }
 
     $scope.startCooking = function() {

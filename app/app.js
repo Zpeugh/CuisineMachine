@@ -1,4 +1,4 @@
-var app = angular.module('cuisineMachineApp', ['ngRoute', 'ui.bootstrap']);
+var app = angular.module('cuisineMachineApp', ['ngRoute', 'ui.bootstrap', 'ngStorage']);
 
 // Configure the routes
 app.config( function($routeProvider) {

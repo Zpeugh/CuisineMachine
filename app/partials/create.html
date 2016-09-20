@@ -1,5 +1,5 @@
-<div class="discover-page container-fluid text-center blur">
-    <h1 class="header">Banana Crepes</h1>
+<div class="discover-page container-fluid text-center blur" ng-controller="cuisineMachineController">
+    <h1 class="header" ng-bind="currentRecipe.title"></h1>
     <br />
 
     <div class="container-fluid text-center">
@@ -14,7 +14,7 @@
                     </a>
                 </div>
                 <div class="col-sm-6 text-center">
-                    <img class="create-recipe" src='../images/banana_crepes.jpg' />
+                    <img class="create-recipe" src={{currentRecipe.pictureUrl}} />
                 </div>
                 <div class="col-sm-3 text-center text-middle">
                     <a ng-click="startCooking()">
@@ -28,56 +28,14 @@
         <div class="row text-left">
             <h3 class="recipe-header">Description</h3>
             <p class="recipe-text">
-                French crepes filled with a sweet cream sauce over bananas and topped with whipped cream.
+                {{currentRecipe.about}}
             </p>
             <hr />
             <h3 class="recipe-header">What You'll need</h3>
             <ul>
-                <li class="recipe-text">
-                    1 cup all-purpose flour
-                </li>
-                <li class="recipe-text">
-                    1/4 cup confectioners' sugar
-                </li>
-                <li class="recipe-text">
-                    2 eggs
-                </li>
-                <li class="recipe-text">
-                    1 cup milk
-                </li>
-                <li class="recipe-text">
-                    3 tablespoons butter, melted
-                </li>
-                <li class="recipe-text">
-                    1 teaspoon vanilla extract
-                </li>
-                <li class="recipe-text">
-                    1/4 teaspoon salt
-                </li>
-                <li class="recipe-text">
-                    1/4 cup butter
-                </li>
-                <li class="recipe-text">
-                    1/4 cup packed brown sugar
-                </li>
-                <li class="recipe-text">
-                    1/4 teaspoon ground cinnamon
-                </li>
-                <li class="recipe-text">
-                    1/4 teaspoon ground nutmeg
-                </li>
-                <li class="recipe-text">
-                    1/4 cup half-and-half cream
-                </li>
-                <li class="recipe-text">
-                    6 bananas, halved lengthwise
-                </li>
-                <li class="recipe-text">
-                    1 1/2 cups whipped heavy cream
-                </li>
-                <li class="recipe-text">
-                    1 pinch ground cinnamon
-                </li>
+                <div ng-repeat="ingredient in currentRecipe.ingredients track by $index">
+                    <li class="recipe-text">{{ingredient}}</li>
+                </div>
             </ul>
             <hr />
             <h3 class="recipe-header">Get Started</h3>
@@ -112,25 +70,12 @@
                 </div>
             </div>
 
-            <ol>
-                <li id="first-step" class="recipe-text">
-                    Sift flour and powdered sugar into a mixing bowl. Add eggs, milk, butter, vanilla, and salt; beat until smooth.
-                </li>
-
-                <br />
-                <li class="recipe-text">
-                    Heat a lightly greased 6 inch skillet. Add about 3 tablespoons batter. Tilt skillet so that batter spreads to almost cover the bottom of skillet. Cook until lightly browned; turn and brown the other side. Repeat process with remaining batter, grease skillet
-                    as needed.
-                </li>
-                <br />
-                <li class="recipe-text">
-                    Melt 1/4 cup butter in a large skillet. Stir in brown sugar, 1/4 teaspoon cinnamon and nutmeg. Stir in cream and cook until slightly thickened. Add half the bananas at a time to skillet; cook for 2 to 3 minutes, spooning sauce over them. Remove from heat.
-                </li>
-                <br />
-                <li class="recipe-text">
-                    Roll a crepe around each banana half and place on serving platter. Spoon sauce over crepes. Top with whipped cream and a pinch of cinnamon.
-                </li>
-            </ol>
+            <ul>
+                <div ng-repeat="step in currentRecipe.instructions track by $index">
+                    <li class="recipe-text">{{step}}</li>
+                    <br />
+                </div>
+            </ul>
         </div>
 
     </div>
