@@ -21,7 +21,6 @@ app.get('/api/search', function(req, res) {
           console.log('Found ' + searchResponse.response.numFound + ' document(s).');
           // console.log('First document: ' + JSON.stringify(searchResponse.response.docs[0], null, 2));
           res.send(JSON.stringify(searchResponse.response.docs));
-          console.log(JSON.stringify(searchResponse.response.docs));
       }
     });
 });
