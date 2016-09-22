@@ -55,3 +55,15 @@ natural_language_classifier.classify({
 //     console.log(JSON.stringify(response, null, 2));
 // });
 
+module.exports = function(sentence) {
+  natural_language_classifier.classify({
+  text: sentence,
+  classifier_id: '2a3173x97-nlc-907' },
+  function(err, response) {
+    if (err)
+      console.log('error:', err);
+    else
+      console.log(JSON.stringify(response, null, 2));
+});
+}
+
