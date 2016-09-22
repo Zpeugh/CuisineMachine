@@ -15,14 +15,15 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'app/js/angular.min.js',
-      'app/js/angular-resource.min.js',
-      'app/js/angular-route.js',
-      'app/js/ngStorage',
-      'app.js',
-      'app/js/controller.js',
-      'node_modules/angular-mocks/angular-mocks.js',
-      'app/tests/*.test.js'
+        'app/libs/jquery/jquery-1.7.2.min.js',
+        'app/libs/angular/angular.min.js',
+        'node_modules/angular-mocks/angular-mocks.js',
+        'app/libs/angular/angular-route.min.js',
+        'app/libs/angular/angular-resource.min.js',
+        'app/libs/angular/angular-storage.min.js',
+        'app/app.js',
+        'app/js/controllers.js',
+        'app/tests/*.test.js'
     ],
 
 
@@ -64,6 +65,11 @@ module.exports = function(config) {
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     browsers: ['Chrome'],
 
+
+    plugins: [
+      'karma-chrome-launcher',
+      'karma-jasmine'
+    ],
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits

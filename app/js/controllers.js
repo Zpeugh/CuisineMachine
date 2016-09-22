@@ -10,7 +10,7 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
             scrollTop: $(selector).offset().top
         }, time);
     }
-    
+
     $scope.number = 0;
     $scope.add = function(x, y) {
         $scope.number = x + y;
