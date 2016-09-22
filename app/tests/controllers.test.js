@@ -4,7 +4,6 @@ describe('CuisineMachineController', function() {
 
     var $controller;
 
-    //TODO: Add dependency injection of mocked RandRservice and RecipeService
     beforeEach(inject(function(_$controller_){
         // The injector unwraps the underscores (_) from around the parameter names when matching
         $controller = _$controller_;
