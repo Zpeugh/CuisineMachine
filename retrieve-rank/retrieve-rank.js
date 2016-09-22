@@ -109,9 +109,6 @@ var solrClient = retrieve_and_rank.createSolrClient({
 module.exports = {
   search: function(sentence, callback) {
 
-    //TODO: Parse the sentence and use the Natural Language Classifier
-    //TODO: To find which parameter(s) to use to send to the retrieve and rank
-    //TODO: and then build a query object to send to the R and R cluster
     var documents = {};
     var query = solrClient.createQuery();
     query.q({ingredients: sentence});
