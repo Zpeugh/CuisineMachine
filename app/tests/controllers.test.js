@@ -1,26 +1,24 @@
-describe('CuisineMachineController', function() {
-
+describe('CuisineMachineController', function() {    
     beforeEach(module('cuisineMachineApp'));
-
+    
+    // get reference to scope before each test
     var $controller;
-
-    //TODO: Add dependency injection of mocked RandRservice and RecipeService
-    beforeEach(inject(function(_$controller_){
-        // The injector unwraps the underscores (_) from around the parameter names when matching
+    var $scope
+    beforeEach(inject(function (_$controller_) {
         $controller = _$controller_;
+        $scope = {};
+        var controller = $controller('cuisineMachineController', {$scope: $scope });
     }));
-
-
-    //test case for onSubmit. Should be called and receive data
-    describe('$scope.add()', function() {
-        it('adds two numbers ', function() {
-            var $scope = {};
-
-            var controller = $controller('cuisineMachineController', {$scope: $scope });
+    
+    
+    //test case for search(). Should be called and receive data
+    describe('$scope.search() ', function() {
+        it('calls retrieve and rank with specified search text ', function() {// 'i'ndividual 't'est
+            //set search text and test response
             $scope.number = 0;
             $scope.add(2, 3);
 
-            expect(5).toEqual(5);
+            expect($scope.number).toEqual(5);
         });
     });
 });

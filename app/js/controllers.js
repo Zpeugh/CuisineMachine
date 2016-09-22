@@ -29,6 +29,7 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
             for (var i = 0; i < data.length; i++){
                 RecipeService.addRecipe(data[i]);
             }
+            debugger;
             $scope.recipes = RecipeService.getRecipes();
             $location.path("/discover");
 
