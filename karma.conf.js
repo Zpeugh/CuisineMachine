@@ -23,6 +23,7 @@ module.exports = function(config) {
         'app/libs/angular/angular-storage.min.js',
         'app/app.js',
         'app/js/controllers.js',
+        'app/js/services.js',
         'app/tests/*.test.js'
     ],
 

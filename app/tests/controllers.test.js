@@ -17,8 +17,8 @@ describe('CuisineMachineController', function() {
             var $scope = {};
 
             var controller = $controller('cuisineMachineController', {$scope: $scope });
-            $ctrlScope.number = 0;
-            $ctrlScope.add(2, 3);
+            $scope.number = 0;
+            $scope.add(2, 3);
 
             expect(5).toEqual(5);
         });
