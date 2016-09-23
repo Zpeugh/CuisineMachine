@@ -19,11 +19,12 @@ module.exports = function(config) {
         'app/libs/angular/angular.min.js',
         'node_modules/angular-mocks/angular-mocks.js',
         'app/libs/angular/angular-route.min.js',
+        'app/libs/angular-bootstrap/ui-bootstrap-tpls.min.js',
         'app/libs/angular/angular-resource.min.js',
         'app/libs/angular/angular-storage.min.js',
         'app/app.js',
-        'app/js/controllers.js',
         'app/js/services.js',
+        'app/js/controllers.js',
         'app/tests/*.test.js'
     ],
 
