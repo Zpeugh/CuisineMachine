@@ -23,6 +23,7 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
     }
 
     $scope.search = function() {
+        RecipeService.clearRecipes();
         RandRService.sendRequest($scope.searchText)
         .success(function(data){
             console.log("Found " + data.length + "documents")

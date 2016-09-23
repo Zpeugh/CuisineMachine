@@ -1,8 +1,9 @@
 var express = require('express');
 var http = require("http");
-var retrieve_and_rank = require("./retrieve-rank/retrieve-rank").search;
-// var search_rank = require("./retrieve-rank/retrieve-rank").search_rank;
+// var retrieve_and_rank = require("./retrieve-rank/retrieve-rank").search;
+var retrieve_and_rank = require("./retrieve-rank/retrieve-rank").search_rank;
 // var classify = require("./nlc/classifier");
+var fs = require('fs');
 
 
 var app = express();
@@ -16,14 +17,23 @@ app.get('/api/search', function(req, res) {
     var sentence = req.query.q;
 
     var documents = retrieve_and_rank(sentence, function(err, searchResponse) {
-      if(err) {
-        console.log("Error search and rank: "+err);
-        res.send("Error searching for documents: " + err);
-      } else {
-          console.log('Found ' + searchResponse.response.numFound + ' document(s).');
-          // console.log('First document: ' + JSON.stringify(searchResponse.response.docs[0], null, 2));
-          res.send(JSON.stringify(searchResponse.response.docs));
-      }
+        if (err) {
+            console.log("Error search and rank: " + err);
+            fs.writeFile("DEBUG_LOGS/retreive_and_rank_log.txt", err, function(err) {
+                if (err) {
+                    return console.log(err);
+                }
+            });
+
+
+            res.send("Error searching for documents: " + err);
+        } else {
+            console.log('Found ' + searchResponse.response.numFound + ' document(s).');
+            for (var i = 0; i < 50; i++){
+                console.log('First document: ' + JSON.stringify(searchResponse.response.docs[i]["ranker.confidence"], null, 2));
+            }
+            res.send(JSON.stringify(searchResponse.response.docs));
+        }
     });
 });
 
