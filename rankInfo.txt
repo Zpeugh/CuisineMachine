@@ -1,0 +1,7 @@
+ranker_id: c852c8x19-rank-1246
+
+How to maked ranked queries: https://www.ibm.com/watson/developercloud/retrieve-and-rank/api/v1/?curl#query_ranker
+
+example curl request: curl -u "0b8e9940-0890-41aa-9a0f-98b73077a868":"nojwL5kgzQES" "https://gateway.watsonplatform.net/retrieve-and-rank/api/v1/solr_clusters/sc12b109cf_91ae_43fe_bb0e_15b68f0fd1cb/solr/Cuisine_Machine_Recipe_Cluster/fcselect?ranker_id=c852c8x19-rank-1246&q=what%20are%20some%20recipes%20with%20chicken%20and%20salt&wt=json&fl=id,title"
+
+example results: {"responseHeader":{"status":0,"QTime":100},"response":{"numFound":28742,"start":0,"maxScore":10.0,"docs":[{"id":"Q6G4VN7B","title":["Satay Chicken Wings"]},{"id":"W3D32PHB","title":["Authentic Old World Puerto Rican Sofrito"]},{"id":"J3C2QMN4","title":["Contemplation and Salad"]},{"id":"G8JHNK7N","title":["Contemplation and salad ..."]},{"id":"JGLYSWSH","title":["Beans ..."]},{"id":"LL8KSSGD","title":["Avocado Cake"]},{"id":"6WMP3T7J","title":["Monday Night Lasagna"]},{"id":"HQLXTCSR","title":["My plan is this ..."]},{"id":"7BM5T32W","title":["Flour Tutorial"]},{"id":"WNJCFNNH","title":["Juegos De Bob Esponja"]}]}}
