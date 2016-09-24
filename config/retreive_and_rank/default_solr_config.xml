@@ -435,7 +435,7 @@
       -->
      <lst name="defaults">
        <str name="echoParams">explicit</str>
-       <int name="rows">10</int>
+       <int name="rows">50</int>
      </lst>
 
     </requestHandler>
@@ -469,15 +469,7 @@
 
 <queryParser name="fcQueryParser" class="com.ibm.watson.hector.plugins.qparser.WatsonFCQParser">
     <str name="textFieldTypes">watson_text_en</str>
-    <!-- <str name="textFieldTypes">ingredients</str>
-    <str name="textFieldTypes">about</str>
-    <str name="textFieldTypes">yield</str>
-    <str name="textFieldTypes">tags</str>
-    <str name="textFieldTypes">title</str> -->
-
-
 </queryParser>
-
 <searchComponent name="fcFeatureGenerator" class="com.ibm.watson.hector.plugins.ss.FCFeatureGeneratorComponent" />
 
 <queryParser name="serializedQueryParser" class="com.ibm.watson.hector.plugins.qparser.WatsonPSSOLRQParserPlugin" />

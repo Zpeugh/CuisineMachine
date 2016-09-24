@@ -1,9 +1,9 @@
-const NLP_SERVICE_CREDENTIAL = "";
-const NLP_SERVICE_PASSWORD = "";
-const TEXT_TO_SPEECH_UN = "dbedbd53-5ac1-4f44-a97b-d682c856acc6"
-const TEXT_TO_SPEECH_PASS = "X47ysWgxe4mD"
-const TEXT_TO_SPEECH_URL = "https://stream.watsonplatform.net/text-to-speech/api";
-const VOICE = "en-GB_KateVoice";
+// const NLP_SERVICE_CREDENTIAL = "";
+// const NLP_SERVICE_PASSWORD = "";
+// const TEXT_TO_SPEECH_UN = "dbedbd53-5ac1-4f44-a97b-d682c856acc6"
+// const TEXT_TO_SPEECH_PASS = "X47ysWgxe4mD"
+// const TEXT_TO_SPEECH_URL = "https://stream.watsonplatform.net/text-to-speech/api";
+// const VOICE = "en-GB_KateVoice";
 console.log("Initializing Services...");
 
 app.service('NLPService', function($http) {
@@ -32,6 +32,7 @@ app.service('RecipeService', function(){
 
     this.addRecipe = function(json){
         recipe = {};
+
         recipe.id = json.id[0];
         recipe.title = json.title[0];
         recipe.ingredients = [];
