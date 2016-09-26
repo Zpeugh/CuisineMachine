@@ -4,7 +4,8 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
     $scope.recipes = RecipeService.getRecipes();
     $scope.currentRecipe = RecipeService.getSelectedRecipe();
     $scope.cookingPopup = false;
-    // Utility functions
+    
+    // Utility functionss
     var scrollTo = function(selector, time) {
         $('html,body').animate({
             scrollTop: $(selector).offset().top
@@ -30,10 +31,8 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
             for (var i = 0; i < data.length; i++){
                 RecipeService.addRecipe(data[i]);
             }
-            debugger;
             $scope.recipes = RecipeService.getRecipes();
             $location.path("/discover");
-
         }).error(function(data){
             console.log("Error: " + data);
             $scope.documents = [];
