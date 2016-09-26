@@ -33,14 +33,13 @@ app.service('RecipeService', function(){
     this.addRecipe = function(json){
         recipe = {};
 
-        recipe.id = json.id[0];
+        recipe.id = json.id;
         recipe.title = json.title[0];
         recipe.ingredients = [];
         recipe.instructions = [];
         recipe.tags = [];
         recipe.pictureUrl = json.picture[0];
         recipe.yield = json.yield[0];
-        recipe.tags = json.tags[0];
         recipe.about = json.about[0];
         var ingredients = json.ingredients[0].split(';');
         for (var i = 0; i < ingredients.length ; i++){

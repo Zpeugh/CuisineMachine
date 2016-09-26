@@ -12,11 +12,6 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
         }, time);
     }
 
-    $scope.number = 0;
-    $scope.add = function(x, y) {
-        $scope.number = x + y;
-    };
-
     $scope.onSubmit = function() {
         console.log("testData: " + $scope.testData);
         $scope.responseData = TextToSpeechService.speakText($scope.testData);
