@@ -1,88 +1,86 @@
-<div class="discover-page container-fluid text-center blur" ng-controller="cuisineMachineController">
-    <h1 class="header" ng-bind="currentRecipe.title"></h1>
-    <br />
+<div id="create-page" class="container-fluid text-center" ng-controller="cuisineMachineController">
 
-    <div class="container-fluid text-center">
 
-        <div class="container-fluid">
-            <div class="row text-center">
-                <div class="col-sm-3 text-center text-middle">
-                    <a href="#discover">
-                        <img src="../images/chef.png" />
-                        <br />
-                        <span class="recipe-header">. . . no</span>
-                    </a>
-                </div>
-                <div class="col-sm-6 text-center">
-                    <img class="create-recipe" src={{currentRecipe.pictureUrl}} />
-                </div>
-                <div class="col-sm-3 text-center text-middle">
-                    <a ng-click="startCooking()">
-                        <img src="../images/bowl.png" />
-                        <br />
-                        <span class="recipe-header">Let's do this!</span>
-                    </a>
-                </div>
+    <div id="create-page-container" class="container-fluid text-center">
+
+        <div id="picture-box" class="row container-fluid text-center">
+            <div class="full-width">
+                <span id="recipe-header" ng-bind="currentRecipe.title"></span>
+            </div>
+            <div class="col-sm-1 text-center text-middle">
+                <a id="right-arrow-div" href="#discover">
+                    <img src="../images/back.png" />
+                </a>
+            </div>
+            <div class="col-sm-10 text-center blur">
+                <img id="create-recipe" src={{currentRecipe.pictureUrl}} />
+            </div>
+            <div id="right-arrow-div" class="col-sm-1 text-center text-middle">
+                <a ng-click="startCooking()">
+                    <img src="../images/play-button.png" />
+                </a>
             </div>
         </div>
-        <div class="row text-left">
-            <h3 class="recipe-header">Description</h3>
-            <p class="recipe-text">
-                {{currentRecipe.about}}
-            </p>
-            <hr />
-            <h3 class="recipe-header">What You'll need</h3>
-            <ul>
-                <div ng-repeat="ingredient in currentRecipe.ingredients track by $index">
-                    <li class="recipe-text">{{ingredient}}</li>
-                </div>
-            </ul>
-            <hr />
-            <h3 class="recipe-header">Get Started</h3>
-
-            <div id="cooking-popup">
-                <br />
-                <p>
-                    Sift 1 cup flour and 1/4 cup powdered sugar into a mixing bowl.
-                </p>
-                <p>
-                    Add 2 eggs, 1 cup milk, 3 tablespoons melted butter, 1 teaspoon vanilla extract, and 1/4 teaspoon salt.
-                </p>
-                <p>
-                    Beat together until smooth.
-                </p>
-                <hr />
-                <div class="container-fluid">
-                    <div class="row text-center">
-                        <div class="col-sm-3">
-                            <button class="button" id="back-button">Go back</button>
-                        </div>
-                        <div class="col-sm-3">
-                            <button class="button" id="read-button">Read instructions</button>
-                        </div>
-                        <div class="col-sm-3">
-                            <button class="button" id="timer-button">Set a timer</button>
-                        </div>
-                        <div class="col-sm-3">
-                            <button class="button" id="next-button">Next step</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <ul>
-                <div ng-repeat="step in currentRecipe.instructions track by $index">
-                    <li class="recipe-text">{{step}}</li>
+        <div class="light-container" class="text-center">
+            <h1 class="create-header padding-top" class="recipe-header">A<span class="spacing"> </span>B<span class="spacing"> </span>O<span class="spacing"> </span>U<span class="spacing"> </span>T<span class="spacing"> </span></h3>
+            <p class="recipe-text text-left">{{currentRecipe.about}}</p>
+            <br />
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <h3 class="create-header">I<span class="spacing"> </span>N<span class="spacing"> </span>G<span class="spacing"> </span>R<span class="spacing"> </span>E<span class="spacing"> </span>D<span class="spacing"> </span>I<span class="spacing"> </span>E<span class="spacing"> </span>N<span class="spacing"> </span>T<span class="spacing"> </span>S</h3>
                     <br />
+                    <ul class="text-left">
+                        <div ng-repeat="ingredient in currentRecipe.ingredients track by $index">
+                            <li type="square" class="recipe-text">{{ingredient}}</li>
+                        </div>
+                    </ul>
                 </div>
-            </ul>
+                <div class="col-sm-12 col-md-12">
+                    <h3 class="create-header">I<span class="spacing"> </span>N<span class="spacing"> </span>S<span class="spacing"> </span>T<span class="spacing"> </span>R<span class="spacing"> </span>U<span class="spacing"> </span>C<span class="spacing"> </span>T<span class="spacing"> </span>I<span class="spacing"> </span>O<span class="spacing"> </span>N<span class="spacing"> </span>S</h3>
+                    <br />
+                    <ol>
+                        <div ng-repeat="step in currentRecipe.instructions track by $index">
+                            <li class="recipe-text text-left">{{step}}</li>
+                            <br />
+                        </div>
+                    </0l>
+                </div>
+            </div>
         </div>
-
     </div>
-
-
-
-
-
-
+    <br />
+    <br />
+    <br />
+    <br />
 </div>
+
+
+<!-- <div id="cooking-popup">
+    <br />
+    <p>
+        Sift 1 cup flour and 1/4 cup powdered sugar into a mixing bowl.
+    </p>
+    <p>
+        Add 2 eggs, 1 cup milk, 3 tablespoons melted butter, 1 teaspoon vanilla extract, and 1/4 teaspoon salt.
+    </p>
+    <p>
+        Beat together until smooth.
+    </p>
+    <hr />
+    <div class="container-fluid">
+        <div class="row text-center">
+            <div class="col-sm-3">
+                <button class="button" id="back-button">Go back</button>
+            </div>
+            <div class="col-sm-3">
+                <button class="button" id="read-button">Read instructions</button>
+            </div>
+            <div class="col-sm-3">
+                <button class="button" id="timer-button">Set a timer</button>
+            </div>
+            <div class="col-sm-3">
+                <button class="button" id="next-button">Next step</button>
+            </div>
+        </div>
+    </div>
+</div> -->

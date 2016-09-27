@@ -1,61 +1,21 @@
-<div class="discover-page container-fluid text-center blur" ng-controller="cuisineMachineController">
-    <h1 class="header">Recipes</h1>
-    <br />
-    <div class="container-fluid">
-        <div ng-repeat="recipe in recipes">
-             <div class="row text-center">
-                <div class="col-sm-12 text-center">
-                    <div ng-click="selectRecipe(recipe)" class="recipe-box">
-                        <img class="recipe" src= {{recipe.pictureUrl}} />
-                        <p class="caption-header text-center">{{recipe.title}}</p>
+<div id="discover-page">
+    <div class="container-fluid text-center" ng-controller="cuisineMachineController">
+        <br />
+        <div id="grid-container" class="container-fluid">
+            <br />
+            <h1 id="discover-header">R<span class="spacing"> </span>E<span class="spacing"> </span>C<span class="spacing"> </span>I<span class="spacing"> </span>P<span class="spacing"> </span> <span class="spacing"> </span>E<span class="spacing"> </span>S</h1>
+            <br />
+            <br />
+            <div class="container-fluid">
+                <div class="row recipe-row text-center" ng-repeat="recipeRow in recipeRows">
+                    <div ng-repeat="recipe in recipeRow" class="col-sm-4 text-center">
+                        <div ng-click="selectRecipe(recipe)" class="recipe-box">
+                            <img class="recipe" src={{recipe.pictureUrl}} />
+                            <p class="caption-header text-center">{{recipe.title}}</p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <br />
         </div>
     </div>
 </div>
-
-        <!-- <div class="row text-center">
-            <div class="col-sm-6 text-center">
-                <div class="recipe-box">
-                    <a href="#create">
-                        <img class="recipe" src= '../images/banana_cream_pie.jpg' />
-                        <p class="caption-header">Banana Cream Pie</p>
-                        <p class="caption-description">The creamiest most unhealthy cow-product filled pie you never knew you wanted.  Until now.</p>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-6 text-center">
-                <div class="recipe-box">
-                    <a href="#create">
-                        <img class="recipe" src= '../images/banana_crepes.jpg' />
-                        <p class="caption-header">Banana Crepes?</p>
-                        <p class="caption-description">We arent really sure what these are all about but you'll just have to try them out.</p>
-                    </a>
-                </div>
-            </div>
-        </div>
-        </br>
-        </br>
-        </br> -->
-        <!-- <div class="row text-center">
-            <div class="col-sm-6 text-center">
-                <div class="recipe-box">
-                    <a href="#create">
-                        <img class="recipe" src= '../images/banana_pudding.jpg' />
-                        <p class="caption-header">Betty's Perfect Banana Pudding</p>
-                        <p class="caption-description">It's an elegant mixture of fragrances and light delicate wafers mixed together perfectly.  Just kidding, its Jello brand pudding with vanilla wafers.</p>
-                    </a>
-                </div>
-            </div>
-            <div class="col-sm-6 text-center">
-                <div class="recipe-box">
-                    <a href="#create">
-                        <img class="recipe" src= '../images/banana_bread.jpg' />
-                        <p class="caption-header">Bob's Bangin' Banana Bread</p>
-                        <p class="caption-description">It's like that stuff from Bob Evans.  Except not, because of trademark liability.</p>
-                    </a>
-                </div>
-            </div>
-        </div> -->

@@ -3,12 +3,8 @@ var app = angular.module('cuisineMachineApp', ['ngRoute', 'ui.bootstrap']);
 // Configure the routes
 app.config( function($routeProvider) {
     $routeProvider
-    .when("/", {
-        templateUrl : "index.html",
-        controller: "cuisineMachineController"
-    })
-    .when("/home", {
-        templateUrl: "partials/home.html",
+    .when("/explore", {
+        templateUrl: "partials/explore.html",
         controller: "cuisineMachineController"
     })
     .when("/discover", {
@@ -18,5 +14,9 @@ app.config( function($routeProvider) {
     .when("/create", {
         templateUrl: "partials/create.html",
         controller: "cuisineMachineController"
-    });
+    })
+    .otherwise({
+        templateUrl: "partials/explore.html",
+        controller: "cuisineMachineController"
+    })
 });

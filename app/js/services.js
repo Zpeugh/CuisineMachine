@@ -29,6 +29,7 @@ app.service('RecipeService', function(){
 
     var selectedRecipe = {};
     var recipes = [];
+    var recipeRows = [];
 
     this.addRecipe = function(json){
         recipe = {};
@@ -70,6 +71,19 @@ app.service('RecipeService', function(){
 
     this.getRecipes = function(){
         return recipes;
+    }
+
+
+    this.getRecipeRows = function(){
+        recipeRows = [];
+        for(var i = 0; i < recipes.length - 3; i += 3){
+            row = [];
+            row.push(recipes[i]);
+            row.push(recipes[i+1]);
+            row.push(recipes[i+2]);
+            recipeRows.push(row);
+        }
+        return recipeRows
     }
 
     this.clearRecipes = function(){

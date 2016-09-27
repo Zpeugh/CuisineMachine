@@ -4,77 +4,120 @@
 }
 
 @font-face{
-    font-family: ironandbrine;
-    src: url("../fonts/iron_and_brine.ttf");
+    font-family: din;
+    src: url("../fonts/din.ttf");
 }
 
-.background-primary{
-    background-color: transparent;
+@font-face{
+    font-family: Gotham;
+    src: url("../fonts/Gotham-Book.otf");
 }
+
+@font-face{
+    font-family: Gotham-light;
+    src: url("../fonts/Gotham-Light.otf");
+}
+
+body{
+    font-family: Gotham-Light;
+    /*background-color: #737373;*/
+    background-image: url("../images/hexabump.png");
+    background-position: fixed;
+}
+
+#cuisine-machine-logo{
+    width: 900px;
+    height: auto;
+}
+
 
 .nav .nav-justified{
     border: none;
     border-radius: none;
-    text-align: center;
+    height: 100px;
+    /*text-align: center;*/
+}
+
+span.spacing{
+    font-size: .55em;
 }
 
 #main-navbar > li > a {
     color: white;
-    font-size: 22px;
-    background-color: transparent;
+    font-size: 1.5em;
+}
+
+#main-navbar {
+    margin-top:0px;
+    position:absolute;
+    vertical-align: middle;
+    z-index: 50;
+
 }
 
 #main-navbar > li > a:hover{
-    color: white;
     border-bottom: 2px solid #5FBA14;
-    margin: 10px 55px 20px 55px;
+    background-color: transparent;
 }
 
 #main-navbar > li > a:focus{
-    color: white;
     border-bottom: 2px solid #5FBA14;
-    margin: 10px 55px 20px 55px;
+    background-color: transparent;
 }
 
 #main-navbar > li > a {
   color: white;
   border-bottom: 2px solid transparent;
-  padding: 0; /*removing spacing*/
-  margin: 10px 55px 20px 55px;
-
-}
-
-body{
-    font-family: geosanslight;
-    font-weight: bold;
-    background-image: url("../images/cooking-background.jpg");
-    background-attachment:fixed;
-    background-repeat: no-repeat;
-    background-size: cover;
+  padding: 0;
+  margin-top: 20px;
+  margin-left: 30%;
+  margin-right: 30%;
 }
 
 #cuisineMachineHeader{
     font-size: 5em;
-    font-weight: bold;
+    /*font-weight: bold;*/
     color: white;
 }
 
-.container-fluid .homepage-container{
-    text-align: center;
+#explore-page-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../images/cooking-background.jpg");
+    background-attachment:fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+
 }
 
-.container-fluid .discover-page{
-    min-width: 1080;
+.container-fluid {
+    text-align: center;
+    /*font-weight: bold;*/
+
 }
+
+#grid-container{
+    background-color: rgba(206,206,206,1);
+    padding-bottom: 50px;
+    margin-top: 150px;
+    width: 80%;
+}
+
 
 .searchbox{
-    width: 600px;
-    height: 50px;
-    font-size: 2em;
+    margin-top:45px;
+    width: 700px;
+    height: 60px;
+    font-size: 24px;
     text-align: center;
     /*background-color: rgba(142,196,77,0.35);*/
     background-color: rgba(0,0,0,0.40);
-    border: 1px solid grey;
+    border: 2px solid grey;
+    border-radius: 0px;
+    border-right: 2px solid grey;
     color: white;
 }
 .searchbox:focus{
@@ -82,59 +125,102 @@ body{
 }
 
 #search-button {
+    margin-top: -8px;
+    margin-left: -5px;
     background-color: black;
-    font-size: 2em;
-    height: 50px;
-    width: 120px;
-    border: 1px solid darkgrey;
+    font-size: 1.5em;
+    height: 60px;
+    width: 50px;
+    border: 2px solid grey;
+    border-radius: 0px;
+    border-left: none;
     color: lightgrey;
+    background-color: rgba(0,0,0,0.40);
+
 }
 
-
-.blur{
-    background: rgba(111,107,107, 0.85);
-    padding-bottom: 50px;
-    width: 85%;
+#listening-text{
+    font-size: 1.4em;
+    color: white;
 }
+
 
 .header{
     font-weight: bold;
     color: white;
 }
+
+#discover-header{
+    font-weight: bold;
+    color: black;
+    padding-bottom: 15px;
+    margin-right: 20%;
+    margin-left: 20%;
+    border-bottom: 2px solid black;
+}
+
+.recipe-row{
+    padding-bottom: 50px;
+}
 .recipe{
     width: 100%;
-    border-bottom: 1px solid black;
+    max-height: 329.5px;
+    /*border-bottom: 1px solid black;*/
 
 }
 
-.recipe-box{
-    padding: 0px;
-    max-width: 500px;
-    height: auto;
-    width: auto;
-    margin: 0px auto;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.45), 0 6px 20px 0 rgba(0, 0, 0, 0.45);*/
-    background-color: white;
-    /*border: 2px solid black;*/
+div.recipe-box:hover{
+    cursor: hand;
+}
+
+@media screen and (min-width: 669px) {
+
+    .recipe-box{
+        padding: 0px;
+        height: auto;
+        margin: 0px 25px 0px 25px;
+        background-color: white;
+        vertical-align: middle;
+    }
+
+    .caption-header{
+        font-size: 1.75em;
+        font-weight: bold;
+        height: 110px;
+        width: auto;
+        color: #333333;
+        background-color: white;
+        vertical-align: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        overflow: hidden;
+    }
 
 }
 
 
-.caption-header{
-    font-size: 2em;
-    font-weight: bold;
-    /*font-family: ironandbrine;*/
-    /*background-image: url("../images/cutting_board.jpg");*/
-    /*background-repeat: no-repeat;*/
-    height: auto;
-    width: auto;
-    color: #333333;
-    background-color: white;
-    vertical-align: center;
-    padding-top: 20px;
-    padding-bottom: 20px;
-    /*max-width: 500px;
-    max-height: 250px;*/
+
+@media screen and (max-width: 668px) {
+    .caption-header{
+        font-size: 1.25em;
+        font-weight: bold;
+        height: 110px;
+        width: auto;
+        color: #333333;
+        background-color: white;
+        vertical-align: center;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        overflow: hidden;
+    }
+
+    .recipe-box{
+        padding: 0px;
+        height: auto;
+        margin: 0px;
+        background-color: white;
+        vertical-align: middle;
+    }
 }
 
 .caption-description{
@@ -157,11 +243,16 @@ body{
     text-decoration: none;
 }
 
-.create-recipe{
-    border: none;
+#create-recipe{
+    width: 100%;
+    height: 100%;
 }
 
-.recipe-header{
+.blur{
+    opacity: .3;
+}
+
+#recipe-header{
     color: white;
     font-size: 3em;
     font-weight: bold;
@@ -171,6 +262,8 @@ body{
     color: black;
     font-size: 2em;
     font-weight: bold;
+    margin-right: 50px;
+    margin-left: 50px;
 }
 
 a>span.recipe-header:hover{
@@ -187,15 +280,56 @@ a>img.recipe-header:active{
 }
 
 .text-middle{
-    vertical-align: middle;
-    height: 600px;
-    padding-top: 250px;
+    margin-top: 24%;
 }
 .button{
     background-color: black;
     color: lightgrey;
     border: 1px solid lightgrey;
     border-radius: 0px;
+}
+
+div#right-arrow-div{
+    height: 100%;
+    vertical-align: middle;
+}
+
+#create-page-container{
+    max-width: 1400px;
+    margin-top: 100px;
+}
+
+#picture-box{
+    background-color: black;
+    margin-right: 0px;
+    margin-left: 0px;
+
+}
+
+.full-width{
+    width: 100%;
+    position: absolute;
+    top: 370px;
+    left: 0px;
+}
+
+.create-header{
+    font-weight: bold;
+    color: black;
+    padding-bottom: 15px;
+    padding-top: 15px;
+    margin-right: 25%;
+    margin-left: 25%;
+    border-bottom: 2px solid black;
+    font-size: 2.2em
+}
+
+.padding-top{
+    padding-top: 40px;
+}
+
+.light-container{
+    background-color: rgba(206,206,206,1);
 }
 
 #cooking-popup{

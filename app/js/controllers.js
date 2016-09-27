@@ -3,18 +3,15 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
     $scope.searchText = "";
     $scope.recipes = RecipeService.getRecipes();
     $scope.currentRecipe = RecipeService.getSelectedRecipe();
+    $scope.recipeRows = RecipeService.getRecipeRows();
     $scope.cookingPopup = false;
+
     // Utility functions
     var scrollTo = function(selector, time) {
         $('html,body').animate({
             scrollTop: $(selector).offset().top
         }, time);
     }
-
-    $scope.number = 0;
-    $scope.add = function(x, y) {
-        $scope.number = x + y;
-    };
 
     $scope.onSubmit = function() {
         console.log("testData: " + $scope.testData);
@@ -26,11 +23,12 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
         RecipeService.clearRecipes();
         RandRService.sendRequest($scope.searchText)
         .success(function(data){
-            console.log("Found " + data.length + "documents")
+            console.log("Found " + data.length + " documents")
             for (var i = 0; i < data.length; i++){
                 RecipeService.addRecipe(data[i]);
             }
             $scope.recipes = RecipeService.getRecipes();
+            $scope.recipeRows = RecipeService.getRecipeRows();
             $location.path("/discover");
 
         }).error(function(data){
