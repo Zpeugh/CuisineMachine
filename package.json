@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.14.0",
-    "watson-developer-cloud": "^2.2.0"
+    "watson-developer-cloud": "2.2.0"
   },
   "devDependencies": {
     "jasmine-core": "^2.5.1",
