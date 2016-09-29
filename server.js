@@ -31,6 +31,7 @@ app.get('/api/search', function(req, res) {
             console.log('Found ' + searchResponse.response.numFound + ' document(s).');
             for (var i = 0; i < 50; i++){
                 console.log('First document: ' + JSON.stringify(searchResponse.response.docs[i]["ranker.confidence"], null, 2));
+                console.log('First document: ' + JSON.stringify(searchResponse.response.docs[i]["title"], null, 2));
             }
             res.send(JSON.stringify(searchResponse.response.docs));
         }
