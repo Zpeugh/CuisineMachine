@@ -41,12 +41,11 @@ app.get('/api/search', function(req, res) {
                     }
                 });
             } else {
+                console.log(class_name);
                 res.send(class_name);
             }
         }
     });
-
-    
 });
 
 console.log("Spinning up server on port " + PORT)
