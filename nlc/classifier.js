@@ -20,26 +20,26 @@ var natural_language_classifier = new NaturalLanguageClassifierV1({
 // );
 
 // check status of the classifier
-natural_language_classifier.status({
-  classifier_id: '2a3173x97-nlc-907' },
-  function(err, response) {
-    if (err)
-      console.log('error:', err);
-    else
-      console.log(JSON.stringify(response, null, 2));
-  }
-);
+// natural_language_classifier.status({
+//   classifier_id: '2a3173x97-nlc-907' },
+//   function(err, response) {
+//     if (err)
+//       console.log('error:', err);
+//     else
+//       console.log(JSON.stringify(response, null, 2));
+//   }
+// );
 
 // classify sentence
-natural_language_classifier.classify({
-  text: 'give me some recipes',
-  classifier_id: '2a3173x97-nlc-907' },
-  function(err, response) {
-    if (err)
-      console.log('error:', err);
-    else
-      console.log(JSON.stringify(response, null, 2));
-});
+// natural_language_classifier.classify({
+//   text: 'give me some recipes',
+//   classifier_id: '2a3173x97-nlc-907' },
+//   function(err, response) {
+//     if (err)
+//       console.log('error:', err);
+//     else
+//       console.log(JSON.stringify(response, null, 2));
+// });
 
 // create classifier
 // var params = {
@@ -55,15 +55,10 @@ natural_language_classifier.classify({
 //     console.log(JSON.stringify(response, null, 2));
 // });
 
-module.exports = function(sentence) {
+module.exports = function(sentence, callback) {
   natural_language_classifier.classify({
-  text: sentence,
-  classifier_id: '2a3173x97-nlc-907' },
-  function(err, response) {
-    if (err)
-      console.log('error:', err);
-    else
-      console.log(JSON.stringify(response, null, 2));
-});
+    text: sentence,
+    classifier_id: '2a3173x97-nlc-907' 
+  }, callback);
 }
 
