@@ -1,4 +1,4 @@
-app.controller("cuisineMachineController", function($scope, $location, RandRService, RecipeService) {
+app.controller("cuisineMachineController", function($scope, $location, RandRService, RecipeService, TextToSpeechService) {
 
     $scope.searchText = "";
     $scope.recipes = RecipeService.getRecipes();
@@ -91,5 +91,10 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
 
     $scope.startTimer = function(){
         //TODO: Create/show timer widget
+    }
+
+    $scope.readInstruction = function(){
+        var text = $('#instruction_' + $scope.currentInstructionStep +' > li').html();
+        TextToSpeechService.speak(text);
     }
 });

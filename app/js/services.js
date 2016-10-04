@@ -101,32 +101,19 @@ app.service('RecipeService', function(){
 
 
 
-
 app.service('TextToSpeechService', function($http) {
-    this.speakText = function( text ){
-        $.ajax({
-            crossOrigin: true,
-            url: TEXT_TO_SPEECH_URL,
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "audio/wav"
-            },
-            method: "POST",
-            dataType: "jsonp",
-            data: {"username": TEXT_TO_SPEECH_UN,
-                    "password": TEXT_TO_SPEECH_PASS,
-                    "voice" : VOICE,
-                    "text" : text},
-            success: function(response) {
-                console.log("success");
-                console.log(response);
-                return response;
-            },
-            error: function(response) {
-                console.log("error");
-                console.log(response);
-                return response;
-            }
-        });
-    };
+
+    var msg = new SpeechSynthesisUtterance();
+    var voices = window.speechSynthesis.getVoices();
+        msg.voice = voices[2]; // Note: some voices don't support altering params
+        msg.voiceURI = 'native';
+        msg.volume = 1; // 0 to 1
+        msg.rate = 1; // 0.1 to 10
+        msg.pitch = 2;
+
+    this.speak = function(text){
+        msg.text = text;
+        window.speechSynthesis.speak(msg);
+    }
+
 });
