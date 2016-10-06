@@ -71,3 +71,61 @@ app.get('/api/search', function(req, res) {
 
 console.log("Spinning up server on port " + PORT)
 app.listen(PORT);
+
+
+// get watson token for speech to text
+/*
+console.log('STT');
+var watson = require('watson-developer-cloud');
+
+var authorization = new watson.AuthorizationV1({
+    username: '200220d5-97ff-4e6e-bb0c-6ebc724928b5',
+    password: 'wFdBnVqSbi6M',
+    url: watson.SpeechToTextV1.URL
+});
+
+authorization.getToken(function (err, token) {
+    if (!token) {
+        console.log('error:', err);
+    } else {
+        // use token
+    }
+});
+*/
+
+var watson = require('watson-developer-cloud');
+var speech_to_text = watson.speech_to_text({
+  username: '200220d5-97ff-4e6e-bb0c-6ebc724928b5',
+  password: 'wFdBnVqSbi6M',
+  version: 'v1'
+});
+
+var params = {
+  content_type: 'audio/wav',
+  continuous: true,
+  interim_results: true,
+    model: 'en-US_NarrowbandModel'
+};
+
+// Create the stream.
+var recognizeStream = speech_to_text.createRecognizeStream(params);
+
+// Pipe in the audio.
+fs.createReadStream('audio-file.wav').pipe(recognizeStream);
+
+// Pipe out the transcription to a file.
+recognizeStream.pipe(fs.createWriteStream('transcription.txt'));
+
+// Get strings instead of buffers from 'data' events.
+recognizeStream.setEncoding('utf8');
+
+// Listen for events.
+recognizeStream.on('data', function(event) { onEvent('Data:', event); });
+recognizeStream.on('results', function(event) { onEvent('Results:', event); });
+recognizeStream.on('error', function(event) { onEvent('Error:', event); });
+recognizeStream.on('close-connection', function(event) { onEvent('Close:', event); });
+
+// Displays events on the console.
+function onEvent(name, event) {
+    console.log(name, event);
+};
