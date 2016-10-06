@@ -1,15 +1,18 @@
-app.controller("cuisineMachineController", function($scope, $location, RandRService, RecipeService) {
+app.controller("cuisineMachineController", function($scope, $location, RandRService, RecipeService, TextToSpeechService) {
 
     $scope.searchText = "";
     $scope.recipes = RecipeService.getRecipes();
     $scope.currentRecipe = RecipeService.getSelectedRecipe();
     $scope.recipeRows = RecipeService.getRecipeRows();
     $scope.cookingPopup = false;
+    $scope.currentInstruction = "";
+    $scope.currentInstructionStep = 0;
+
 
     // Utility functionss
-    var scrollTo = function(selector, time) {
+    var scrollTo = function(selector, offset, time) {
         $('html,body').animate({
-            scrollTop: $(selector).offset().top
+            scrollTop: $(selector).offset().top - offset
         }, time);
     }
 
@@ -45,11 +48,53 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
     }
 
     $scope.startCooking = function() {
-        scrollTo('#first-step', 1500);
-        setTimeout(function() {
-            $('#cooking-popup').show();
-            $('#first-step').hide();
-        }, 1450);
+
+        $scope.currentInstructionStep = 0;
+        $scope.currentInstruction = $scope.currentRecipe.instructions[$scope.instructionStep];
+
+        scrollTo('#instruction_0', 200, 1200);
+
+        goToStep(0);
+
     }
 
+    var goToStep = function(stepNum){
+        var inst = $('#instruction_' + stepNum);
+        inst.addClass('current-instruction-box');
+        $('#button-container_' + stepNum).show();
+    }
+
+    var endStep = function(stepNum){
+        var inst = $('#instruction_' + stepNum);
+        inst.removeClass('current-instruction-box');
+        $('#button-container_' + stepNum).hide();
+    }
+
+    $scope.nextStep = function(){
+        endStep($scope.currentInstructionStep);
+        if ($scope.currentRecipe.instructions.length > $scope.currentInstructionStep + 1){
+            $scope.currentInstructionStep++;
+            goToStep($scope.currentInstructionStep);
+            scrollTo('#instruction_' + $scope.currentInstructionStep, 0, 1200);
+
+        }
+    }
+
+    $scope.lastStep = function(){
+        endStep($scope.currentInstructionStep);
+        if ($scope.currentInstructionStep > 0){
+            $scope.currentInstructionStep--;
+            goToStep($scope.currentInstructionStep);
+            scrollTo('#instruction_' + $scope.currentInstructionStep, 0, 1200);
+        }
+    }
+
+    $scope.startTimer = function(){
+        //TODO: Create/show timer widget
+    }
+
+    $scope.readInstruction = function(){
+        var text = $('#instruction_' + $scope.currentInstructionStep +' > li').html();
+        TextToSpeechService.speak(text);
+    }
 });

@@ -9,6 +9,8 @@ var natural_language_classifier = new NaturalLanguageClassifierV1({
   username: "ea81bd9c-8673-474d-9db1-4eba97f2d14f"
 });
 
+var id = '2a3230x98-nlc-3419';
+
 // list all classfier
 // natural_language_classifier.list({},
 //   function(err, response) {
@@ -21,7 +23,7 @@ var natural_language_classifier = new NaturalLanguageClassifierV1({
 
 // check status of the classifier
 natural_language_classifier.status({
-  classifier_id: '2a3173x97-nlc-907' },
+  classifier_id: id },
   function(err, response) {
     if (err)
       console.log('error:', err);
@@ -31,17 +33,26 @@ natural_language_classifier.status({
 );
 
 // classify sentence
-natural_language_classifier.classify({
-  text: 'give me some recipes',
-  classifier_id: '2a3173x97-nlc-907' },
-  function(err, response) {
-    if (err)
-      console.log('error:', err);
-    else
-      console.log(JSON.stringify(response, null, 2));
-});
+// natural_language_classifier.classify({
+//   text: 'give me some recipes',
+//   classifier_id: '2a3173x97-nlc-907' },
+//   function(err, response) {
+//     if (err)
+//       console.log('error:', err);
+//     else
+//       console.log(JSON.stringify(response, null, 2));
+// });
 
-// create classifier
+
+
+// natural_language_classifier.remove({ classifier_id: id }, function(err, response) {
+//     if (err)
+//       console.log('error:', err);
+//     else
+//       console.log(JSON.stringify(response, null, 2));
+// });
+
+// // create classifier
 // var params = {
 //   language: 'en',
 //   name: 'Cuisine_Machine_Classifier',
@@ -55,15 +66,11 @@ natural_language_classifier.classify({
 //     console.log(JSON.stringify(response, null, 2));
 // });
 
-module.exports = function(sentence) {
+
+module.exports = function(sentence, callback) {
   natural_language_classifier.classify({
-  text: sentence,
-  classifier_id: '2a3173x97-nlc-907' },
-  function(err, response) {
-    if (err)
-      console.log('error:', err);
-    else
-      console.log(JSON.stringify(response, null, 2));
-});
+    text: sentence,
+    classifier_id: id
+  }, callback);
 }
 
