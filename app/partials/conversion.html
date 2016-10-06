@@ -12,36 +12,39 @@ function convert(sentence){
 	var srcUnit = 0;//volume, weight
 	var targUnit = 0;
 
-	var srcType = document.getElementById("sourceType").value;
-	var srcVal = document.getElementById("sourceValue").value;
+	UnitConversionParser.parseSentence(sentence);
+	var srcType = UnitConversionParser.getSourceType();
+	var srcVal = UnitConversionParser.getSourceValue();
 	var srcID = typeIDs.indexOf(srcType);
-	if(srcID > 8){
-		srcID = srcID - 9;
-		srcUnit = 1;}
-	else
-		srcUnit = 0;
-	var targType = document.getElementById("targetType").value;
-	var targID = typeIDs.indexOf(targType);
-	if(targID > 8){
-		targID = targID - 9;
-		targUnit = 1;}
-	else
-		targUnit = 0;
-	if(srcUnit != targUnit){
-		document.getElementById("answer").innerHTML = "Type Error";}
-	else{
-		if(srcUnit == 0){
-			srcSize = srcVal * volume[srcID];
-			targSize = srcSize/volume[targID];
-			console.log(srcID);
-			console.log(targID);
-		}
-		if(srcUnit == 1){
-			srcSize = srcVal * weight[srcID];
-			targSize = srcSize/weight[targID];
-		}
+	// if(srcID > 8){
+	// 	srcID = srcID - 9;
+	// 	srcUnit = 1;}
+	// else
+	// 	srcUnit = 0;
+	var targType = UnitConversionParser.getTargetType();
+	var targVal = UnitConversionParser.getTargetValue();
 
-	document.getElementById("answer").innerHTML = targSize + " " + targType;
+	// var targID = typeIDs.indexOf(targType);
+	// if(targID > 8){
+	// 	targID = targID - 9;
+	// 	targUnit = 1;}
+	// else
+	// 	targUnit = 0;
+	// if(srcUnit != targUnit){
+	// 	document.getElementById("answer").innerHTML = "Type Error";}
+	// else{
+	// 	if(srcUnit == 0){
+	// 		srcSize = srcVal * volume[srcID];
+	// 		targSize = srcSize/volume[targID];
+	// 		console.log(srcID);
+	// 		console.log(targID);
+	// 	}
+	// 	if(srcUnit == 1){
+	// 		srcSize = srcVal * weight[srcID];
+	// 		targSize = srcSize/weight[targID];
+	// 	}
+	//
+	// document.getElementById("answer").innerHTML = targSize + " " + targType;
 
 	}
 

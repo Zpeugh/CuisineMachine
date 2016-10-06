@@ -1,4 +1,4 @@
-app.controller("cuisineMachineController", function($scope, $location, RandRService, RecipeService, TextToSpeechService) {
+app.controller("cuisineMachineController", function($scope, $location, RandRService, RecipeService, TextToSpeechService, UnitConversionParser) {
 
     $scope.searchText = "";
     $scope.recipes = RecipeService.getRecipes();
@@ -110,7 +110,7 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
     }
 
 
-    $scope.convert(sentence){
+    $scope.convert = function(sentence){
     	var volume = [1, 3, 6, 48, 96, 192, 768, 0.202884, 202.884]; //teaspooon, tblspoon, ounce, cup, pint, quart, gallon, milliliter, liter
     	var weight = [1, 16, 0.035274, 35.274]; //ounce, pound, gram, kilogram
     	var typeIDs = ["tspn","tblspn","floz","cup","pnt","qrt","gal","ml","l","oz","lb","g","kg"];
