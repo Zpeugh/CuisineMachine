@@ -117,3 +117,36 @@ app.service('TextToSpeechService', function($http) {
     }
 
 });
+
+
+app.service('UnitConversionParser', function() {
+
+    var sourceValue = 0;
+    var sourceType = "";
+    var targetValue = 0;
+    var targetType = "";
+
+    this.parseSentence = function(sentence){
+
+        //TODO: Jackson create a parser to get and set sourceValue, sourceType, targetValue, targetType
+
+    }
+
+    this.getSourceValue = function(){
+        return sourceValue;
+    }
+
+    this.getSourceType = function(){
+        return sourceType;
+    }
+
+    this.getTargetValue = function(){
+        return targetValue;
+    }
+
+    this.getTargetType = function(){
+        return targetType;
+    }
+
+
+});
