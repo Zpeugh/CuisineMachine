@@ -25,6 +25,25 @@ body{
     background-position: fixed;
 }
 
+div#side-menu{
+    position:fixed;
+    top: 100px;
+    height: 50%;
+    width: 250px;
+    background-color: black;
+    opacity: .8;
+    z-index: 50;
+    text-align: center;
+    font-size: 1.5em;
+    font-color: white;
+    /*display: none;*/
+}
+
+div#side-menu:hover{
+    /*display: block;*/
+}
+
+
 #cuisine-machine-logo{
     width: 650px;
     height: auto;

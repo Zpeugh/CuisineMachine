@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    <div ng-app="cuisineMachineApp">
+    <div ng-app="cuisineMachineApp" ng-controller="cuisineMachineController">
 
         <!-- Navigation Tabs -->
         <ul id="main-navbar" class="nav nav-justified">
@@ -35,6 +35,11 @@
             </li>
         </ul>
 
+        <div id="side-menu">
+            <p>
+                <a>Start a timer
+            </p>
+        </div>
 
         <div ng-view></div>
 </body>

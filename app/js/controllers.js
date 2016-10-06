@@ -8,13 +8,24 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
     $scope.currentInstruction = "";
     $scope.currentInstructionStep = 0;
 
-
     // Utility functionss
     var scrollTo = function(selector, offset, time) {
         $('html,body').animate({
             scrollTop: $(selector).offset().top - offset
         }, time);
     }
+
+    $("body").on("mousemove",function(event) {
+        if (event.pageX < 10) {
+            $('#side-menu').show();
+        }
+    });
+
+    $("body").on("mousemove",function(event) {
+        if (event.pageX > 250) {
+            $('#side-menu').hide();
+        }
+    });
 
     $scope.onSubmit = function() {
         console.log("testData: " + $scope.testData);
