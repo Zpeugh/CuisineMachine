@@ -40,12 +40,26 @@ go to the next step,nav_next
 next step,nav_next
 what's next,nav_next
 how many grams in a pound,unit_conversion
+how many cups in three gallons,unit_conversion
+how many fluid ounces in two pints,unit_conversion
 how many ounces in a cup,unit_conversion
+how many gallons in eight cups,unit_conversion
 how many pints in a quart,unit_conversion
+how many grams in six pounds,unit_conversion
+how many kilograms in twenty seven grams,unit_conversion
 how many ounces in a gallon,unit_conversion 
 how many grams in an ounce,unit_conversion
+how many ounces in three pounds,unit_conversion
 gram to cup,unit_conversion
+eight grams to pounds,unit_conversion
 ounce to gram,unit_conversion
+three teaspoons to tablespoons,unit_conversion
 pint to ounce,unit_conversion
+nine pints to gallons,unit_conversion
 gallon to cup,unit_conversion
+sixteen gallons to cups,unit_conversion
 celsius to fahrenheit,unit_conversion
+forty two degrees fahrenheit to celsius,unit_conversion
+minus three degrees celsius to fahrenheit,unit_conversion
+negative ten degrees fahrenheit to celsius,unit_conversion
+four hundred degrees celsius to fahrenheit,unit_conversion
