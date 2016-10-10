@@ -1,4 +1,4 @@
-app.controller("cuisineMachineController", function($scope, $location, RandRService, RecipeService, TextToSpeechService, UnitConversionParser) {
+app.controller("cuisineMachineController", function($scope, $location, RandRService, RecipeService, TextToSpeechService, TimerService, UnitConversionParser) {
 
     $scope.searchText = "";
     $scope.recipes = RecipeService.getRecipes();
@@ -7,6 +7,8 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
     $scope.cookingPopup = false;
     $scope.currentInstruction = "";
     $scope.currentInstructionStep = 0;
+    $scope.timer = TimerService.getTimer();
+    $scope.timer.displayTime = TimerService.prettyPrintTime();
 
     // Utility functionss
     var scrollTo = function(selector, offset, time) {
@@ -15,18 +17,21 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
         }, time);
     }
 
-    $("body").on("mousemove",function(event) {
-        if (event.pageX < 10) {
+    // These two event listeners show and hide the side menu bar when the mouse is
+    // far enough to the left of the screen
+    $("body").on("mousemove", function(event) {
+        if (event.pageX < 25) {
             $('#side-menu').show();
         }
     });
 
-    $("body").on("mousemove",function(event) {
-        if (event.pageX > 250) {
+    $("body").on("mousemove", function(event) {
+        if (event.pageX > 255) {
             $('#side-menu').hide();
         }
     });
 
+    // Explore page's function to handle search being pressed
     $scope.onSubmit = function() {
         console.log("testData: " + $scope.testData);
         $scope.responseData = TextToSpeechService.speakText($scope.testData);
@@ -36,21 +41,21 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
     $scope.search = function() {
         RecipeService.clearRecipes();
         RandRService.sendRequest($scope.searchText)
-        .success(function(data){
-            console.log("Found " + data.length + " documents")
-            for (var i = 0; i < data.length; i++){
-                RecipeService.addRecipe(data[i]);
-            }
-            $scope.recipes = RecipeService.getRecipes();
-            $scope.recipeRows = RecipeService.getRecipeRows();
-            $location.path("/discover");
-        }).error(function(data){
-            console.log("Error: " + data);
-            $scope.documents = [];
-        });
+            .success(function(data) {
+                console.log("Found " + data.length + " documents")
+                for (var i = 0; i < data.length; i++) {
+                    RecipeService.addRecipe(data[i]);
+                }
+                $scope.recipes = RecipeService.getRecipes();
+                $scope.recipeRows = RecipeService.getRecipeRows();
+                $location.path("/discover");
+            }).error(function(data) {
+                console.log("Error: " + data);
+                $scope.documents = [];
+            });
     }
 
-    $scope.selectRecipe = function(recipe){
+    $scope.selectRecipe = function(recipe) {
         RecipeService.setSelectedRecipe(recipe);
         $scope.currentRecipe = RecipeService.getSelectedRecipe();
         console.log($scope.currentRecipe);
@@ -69,21 +74,21 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
 
     }
 
-    var goToStep = function(stepNum){
+    var goToStep = function(stepNum) {
         var inst = $('#instruction_' + stepNum);
         inst.addClass('current-instruction-box');
         $('#button-container_' + stepNum).show();
     }
 
-    var endStep = function(stepNum){
+    var endStep = function(stepNum) {
         var inst = $('#instruction_' + stepNum);
         inst.removeClass('current-instruction-box');
         $('#button-container_' + stepNum).hide();
     }
 
-    $scope.nextStep = function(){
+    $scope.nextStep = function() {
         endStep($scope.currentInstructionStep);
-        if ($scope.currentRecipe.instructions.length > $scope.currentInstructionStep + 1){
+        if ($scope.currentRecipe.instructions.length > $scope.currentInstructionStep + 1) {
             $scope.currentInstructionStep++;
             goToStep($scope.currentInstructionStep);
             scrollTo('#instruction_' + $scope.currentInstructionStep, 0, 1200);
@@ -91,65 +96,88 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
         }
     }
 
-    $scope.lastStep = function(){
+    $scope.lastStep = function() {
         endStep($scope.currentInstructionStep);
-        if ($scope.currentInstructionStep > 0){
+        if ($scope.currentInstructionStep > 0) {
             $scope.currentInstructionStep--;
             goToStep($scope.currentInstructionStep);
             scrollTo('#instruction_' + $scope.currentInstructionStep, 0, 1200);
         }
     }
 
-    $scope.startTimer = function(){
+    $scope.startTimer = function() {
         //TODO: Create/show timer widget
     }
 
-    $scope.readInstruction = function(){
-        var text = $('#instruction_' + $scope.currentInstructionStep +' > li').html();
+    $scope.readInstruction = function() {
+        var text = $('#instruction_' + $scope.currentInstructionStep + ' > li').html();
         TextToSpeechService.speak(text);
     }
 
 
-    $scope.convert = function(sentence){
-    	var volume = [1, 3, 6, 48, 96, 192, 768, 0.202884, 202.884]; //teaspooon, tblspoon, ounce, cup, pint, quart, gallon, milliliter, liter
-    	var weight = [1, 16, 0.035274, 35.274]; //ounce, pound, gram, kilogram
-    	var typeIDs = ["tspn","tblspn","floz","cup","pnt","qrt","gal","ml","l","oz","lb","g","kg"];
-    	var srcUnit = 0;//volume, weight
-    	var targUnit = 0;
+    $scope.openTimer = function() {
+        $scope.timer.show = true;
+        $scope.timer.showTitlePage = true;
+        console.log("opening");
+        // results = convert(sentence);
+
+    }
+
+    $scope.setTimerTitle = function(timerTitle) {
+        $scope.timer.showTitlePage = false;
+        $scope.timer.showTimePage = true;
+
+        console.log("Timer Title: " + timerTitle);
+    }
+
+    $scope.closeTimer = function() {
+        $scope.timer.show = false;
+        $scope.timer.showTitlePage = false;
+        $scope.timer.showTimePage = false;
+
+    }
+
+    $scope.startTimer = function() {
+        $scope.timer.displayTime = TimerService.prettyPrintTime();
+        $scope.closeTimer();
+        $scope.timer.isActive = true;
+        console.log($scope.timer.displayTime);
+    }
 
 
-    	var srcType = document.getElementById("sourceType").value;
-    	var srcVal = document.getElementById("sourceValue").value;
-    	var srcID = typeIDs.indexOf(srcType);
-    	if(srcID > 8){
-    		srcID = srcID - 9;
-    		srcUnit = 1;}
-    	else
-    		srcUnit = 0;
-    	var targType = document.getElementById("targetType").value;
-    	var targID = typeIDs.indexOf(targType);
-    	if(targID > 8){
-    		targID = targID - 9;
-    		targUnit = 1;}
-    	else
-    		targUnit = 0;
-    	if(srcUnit != targUnit){
-    		document.getElementById("answer").innerHTML = "Type Error";}
-    	else{
-    		if(srcUnit == 0){
-    			srcSize = srcVal * volume[srcID];
-    			targSize = srcSize/volume[targID];
-    			console.log(srcID);
-    			console.log(targID);
-    		}
-    		if(srcUnit == 1){
-    			srcSize = srcVal * weight[srcID];
-    			targSize = srcSize/weight[targID];
-    		}
 
-    	document.getElementById("answer").innerHTML = targSize + " " + targType;
+    $scope.openUnitConverter = function(){
+        //TODO: implement this similarly to timer widget
+    }
+    var convert = function(sentence) {
+        var volume = [1, 3, 6, 48, 96, 192, 768, 0.202884, 202.884]; //teaspooon, tblspoon, ounce, cup, pint, quart, gallon, milliliter, liter
+        var weight = [1, 16, 0.035274, 35.274]; //ounce, pound, gram, kilogram
+        var typeIDs = ["tspn", "tblspn", "floz", "cup", "pnt", "qrt", "gal", "ml", "l", "oz", "lb", "g", "kg"];
+        var srcUnit = 0; //volume, weight
+        var targUnit = 0;
 
-    	}
+        UnitConversionParser.parseSentence(sentence);
+
+        var srcType = UnitConversionParser.getSourceType();
+        var srcVal = UnitConversionParser.getSourceValue();
+        var srcID = typeIDs.indexOf(srcType);
+
+        var targType = UnitConversionParser.getTargetType();
+        var targVal;
+
+        if (srcUnit == 0) {
+            srcSize = srcVal * volume[srcID];
+            targSize = srcSize / volume[targID];
+            console.log(srcID);
+            console.log(targID);
+        }
+        if (srcUnit == 1) {
+            srcSize = srcVal * weight[srcID];
+            targSize = srcSize / weight[targID];
+        }
+
+        return "5 Grams"
+
 
     }
 

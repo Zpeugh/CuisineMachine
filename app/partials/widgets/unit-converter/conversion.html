@@ -3,48 +3,43 @@
 <head>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script>
+var volume = [1, 3, 6, 48, 96, 192, 768, 0.202884, 202.884]; //teaspooon, tblspoon, ounce, cup, pint, quart, gallon, milliliter, liter
+var weight = [1, 16, 0.035274, 35.274]; //ounce, pound, gram, kilogram
+var typeIDs = ["tspn","tblspn","floz","cup","pnt","qrt","gal","ml","l","oz","lb","g","kg"];
+var srcUnit = 0;//volume, weight
+var targUnit = 0;
 
-
-function convert(sentence){
-	var volume = [1, 3, 6, 48, 96, 192, 768, 0.202884, 202.884]; //teaspooon, tblspoon, ounce, cup, pint, quart, gallon, milliliter, liter
-	var weight = [1, 16, 0.035274, 35.274]; //ounce, pound, gram, kilogram
-	var typeIDs = ["tspn","tblspn","floz","cup","pnt","qrt","gal","ml","l","oz","lb","g","kg"];
-	var srcUnit = 0;//volume, weight
-	var targUnit = 0;
-
-	UnitConversionParser.parseSentence(sentence);
-	var srcType = UnitConversionParser.getSourceType();
-	var srcVal = UnitConversionParser.getSourceValue();
+function Convert(){
+	var srcType = document.getElementById("sourceType").value;
+	var srcVal = document.getElementById("sourceValue").value;
 	var srcID = typeIDs.indexOf(srcType);
-	// if(srcID > 8){
-	// 	srcID = srcID - 9;
-	// 	srcUnit = 1;}
-	// else
-	// 	srcUnit = 0;
-	var targType = UnitConversionParser.getTargetType();
-	var targVal = UnitConversionParser.getTargetValue();
+	if(srcID > 8){
+		srcID = srcID - 9;
+		srcUnit = 1;}
+	else
+		srcUnit = 0;
+	var targType = document.getElementById("targetType").value;
+	var targID = typeIDs.indexOf(targType);
+	if(targID > 8){
+		targID = targID - 9;
+		targUnit = 1;}
+	else
+		targUnit = 0;
+	if(srcUnit != targUnit){
+		document.getElementById("answer").innerHTML = "Type Error";}
+	else{
+		if(srcUnit == 0){
+			srcSize = srcVal * volume[srcID];
+			targSize = srcSize/volume[targID];
+			console.log(srcID);
+			console.log(targID);
+		}
+		if(srcUnit == 1){
+			srcSize = srcVal * weight[srcID];
+			targSize = srcSize/weight[targID];
+		}
 
-	// var targID = typeIDs.indexOf(targType);
-	// if(targID > 8){
-	// 	targID = targID - 9;
-	// 	targUnit = 1;}
-	// else
-	// 	targUnit = 0;
-	// if(srcUnit != targUnit){
-	// 	document.getElementById("answer").innerHTML = "Type Error";}
-	// else{
-	// 	if(srcUnit == 0){
-	// 		srcSize = srcVal * volume[srcID];
-	// 		targSize = srcSize/volume[targID];
-	// 		console.log(srcID);
-	// 		console.log(targID);
-	// 	}
-	// 	if(srcUnit == 1){
-	// 		srcSize = srcVal * weight[srcID];
-	// 		targSize = srcSize/weight[targID];
-	// 	}
-	//
-	// document.getElementById("answer").innerHTML = targSize + " " + targType;
+	document.getElementById("answer").innerHTML = targSize + " " + targType;
 
 	}
 
