@@ -14,7 +14,7 @@
 					// console.log(e.data);
 					if(e.data.size > 10) {
 						var reader = new FileReader();
-						reader.onload = function () {
+						reader.onloadend = function () {
 							console.log(reader.result.__proto__);
 							console.log(reader.result);
 							$.ajax({
@@ -36,7 +36,7 @@
 					// fd.append('data', e.data);
 					
   				}
-				mediaRecorder.start();
+				mediaRecorder.start(10000);
 			},
 			function(err) {
 				console.log("promise fail");
@@ -48,7 +48,19 @@
 			// 	console.log(reader.result);
 			// }
 			// mediaRecorder.requestData();
+			console.log("call stopRecord");
 			mediaRecorder.stop();
+			// setTimeout(function() {}, 10000);
+			// $.ajax({
+			// 	url: "/speech_to_text",
+			// 	method: "POST",
+			// 	data: "end",
+			// 	contentType: 'text/plain',
+			// 	processData: false,
+			// 	success: function(data) {
+			// 		console.log("receive data");
+			// 	}
+			// });
 			// 
 		}
 

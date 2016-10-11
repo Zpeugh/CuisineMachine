@@ -51,10 +51,21 @@ app.get('/api/search', function(req, res) {
     });
 });
 
+var buffer = "";
+var fs = require("fs");
+
 app.post('/speech_to_text', function(req, res) {
     console.log("receive speech to text request");
-    console.log(req.body);
-    // console.log(req.)
+    console.log(req.body.__proto__);
+    // if(req.body == "end") {
+    //     console.log(req.body);
+    //     fs.writeFile("./audio.wav", buffer, "binary", function(err) {});
+    //     buffer = "";
+    // } else {
+    //     buffer += req.body;
+    //     // console.log(req.body);
+    // }
+    fs.writeFile("./audio.wav", req.body, "binary", function(err) {});
 });
 
 console.log("Spinning up server on port " + PORT)
