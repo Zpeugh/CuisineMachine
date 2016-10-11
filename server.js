@@ -111,12 +111,12 @@ var params = {
 var recognizeStream = speech_to_text.createRecognizeStream(params);
 
 // Pipe in the audio.
+// CHANGE TO DATA READ FROM SOCKET BETWEEN CLIENT AND SERVER
 fs.createReadStream('audio-file.wav').pipe(recognizeStream);
 
 // Pipe out the transcription to a file.
+// CHANGE TO WRITE RESULTS BACK TO SOCKET TO CLIENT
 recognizeStream.pipe(fs.createWriteStream('transcription.txt'));
-
-// Get strings instead of buffers from 'data' events.
 recognizeStream.setEncoding('utf8');
 
 // Listen for events.
