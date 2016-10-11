@@ -117,19 +117,6 @@ app.service('UnitConversionParser', function() {
     var targetType = "";
 
     this.parseSentence = function(sentence){
-
-        //TODO: Jackson create a parser to get and set sourceValue, sourceType, targetValue, targetType
-		var words = sentence.split(" ");
-		var format = "how many blank are in blank";
-		var format1 = format.split(" ");
-		format = "how many blank in blank";
-		var format2 = format.split(" ");
-		format = "blank in blank";
-		var format3 = format.split(" ");
-		format = "blank to blank";
-		var format4 = format.split(" ");
-		format = "blank blank to blank";
-		var format5 = format.split(" ");
 		var TargID;
 		var srcID;
 		var ones = ["zero","one","two","three","four","five","six","seven","eight","nine"];
