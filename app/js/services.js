@@ -271,6 +271,8 @@ app.service('UnitConversionParser', function() {
 		
 		else if{
 			while(word < textArray.length){
+				value = 0;
+				place = 0;
 				if(ones.indexOf(textArray[word]) != -1){
 					value = ones.indexOf(textArray[word]);
 					word++;
