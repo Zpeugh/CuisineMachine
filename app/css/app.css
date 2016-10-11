@@ -30,8 +30,7 @@ div#side-menu{
     top: 100px;
     height: 50%;
     width: 250px;
-    background-color: black;
-    opacity: .8;
+    background-color: rgba(0, 0, 0, 0.8);
     z-index: 50;
     text-align: center;
     font-size: 1.5em;
@@ -39,17 +38,127 @@ div#side-menu{
     /*display: none;*/
 }
 
-div#side-menu:hover{
-    /*display: block;*/
+p.side-menu-item{
+    padding: 5px;
+    font-color: white;
+    color: white;
+}
+
+/************** Styling for popup widgets******************/
+.popup-panel{
+    position: fixed;
+    left: 50%;
+    top: 40%;
+    background-color: rgba(0, 0, 0,.95);
+    z-index: 100;
+    box-shadow: 0 20px 12px -10px rgba(0, 0, 0, 0.4);
+    height: 400px;
+    margin-top: -200px;
+    vertical-align: middle;
+    text-align: center;
+    width: 600px;
+    margin-left: -300px;
+}
+
+h1#timer-title{
+    color: white;
+    font-weight: bold;
+}
+
+input#widget-searchbox{
+    width: 400px;
+    height: 40px;
+    background-color: transparent;
+    font-size: 20px;
+    color: white;
+    border: 1px solid lightgrey;
+    text-align: center;
+    margin-top: 15px;
 }
 
 
-#cuisine-machine-logo{
-    width: 650px;
-    height: auto;
+.widget-number-field{
+    width: 100px;
+    height: 30px;
+    background-color: transparent;
+    font-size: 20px;
+    color: white;
+    border: 1px solid lightgrey;
+    text-align: center;
+    /*margin-top: 15px;*/
+}
+
+.widget-text {
+    font-size: 20px;
+    color: white;
+}
+
+.widget-row{
+    padding-bottom: 20px;
+}
+
+img#widget-next-arrow{
+    margin-top: 4px;
+    margin-left: 25px;
+}
+
+#begin-timer-button{
+    height: 30px;
+    width: 100px;
+    background-color: transparent;
+    border: 1px solid lightgrey;
+    color: white;
+    font-size: 20px;
+    margin-top: 15px;
 }
 
 
+#timer-display{
+    position: fixed;
+    left: 0%;
+    bottom: 00%;
+    background-color: rgba(0, 0, 0,.6);
+    z-index: 100;
+    box-shadow: 0 20px 12px -10px rgba(0, 0, 0, 0.4);
+    vertical-align: middle;
+    text-align: center;
+    width: 200px;
+    color: white;
+    font-size: 20px;
+}
+
+
+/************ Reusable classes/ids ************/
+
+.clickable:hover{
+    cursor: pointer;
+}
+
+span.spacing{
+    font-size: .55em;
+}
+
+.container-fluid {
+    text-align: center;
+    /*font-weight: bold;*/
+
+}
+
+.header{
+    font-weight: bold;
+    color: white;
+}
+
+img#exit{
+    float: right;
+    padding: 5px;
+    height: 30px;
+    width: 30px;
+}
+
+
+
+/***************** Top navigation bar ***************/
 .nav .nav-justified{
     border: none;
     border-radius: none;
@@ -57,9 +166,6 @@ div#side-menu:hover{
     /*text-align: center;*/
 }
 
-span.spacing{
-    font-size: .55em;
-}
 
 #main-navbar > li > a {
     color: white;
@@ -99,6 +205,16 @@ span.spacing{
     color: white;
 }
 
+
+/******************** Explore Page ********************/
+
+
+#cuisine-machine-logo{
+    width: 650px;
+    height: auto;
+}
+
+
 #explore-page-container{
     position: absolute;
     top: 0;
@@ -110,19 +226,6 @@ span.spacing{
     background-repeat: no-repeat;
     background-size: cover;
 
-}
-
-.container-fluid {
-    text-align: center;
-    /*font-weight: bold;*/
-
-}
-
-#grid-container{
-    background-color: rgba(206,206,206,1);
-    padding-bottom: 50px;
-    margin-top: 100px;
-    width: 80%;
 }
 
 
@@ -139,6 +242,7 @@ span.spacing{
     border-right: 2px solid grey;
     color: white;
 }
+
 .searchbox:focus{
     border: 1px solid white;
 }
@@ -158,16 +262,25 @@ span.spacing{
 
 }
 
+
 #listening-text{
     font-size: 1.4em;
     color: white;
 }
 
 
-.header{
-    font-weight: bold;
-    color: white;
+
+
+
+/***************** Discover page styling ********************/
+
+#grid-container{
+    background-color: rgba(206,206,206,1);
+    padding-bottom: 50px;
+    margin-top: 100px;
+    width: 80%;
 }
+
 
 #discover-header{
     font-weight: bold;
@@ -189,7 +302,7 @@ span.spacing{
 }
 
 div.recipe-box:hover{
-    cursor: hand;
+    cursor: pointer;
 }
 
 @media screen and (min-width: 669px) {
@@ -216,7 +329,6 @@ div.recipe-box:hover{
     }
 
 }
-
 
 
 @media screen and (max-width: 668px) {
@@ -308,6 +420,9 @@ a>img.recipe-header:active{
     border-radius: 0px;
 }
 
+
+/******************* Create Page *******************/
+
 div#right-arrow-div{
     height: 100%;
     vertical-align: middle;
@@ -351,6 +466,7 @@ div#right-arrow-div{
     background-color: rgba(206,206,206,1);
 }
 
+
 #cooking-popup{
     display: none;
     height: 250px;
@@ -382,4 +498,18 @@ div#right-arrow-div{
     padding: 20px;
     border: 1px solid black;
     margin: 0px auto;
+}
+
+.flat-button{
+    background-color: transparent;
+    color: black;
+    border: 1px solid black;
+    font-size: 20px;
+    font-weight: bold;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
