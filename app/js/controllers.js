@@ -1,4 +1,4 @@
-app.controller("cuisineMachineController", function($scope, $location, RandRService, RecipeService, TextToSpeechService, TimerService, UnitConversionParser) {
+app.controller("cuisineMachineController", function($scope, $location, $interval, RandRService, RecipeService, TextToSpeechService, TimerService, UnitConversionParser) {
 
     $scope.searchText = "";
     $scope.recipes = RecipeService.getRecipes();
@@ -9,6 +9,8 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
     $scope.currentInstructionStep = 0;
     $scope.timer = TimerService.getTimer();
     $scope.timer.displayTime = TimerService.prettyPrintTime();
+    $scope.converter = {};
+    $scope.converter.show  = false;
 
     // Utility functionss
     var scrollTo = function(selector, offset, time) {
@@ -119,14 +121,11 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
         $scope.timer.show = true;
         $scope.timer.showTitlePage = true;
         console.log("opening");
-        // results = convert(sentence);
-
     }
 
     $scope.setTimerTitle = function(timerTitle) {
         $scope.timer.showTitlePage = false;
         $scope.timer.showTimePage = true;
-
         console.log("Timer Title: " + timerTitle);
     }
 
@@ -134,20 +133,26 @@ app.controller("cuisineMachineController", function($scope, $location, RandRServ
         $scope.timer.show = false;
         $scope.timer.showTitlePage = false;
         $scope.timer.showTimePage = false;
-
     }
 
     $scope.startTimer = function() {
-        $scope.timer.displayTime = TimerService.prettyPrintTime();
         $scope.closeTimer();
         $scope.timer.isActive = true;
+        var totalSeconds = TimerService.setTotalSeconds();
         console.log($scope.timer.displayTime);
+        $interval(function(){
+            $scope.timer.displayTime = TimerService.prettyPrintTime();
+            TimerService.decrementTime();
+        }, 1000, totalSeconds);
     }
 
 
-
     $scope.openUnitConverter = function(){
-        //TODO: implement this similarly to timer widget
+        $scope.converter.show  = true;
+    }
+
+    $scope.setUnitConversionSentence = function(sentence){
+        console.log(sentence);
     }
     var convert = function(sentence) {
         var volume = [1, 3, 6, 48, 96, 192, 768, 0.202884, 202.884]; //teaspooon, tblspoon, ounce, cup, pint, quart, gallon, milliliter, liter

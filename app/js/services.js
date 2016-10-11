@@ -164,6 +164,11 @@ app.service('TimerService', function(){
         }
     }
 
+    var refreshTimeFields = function(){
+        timer.time.seconds = timer.time.totalSeconds % 60;
+        timer.time.minutes = Math.floor(timer.time.totalSeconds / 60) % 60;
+        timer.time.hours = Math.floor(timer.time.totalSeconds / 3600);
+    }
 
     this.getTimer = function(){
         return timer;
@@ -173,9 +178,23 @@ app.service('TimerService', function(){
         var strHours = padWithZeros(timer.time.hours);
         var strMinutes = padWithZeros(timer.time.minutes);
         var strSeconds = padWithZeros(timer.time.seconds);
-
         return strHours + ":" + strMinutes + ":" + strSeconds;
     }
 
+    this.setTotalSeconds = function(){
+        timer.time.totalSeconds = timer.time.hours*3600 + timer.time.minutes*60 + timer.time.seconds
+        return timer.time.totalSeconds;
+    }
+
+    this.decrementTime = function(){
+        if(timer.time.totalSeconds == 1){
+            timer.time.seconds = 0;
+            timer.time.totalSeconds = 0;
+            return true;
+        } else {
+            timer.time.totalSeconds--;
+            refreshTimeFields();
+        }
+    }
 
 });
