@@ -152,7 +152,15 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     }
 
     $scope.setUnitConversionSentence = function(sentence){
-        console.log(sentence);
+        UnitConversionParser.parseSentence(sentence);
+        var sourceValue = UnitConversionParser.getSourceValue();
+        var sourceType = UnitConversionParser.getSourceType();
+        var targetType = UnitConversionParser.getTargetType();
+
+        console.log(sourceValue);
+        console.log(sourceType);
+        console.log(targetType);
+
     }
     var convert = function(sentence) {
         var volume = [1, 3, 6, 48, 96, 192, 768, 0.202884, 202.884]; //teaspooon, tblspoon, ounce, cup, pint, quart, gallon, milliliter, liter

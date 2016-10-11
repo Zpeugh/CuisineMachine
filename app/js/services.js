@@ -117,29 +117,30 @@ app.service('UnitConversionParser', function() {
     var targetType = "";
 
     this.parseSentence = function(sentence){
-		var TargID;
+        var words = sentence.split(' ');
+        var TargID;
 		var srcID;
 		var ones = ["zero","one","two","three","four","five","six","seven","eight","nine"];
 		var teens = ["null","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"]
 		var tens = ["null","ten","twenty","thirty","forty","fifty","sixty","seven","eight","nine"];
 		var mag = ["a","point","minus","negative","hundred","thousand"];
 		var units = ["degree","teaspoon","tablespoon","fluid ounce","cup","pint","quart","gallon","milliliter","liter","oounce","pound","gram","kilogram","degrees","teaspoons","tablespoons","fluid","cups","pints","quarts","gallons","milliliters","liters","oounces","pounds","grams","kilograms"]
-		
+
 		currentWord = 0;
-		if(words[0].equals("how") && words[1].equals("many")){
+		if(words[0] === ("how") && words[1] === ("many")){
 			currentWord = 2;
 			targID = units.indexOf(words[currentWord]);
 			if(targID > 13){
 				targID = targID - 14;
 			}
 			targetType = units[targID];
-			if(targetType.equals("degree") || targetType.equals("degrees")){
+			if(targetType === ("degree") || targetType === ("degrees")){
 				targetType = units[targID+1];
 				currentWord++;
 			}
 			currentWord = words.indexOf("in");
 			currentWord++;
-			
+
 			numStart = currentWord;
 			while(units.indexOf(words[currentWord]) == -1){
 				currentWord++;
@@ -150,25 +151,25 @@ app.service('UnitConversionParser', function() {
 				srcID = srcID - 14;
 			}
 			sourceType = units[srcID];
-			if(sourceType.equals("degree") || sourceType.equals("degrees")){
+			if(sourceType === ("degree") || sourceType === ("degrees")){
 				sourceType = units[srcID+1];
 				currentWord++;
 			}
 		}
 		else if(units.indexOf(words[0]) != -1){
-			if(words[1].equals("in") || words[2].equals("in")){
+			if(words[1] === ("in") || words[2] === ("in")){
 				currentWord = 0;
 				targID = units.indexOf(words[currentWord]);
 				if(targID > 13){
 					targID = targID - 14;
 				}
 				targetType = units[targID];
-				if(targetType.equals("degree") || targetType.equals("degrees")){
+				if(targetType === ("degree") || targetType === ("degrees")){
 				targetType = units[targID+1];
 				currentWord++;
 				}
 				currentWord = words.indexOf("in")+1;
-				
+
 				numStart = currentWord;
 				while(units.indexOf(words[currentWord]) == -1){
 					currentWord++;
@@ -179,18 +180,18 @@ app.service('UnitConversionParser', function() {
 					srcID = srcID - 14;
 				}
 				sourceType = units[srcID];
-				if(sourceType.equals("degree") || sourceType.equals("degrees")){
+				if(sourceType === ("degree") || sourceType === ("degrees")){
 					sourceType = units[srcID+1];
 					currentWord++;
 				}
 			}
-			else if(words[1].equals("to")){
+			else if(words[1] === ("to")){
 				srcID = units.indexOf(words[currentWord]);
 				if(srcID > 13){
 					srcID = srcID - 14;
 				}
 				sourceType = units[srcID];
-				if(sourceType.equals("degree") || sourceType.equals("degrees")){
+				if(sourceType === ("degree") || sourceType === ("degrees")){
 					sourceType = units[srcID+1];
 					currentWord++;
 				}
@@ -200,13 +201,13 @@ app.service('UnitConversionParser', function() {
 				if(targID > 13){
 					targID = targID - 14;
 				}
-				targetType = units[targID];	
-				if(targetType.equals("degree") || targetType.equals("degrees")){
+				targetType = units[targID];
+				if(targetType === ("degree") || targetType === ("degrees")){
 					targetType = units[targID+1];
 					currentWord++;
-				}				
-			}	
-				
+				}
+			}
+
 		}
 		else if(ones.indexOf(words[0]) != -1  || tens.indexOf(words[0]) != -1  || teens.indexOf(words[0]) != -1 || mag.indexOf(words[0]) != -1){
 			numStart = currentWord;
@@ -219,7 +220,7 @@ app.service('UnitConversionParser', function() {
 				srcID = srcID - 14;
 			}
 			sourceType = units[srcID];
-			if(sourceType.equals("degree") || sourceType.equals("degrees")){
+			if(sourceType === ("degree") || sourceType === ("degrees")){
 				sourceType = units[srcID+1];
 				currentWord++;
 			}
@@ -229,47 +230,47 @@ app.service('UnitConversionParser', function() {
 			if(targID > 13){
 				targID = targID - 14;
 			}
-			targetType = units[targID];	
-			if(targetType.equals("degree") || targetType.equals("degrees")){
+			targetType = units[targID];
+			if(targetType === ("degree") || targetType === ("degrees")){
 				targetType = units[targID+1];
 				currentWord++;
 				}
-				
+
 		}
-		
+
 
     }
-	
-	function numParse(textArray){
+
+	var numparse = function(textArray){
 		var ones = ["zero","one","two","three","four","five","six","seven","eight","nine"];
 		var teens = ["null","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"]
 		var tens = ["null","ten","twenty","thirty","forty","fifty","sixty","seven","eight","nine"];
 		var mag = ["null","hundred"];
 		var misc = ["a","point","minus","negative","and"];
-		
+
 		var word = 0;
 		var number = 0;
 		var value;
 		var place;
 		var sign = 1;
-		
-		if(textArray.length == 0 || (textArray.length == 1 && textArray[0].equals("a"))){
+
+		if(textArray.length == 0 || (textArray.length == 1 && textArray[0] === ("a"))){
 			number = 1;
 		}
-		
+
 		else if(textArray.indexOf("half") != -1){
 			number = 0.5
 		}
-		
+
 		else if(textArray.indexOf("quarter") != -1){
 			number = 0.25
 		}
-		
+
 		else if(textArray.indexOf("eighth") != -1){
 			number = 0.125
 		}
-		
-		else if{
+
+		else{
 			while(word < textArray.length){
 				value = 0;
 				place = 0;
@@ -283,10 +284,10 @@ app.service('UnitConversionParser', function() {
 						place = 1;
 					}
 					word++;
-					if(word < textArray.length && textArray[word].equals("and")){
-					word++;	
+					if(word < textArray.length && textArray[word] === ("and")){
+					word++;
 					}
-					
+
 				}
 				else if(teens.indexOf(textArray[word]) != -1){
 					value = teens.indexOf(textArray[word]) + 10;
@@ -304,7 +305,7 @@ app.service('UnitConversionParser', function() {
 					place = 10;
 					word++;
 				}
-				else if(textArray[word].equals("a")){
+				else if(textArray[word] === ("a")){
 					value = 1;
 					if(mag.indexOf(textArray[word]) != -1){
 						place = Math.pow(10, mag.indexOf(textArray[word]));
@@ -314,15 +315,15 @@ app.service('UnitConversionParser', function() {
 					}
 					word++;
 				}
-				else if(textArray[word].equals("minus") || textArray[word].equals("negative")){
+				else if(textArray[word] === ("minus") || textArray[word] === ("negative")){
 					sign = -1;
 					word++;
 				}
-				
+
 				number += sign*value*place;
 			}
 		}
-		
+
 		return number;
 	}
 
@@ -332,10 +333,6 @@ app.service('UnitConversionParser', function() {
 
     this.getSourceType = function(){
         return sourceType;
-    }
-
-    this.getTargetValue = function(){
-        return targetValue;
     }
 
     this.getTargetType = function(){
