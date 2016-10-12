@@ -12,7 +12,7 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     $scope.converter = {};
     $scope.converter.show  = false;
 
-    // Utility functionss
+    // Utility functions
     var scrollTo = function(selector, offset, time) {
         $('html,body').animate({
             scrollTop: $(selector).offset().top - offset
@@ -143,9 +143,19 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         $interval(function(){
             $scope.timer.displayTime = TimerService.prettyPrintTime();
             TimerService.decrementTime();
+            console.log($scope.timer.time.totalSeconds);
+            if($scope.timer.time.totalSeconds == 0){
+                $scope.timerFinished();
+            }
         }, 1000, totalSeconds);
     }
 
+    $scope.timerFinished = function(){
+        var title = $scope.timer.title;
+        $scope.timer.isActive = false;
+        TextToSpeechService.speak("The " + title + " is done.");
+        $scope.timer = TimerService.resetTimer();
+    }
 
     $scope.openUnitConverter = function(){
         $scope.converter.show  = true;

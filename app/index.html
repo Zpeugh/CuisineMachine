@@ -56,10 +56,7 @@
             </div>
         </div>
 
-        <div ng-if="converter.show">
-            <div ng-include src="'partials/widgets/unit-converter/conversion.html'"></div>
-        </div>
-
+        <div ng-if="converter.show" ng-include src="'partials/widgets/unit-converter/conversion.html'"></div>
         <div ng-view></div>
     </div>
 </body>

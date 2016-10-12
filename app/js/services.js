@@ -354,7 +354,7 @@ app.service('TimerService', function(){
     timer.time.hours = "";
     timer.time.minutes = "";
     timer.time.seconds = "";
-    timer.time.totalSeconds = 96000;
+    timer.time.totalSeconds = 0;
 
     var padWithZeros = function(t){
         if (t < 10){
@@ -395,6 +395,20 @@ app.service('TimerService', function(){
             timer.time.totalSeconds--;
             refreshTimeFields();
         }
+    }
+
+    this.resetTimer = function(){
+        timer.show = false;
+        timer.showTitlePage = false;
+        timer.showTimePage = false;
+        timer.title = "";
+        timer.time = {};
+        timer.time.hours = 0;
+        timer.time.minutes = 0;
+        timer.time.seconds = 0;
+        timer.time.totalSeconds = 0;
+
+        return timer;
     }
 
 });
