@@ -165,8 +165,8 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     var convert = function(sentence) {
         var volume = [1, 3, 6, 48, 96, 192, 768, 0.202884, 202.884]; //teaspooon, tblspoon, ounce, cup, pint, quart, gallon, milliliter, liter
         var weight = [1, 16, 0.035274, 35.274]; //ounce, pound, gram, kilogram
-        var typeIDs = ["tspn", "tblspn", "floz", "cup", "pnt", "qrt", "gal", "ml", "l", "oz", "lb", "g", "kg"];
-        var srcUnit = 0; //volume, weight
+        var typeIDs = ["teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "milliliter", "liter", "ounce", "pound", "gram", "kilogram","fahrenheit","celsius"];
+        var srcUnit = 0; //volume, weight, temp
         var targUnit = 0;
 
         UnitConversionParser.parseSentence(sentence);
@@ -177,17 +177,38 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
 
         var targType = UnitConversionParser.getTargetType();
         var targVal;
+		
+		if(targID > 8 && targID <= 12){
+			targID = targID - 9;
+			targUnit = 1;}
+		else if(targID <= 8)
+			targUnit = 0;
+		else if(targID > 12){
+			targID = targID - 13;
+			targUnit = 2;}
+			
+		if(srcID > 8 && srcID <= 12){
+			srcID = srcID - 9;
+			srcUnit = 1;}
+		else if(srcID <= 8)
+			srcUnit = 0;
+		else if(targID > 12)
+			srcID = srcID - 13;
+			srcUnit = 2;
+		
 
         if (srcUnit == 0) {
             srcSize = srcVal * volume[srcID];
             targSize = srcSize / volume[targID];
-            console.log(srcID);
-            console.log(targID);
         }
         if (srcUnit == 1) {
             srcSize = srcVal * weight[srcID];
             targSize = srcSize / weight[targID];
         }
+		if(srcUnit == 2)
+			
+		
+		console.log(targSize + " " + targID);
 
         return "5 Grams"
 

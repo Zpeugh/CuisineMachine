@@ -241,11 +241,11 @@ app.service('UnitConversionParser', function() {
 
     }
 
-	var numparse = function(textArray){
+	function numParse(textArray){
 		var ones = ["zero","one","two","three","four","five","six","seven","eight","nine"];
 		var teens = ["null","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"]
 		var tens = ["null","ten","twenty","thirty","forty","fifty","sixty","seven","eight","nine"];
-		var mag = ["null","hundred"];
+		var mag = ["null","null","hundred"];
 		var misc = ["a","point","minus","negative","and"];
 
 		var word = 0;
@@ -256,6 +256,10 @@ app.service('UnitConversionParser', function() {
 
 		if(textArray.length == 0 || (textArray.length == 1 && textArray[0] === ("a"))){
 			number = 1;
+		}
+		
+		else if(textArray.length == 1 && !isNaN(textArray[0])){
+			number = parseFloat(textArray[0]);
 		}
 
 		else if(textArray.indexOf("half") != -1){
