@@ -124,7 +124,7 @@ app.service('UnitConversionParser', function() {
 		var teens = ["null","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"]
 		var tens = ["null","ten","twenty","thirty","forty","fifty","sixty","seven","eight","nine"];
 		var mag = ["a","point","minus","negative","hundred","thousand"];
-		var units = ["degree","teaspoon","tablespoon","fluid ounce","cup","pint","quart","gallon","milliliter","liter","oounce","pound","gram","kilogram","degrees","teaspoons","tablespoons","fluid","cups","pints","quarts","gallons","milliliters","liters","oounces","pounds","grams","kilograms"]
+		var units = ["degree","teaspoon","tablespoon","fluid ounce","cup","pint","quart","gallon","milliliter","liter","ounce","pound","gram","kilogram","degrees","teaspoons","tablespoons","fluid","cups","pints","quarts","gallons","milliliters","liters","ounces","pounds","grams","kilograms"]
 
 		currentWord = 0;
 		if(words[0] === ("how") && words[1] === ("many")){
@@ -135,7 +135,7 @@ app.service('UnitConversionParser', function() {
 			}
 			targetType = units[targID];
 			if(targetType === ("degree") || targetType === ("degrees")){
-				targetType = units[targID+1];
+				targetType = words[currentWord + 1];
 				currentWord++;
 			}
 			currentWord = words.indexOf("in");
@@ -152,7 +152,7 @@ app.service('UnitConversionParser', function() {
 			}
 			sourceType = units[srcID];
 			if(sourceType === ("degree") || sourceType === ("degrees")){
-				sourceType = units[srcID+1];
+				sourceType = words[currentWord + 1];
 				currentWord++;
 			}
 		}
@@ -165,7 +165,7 @@ app.service('UnitConversionParser', function() {
 				}
 				targetType = units[targID];
 				if(targetType === ("degree") || targetType === ("degrees")){
-				targetType = units[targID+1];
+				targetType = words[currentWord + 1];
 				currentWord++;
 				}
 				currentWord = words.indexOf("in")+1;
@@ -181,7 +181,7 @@ app.service('UnitConversionParser', function() {
 				}
 				sourceType = units[srcID];
 				if(sourceType === ("degree") || sourceType === ("degrees")){
-					sourceType = units[srcID+1];
+					sourceType = words[currentWord + 1];
 					currentWord++;
 				}
 			}
@@ -192,7 +192,7 @@ app.service('UnitConversionParser', function() {
 				}
 				sourceType = units[srcID];
 				if(sourceType === ("degree") || sourceType === ("degrees")){
-					sourceType = units[srcID+1];
+					sourceType = words[currentWord + 1];
 					currentWord++;
 				}
 				sourceValue = 1;
@@ -203,13 +203,13 @@ app.service('UnitConversionParser', function() {
 				}
 				targetType = units[targID];
 				if(targetType === ("degree") || targetType === ("degrees")){
-					targetType = units[targID+1];
+					targetType = words[currentWord + 1];
 					currentWord++;
 				}
 			}
 
 		}
-		else if(ones.indexOf(words[0]) != -1  || tens.indexOf(words[0]) != -1  || teens.indexOf(words[0]) != -1 || mag.indexOf(words[0]) != -1){
+		else if(ones.indexOf(words[0]) != -1  || tens.indexOf(words[0]) != -1  || teens.indexOf(words[0]) != -1 || mag.indexOf(words[0]) != -1 || !isNaN(words[0])){
 			numStart = currentWord;
 			while(units.indexOf(words[currentWord]) == -1){
 				currentWord++;
@@ -221,7 +221,7 @@ app.service('UnitConversionParser', function() {
 			}
 			sourceType = units[srcID];
 			if(sourceType === ("degree") || sourceType === ("degrees")){
-				sourceType = units[srcID+1];
+				sourceType = words[currentWord + 1];
 				currentWord++;
 			}
 			currentWord = words.indexOf("to");
@@ -232,7 +232,7 @@ app.service('UnitConversionParser', function() {
 			}
 			targetType = units[targID];
 			if(targetType === ("degree") || targetType === ("degrees")){
-				targetType = units[targID+1];
+				targetType = words[currentWord + 1];
 				currentWord++;
 				}
 
@@ -253,8 +253,9 @@ app.service('UnitConversionParser', function() {
 		var value;
 		var place;
 		var sign = 1;
+		
 
-		if(textArray.length == 0 || (textArray.length == 1 && textArray[0] === ("a"))){
+		if(textArray.length == 0 || (textArray.length == 1 && (textArray[0] === ("a") || textArray[0] === ("an")))){
 			number = 1;
 		}
 		
@@ -332,6 +333,10 @@ app.service('UnitConversionParser', function() {
 	}
 
     this.getSourceValue = function(){
+        return sourceValue;
+    }
+	
+	this.getSourceValue = function(){
         return sourceValue;
     }
 
