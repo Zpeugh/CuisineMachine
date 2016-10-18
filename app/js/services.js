@@ -6,17 +6,6 @@
 // const VOICE = "en-GB_KateVoice";
 console.log("Initializing Services...");
 
-app.service('NLPService', function($http) {
-    this.processText = function( text ){
-        $http.get("http://www.httpbin.org/get?sample=" + text)
-        .success(function(data){
-            console.log(data);
-            return JSON.stringify(data);
-        }).error(function(data){
-            return "Shit";
-        });
-    };
-});
 
 app.service('RandRService', function($http){
     this.sendRequest = function(sentence){
@@ -103,17 +92,19 @@ app.service('RecipeService', function(){
 
 app.service('TextToSpeechService', function($http) {
 
-    var msg = new SpeechSynthesisUtterance();
+    var utterance = new SpeechSynthesisUtterance();
     var voices = window.speechSynthesis.getVoices();
-        msg.voice = voices[2]; // Note: some voices don't support altering params
-        msg.voiceURI = 'native';
-        msg.volume = 1; // 0 to 1
-        msg.rate = 1; // 0.1 to 10
-        msg.pitch = 2;
+    // utterance.voice = voices[2]; // Note: some voices don't support altering params
+    utterance.voice = voices.filter(function(voice) { return voice.name === 'Google UK English Female'; })[0];
+
+    utterance.voiceURI = 'native';
+    utterance.volume = 1; // 0 to 1
+    utterance.rate = 1; // 0.1 to 10
+    utterance.pitch = 7;
 
     this.speak = function(text){
-        msg.text = text;
-        window.speechSynthesis.speak(msg);
+        utterance.text = text;
+        window.speechSynthesis.speak(utterance);
     }
 
 });
@@ -146,6 +137,44 @@ app.service('UnitConversionParser', function() {
 
     this.getTargetType = function(){
         return targetType;
+    }
+
+
+});
+
+
+app.service('TimerService', function(){
+
+    var timer = {};
+    timer.show = false;
+    timer.showTitlePage = false;
+    timer.showTimePage = false;
+    timer.title = "";
+    timer.time = {};
+    timer.time.hours = "";
+    timer.time.minutes = "";
+    timer.time.seconds = "";
+    timer.time.totalSeconds = 96000;
+
+    var padWithZeros = function(t){
+        if (t < 10){
+            return "0" + t;
+        } else {
+            return "" + t;
+        }
+    }
+
+
+    this.getTimer = function(){
+        return timer;
+    }
+
+    this.prettyPrintTime = function(){
+        var strHours = padWithZeros(timer.time.hours);
+        var strMinutes = padWithZeros(timer.time.minutes);
+        var strSeconds = padWithZeros(timer.time.seconds);
+
+        return strHours + ":" + strMinutes + ":" + strSeconds;
     }
 
 

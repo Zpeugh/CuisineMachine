@@ -1,5 +1,6 @@
 var express = require('express');
 var http = require("http");
+var bodyParser = require('body-parser');
 // var retrieve_and_rank = require("./retrieve-rank/retrieve-rank").search;
 var retrieve_and_rank = require("./retrieve-rank/retrieve-rank").search_rank;
 var classify = require("./nlc/classifier");
@@ -11,31 +12,12 @@ const PORT = 8080;
 
 app.use(express.static(__dirname + '/app'));
 
+app.use(bodyParser.text());
+
 app.get('/api/search', function(req, res) {
     console.log("HIT THE BACKEND");
     console.log(req.query.q);
     var sentence = req.query.q;
-
-    // var documents = retrieve_and_rank(sentence, function(err, searchResponse) {
-    //         if (err) {
-    //             console.log("Error search and rank: " + err);
-    //             fs.writeFile("DEBUG_LOGS/retreive_and_rank_log.txt", err, function(err) {
-    //                 if (err) {
-    //                     return console.log(err);
-    //                 }
-    //             });
-    //
-    //             res.send("Error searching for documents: " + err);
-    //         } else {
-    //             console.log('Found ' + searchResponse.response.numFound + ' document(s).');
-    //             for (var i = 0; i < 50; i++) {
-    //                 console.log('First document: ' + JSON.stringify(searchResponse.response.docs[i]["ranker.confidence"], null, 2));
-    //                 console.log('First document: ' + JSON.stringify(searchResponse.response.docs[i]["title"], null, 2));
-    //             }
-    //         }
-    //     }
-    // );
-
 
     classify(sentence, function(err, response) {
         if (err)
@@ -69,41 +51,63 @@ app.get('/api/search', function(req, res) {
     });
 });
 
+var buffer = "";
+var fs = require("fs");
+
+app.post('/speech_to_text', function(req, res) {
+    console.log("receive speech to text request");
+    console.log(req.body.__proto__);
+    // if(req.body == "end") {
+    //     console.log(req.body);
+    //     fs.writeFile("./audio.wav", buffer, "binary", function(err) {});
+    //     buffer = "";
+    // } else {
+    //     buffer += req.body;
+    //     // console.log(req.body);
+    // }
+    fs.writeFile("./audio.wav", req.body, "binary", function(err) {});
+});
+
 console.log("Spinning up server on port " + PORT)
 app.listen(PORT);
 
-
-// get watson token for speech to text
-/*
+// get token for speech to text
 console.log('STT');
+var sttToken = '';
 var watson = require('watson-developer-cloud');
-
 var authorization = new watson.AuthorizationV1({
     username: '200220d5-97ff-4e6e-bb0c-6ebc724928b5',
     password: 'wFdBnVqSbi6M',
     url: watson.SpeechToTextV1.URL
 });
-
 authorization.getToken(function (err, token) {
     if (!token) {
         console.log('error:', err);
-    } else {
-        // use token
+    } else {        
+        sttToken = token;
+        console.log(token);
     }
 });
-*/
 
+// pass token to client
+// NOTE: might need  way of waiting for token to be set
+app.get('/api/stt/gettoken',function(req, res){
+    return res.json({ token: sttToken });
+});
+
+// speech to text 
+/*
 var watson = require('watson-developer-cloud');
 var speech_to_text = watson.speech_to_text({
-  username: '200220d5-97ff-4e6e-bb0c-6ebc724928b5',
-  password: 'wFdBnVqSbi6M',
-  version: 'v1'
+    username: '200220d5-97ff-4e6e-bb0c-6ebc724928b5',
+    password: 'wFdBnVqSbi6M',
+    version: 'v1'
 });
 
 var params = {
-  content_type: 'audio/wav',
-  continuous: true,
-  interim_results: true,
+    content_type: 'audio/wav',
+    continuous: true,
+    interim_results: true,
     model: 'en-US_NarrowbandModel'
 };
 
@@ -129,3 +133,4 @@ recognizeStream.on('close-connection', function(event) { onEvent('Close:', event
 function onEvent(name, event) {
     console.log(name, event);
 };
+*/
