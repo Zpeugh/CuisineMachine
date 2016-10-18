@@ -14,7 +14,24 @@ app.use(express.static(__dirname + '/app'));
 
 app.use(bodyParser.text());
 
-app.get('/api/search', function(req, res) {
+app.get('/api/classify', function(req, res) {
+    console.log("HIT THE BACKEND");
+    console.log(req.query.q);
+    var sentence = req.query.q;
+
+    classify(sentence, function(err, response) {
+        if (err)
+            console.log('error:', err);
+        else {
+            // console.log(response);
+            var class_name = response.classes[0].class_name;
+            res.send(class_name);
+        }
+    });
+});
+
+
+app.get('/api/recipes', function(req, res) {
     console.log("HIT THE BACKEND");
     console.log(req.query.q);
     var sentence = req.query.q;

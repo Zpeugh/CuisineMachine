@@ -9,7 +9,13 @@ console.log("Initializing Services...");
 
 app.service('RandRService', function($http){
     this.sendRequest = function(sentence){
-        return $http.get("/api/search?q=" + sentence);
+        return $http.get("/api/recipes?q=" + sentence);
+    }
+});
+
+app.service('ClassifyService', function($http){
+    this.classifyRequest = function(sentence){
+        return $http.get("/api/classify?q=" + sentence);
     }
 });
 
@@ -115,6 +121,21 @@ app.service('UnitConversionParser', function() {
     var sourceValue = 0;
     var sourceType = "";
     var targetType = "";
+    var converter = {}
+    converter.show = false;
+
+    this.getConverter = function(){
+        return converter;
+    }
+
+    this.showConverter = function(){
+        converter.show = true;
+    };
+
+    this.hideConverter = function(){
+        converter.show = false;
+    };
+
 
     this.parseSentence = function(sentence){
         var words = sentence.split(' ');
@@ -410,5 +431,26 @@ app.service('TimerService', function(){
 
         return timer;
     }
+
+});
+
+app.service('ListeningService', function(){
+
+    var listener = {};
+    listener.isActive = false;
+
+    this.getListener = function(){
+        return listener;
+    }
+
+    this.setActive = function(){
+        listener.isActive = true;
+    }
+
+    this.setInactive = function(){
+        listener.isActive = false;
+    }
+
+
 
 });

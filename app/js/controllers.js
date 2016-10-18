@@ -1,16 +1,28 @@
-app.controller("cuisineMachineController", function($scope, $location, $interval, RandRService, RecipeService, TextToSpeechService, TimerService, UnitConversionParser) {
+app.controller("cuisineMachineController", function($scope, $location, $interval, $rootScope, RandRService, ClassifyService, RecipeService, TextToSpeechService, TimerService, UnitConversionParser, ListeningService) {
 
     $scope.searchText = "";
     $scope.recipes = RecipeService.getRecipes();
     $scope.currentRecipe = RecipeService.getSelectedRecipe();
     $scope.recipeRows = RecipeService.getRecipeRows();
-    $scope.cookingPopup = false;
     $scope.currentInstruction = "";
     $scope.currentInstructionStep = 0;
     $scope.timer = TimerService.getTimer();
     $scope.timer.displayTime = TimerService.prettyPrintTime();
-    $scope.converter = {};
-    $scope.converter.show  = false;
+    $scope.converter = UnitConversionParser.getConverter();
+    $scope.listener = ListeningService.getListener();
+
+    $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+        var nextPath = next.$$route.originalPath;
+        if (nextPath == "/discover"){
+            ListeningService.setActive();
+        } else if (nextPath == "/create"){
+            ListeningService.setActive();
+        } else if (nextPath == "/explore"){
+            ListeningService.setInactive();
+        } else {
+            console.log("unknown path: " + nextPath);
+        }
+    });
 
     // Utility functions
     var scrollTo = function(selector, offset, time) {
@@ -24,6 +36,7 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     $("body").on("mousemove", function(event) {
         if (event.pageX < 25) {
             $('#side-menu').show();
+            console.log($scope.converter.show);
         }
     });
 
@@ -41,20 +54,43 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     }
 
     $scope.search = function() {
-        RecipeService.clearRecipes();
-        RandRService.sendRequest($scope.searchText)
-            .success(function(data) {
-                console.log("Found " + data.length + " documents")
-                for (var i = 0; i < data.length; i++) {
-                    RecipeService.addRecipe(data[i]);
-                }
-                $scope.recipes = RecipeService.getRecipes();
-                $scope.recipeRows = RecipeService.getRecipeRows();
-                $location.path("/discover");
-            }).error(function(data) {
-                console.log("Error: " + data);
-                $scope.documents = [];
-            });
+        ClassifyService.classifyRequest($scope.searchText).success(function(className){
+            console.log("Classified as: " + className);
+            if (className == "recipes"){
+                RecipeService.clearRecipes();
+                RandRService.sendRequest($scope.searchText)
+                    .success(function(data) {
+                        console.log("Found " + data.length + " documents")
+                        for (var i = 0; i < data.length; i++) {
+                            RecipeService.addRecipe(data[i]);
+                        }
+                        $scope.recipes = RecipeService.getRecipes();
+                        $scope.recipeRows = RecipeService.getRecipeRows();
+                        $location.path("/discover");
+                    }).error(function(data) {
+                        console.log("Error: " + data);
+                        $scope.documents = [];
+                    });
+            } else if(className == "timer"){
+                $scope.openTimer();
+            } else if(className == "nav_start"){
+                $scope.firstStep();
+            } else if(className == "nav_next"){
+                $scope.nextStep();
+            } else if(className == "nav_prev"){
+                $scope.goBackAStep();
+            } else if(className == "nav_end"){
+                $scope.nextStep();
+            }else if(className == "unit_conversion"){
+                console.log("opening converter");
+                $scope.openUnitConverter();
+
+                // $scope.setUnitConversionSentence($scope.searchText);
+            }
+        }).error(function(data){
+            console.log("Error classifying: "+ data);
+        });
+
     }
 
     $scope.selectRecipe = function(recipe) {
@@ -88,6 +124,13 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         $('#button-container_' + stepNum).hide();
     }
 
+    $scope.firstStep = function() {
+        endStep($scope.currentInstructionStep);
+        $scope.currentInstructionStep = 0;
+        goToStep(0);
+        scrollTo('#instruction_0', 0, 1200);
+    }
+
     $scope.nextStep = function() {
         endStep($scope.currentInstructionStep);
         if ($scope.currentRecipe.instructions.length > $scope.currentInstructionStep + 1) {
@@ -98,17 +141,13 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         }
     }
 
-    $scope.lastStep = function() {
+    $scope.goBackAStep = function() {
         endStep($scope.currentInstructionStep);
         if ($scope.currentInstructionStep > 0) {
             $scope.currentInstructionStep--;
             goToStep($scope.currentInstructionStep);
             scrollTo('#instruction_' + $scope.currentInstructionStep, 0, 1200);
         }
-    }
-
-    $scope.startTimer = function() {
-        //TODO: Create/show timer widget
     }
 
     $scope.readInstruction = function() {
@@ -153,23 +192,28 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     $scope.timerFinished = function(){
         var title = $scope.timer.title;
         $scope.timer.isActive = false;
-        TextToSpeechService.speak("The " + title + " is done.");
+        TextToSpeechService.speak("The " + title + "timer is done.");
         $scope.timer = TimerService.resetTimer();
     }
 
     $scope.openUnitConverter = function(){
-        $scope.converter.show  = true;
+        $scope.converter.show = true;
+    }
+
+    $scope.closeUnitConverter = function(){
+        $scope.converter.show = false;
     }
 
     $scope.setUnitConversionSentence = function(sentence){
-        UnitConversionParser.parseSentence(sentence);
-        var sourceValue = UnitConversionParser.getSourceValue();
-        var sourceType = UnitConversionParser.getSourceType();
-        var targetType = UnitConversionParser.getTargetType();
-
-        console.log(sourceValue);
-        console.log(sourceType);
-        console.log(targetType);
+        console.log("converting sentence: "+ sentence);
+        // UnitConversionParser.parseSentence(sentence);
+        // var sourceValue = UnitConversionParser.getSourceValue();
+        // var sourceType = UnitConversionParser.getSourceType();
+        // var targetType = UnitConversionParser.getTargetType();
+        //
+        // console.log(sourceValue);
+        // console.log(sourceType);
+        // console.log(targetType);
 
     }
     var convert = function(sentence) {

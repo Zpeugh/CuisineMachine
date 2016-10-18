@@ -116,7 +116,7 @@ img#widget-next-arrow{
 #timer-display{
     position: fixed;
     left: 0%;
-    bottom: 00%;
+    bottom: 0%;
     background-color: rgba(0, 0, 0,.6);
     z-index: 100;
     box-shadow: 0 20px 12px -10px rgba(0, 0, 0, 0.4);
@@ -127,6 +127,19 @@ img#widget-next-arrow{
     font-size: 20px;
 }
 
+#listener-box{
+    position: fixed;
+    right: 0%;
+    top: 0%;
+    background-color: rgba(0, 0, 0,.6);
+    z-index: 100;
+    box-shadow: 0 20px 12px -10px rgba(0, 0, 0, 0.4);
+    vertical-align: middle;
+    text-align: center;
+    width: 200px;
+    color: white;
+    font-size: 20px;
+}
 
 /************ Reusable classes/ids ************/
 
@@ -156,6 +169,10 @@ img#exit{
     width: 30px;
 }
 
+img.small-ripple{
+    height: 75px;
+    width: 75px;
+}
 
 
 /***************** Top navigation bar ***************/
