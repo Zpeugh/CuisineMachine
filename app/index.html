@@ -44,21 +44,19 @@
             <div ng-if="timer.showTitlePage" ng-include src="'partials/widgets/timer/set-title.html'"></div>
             <div ng-if="timer.showTimePage" ng-include src="'partials/widgets/timer/set-time.html'"></div>
         </div>
-        <div ng-if="timer.showConversion">
-            <div ng-include src="'partials/unit-converter/widget.html'"></div>
-        </div>
-
         <div ng-if="timer.isActive">
             <div id="timer-display" class="container">
                 <div class="row">
                     <span ng-model="timer.title">{{timer.title}}</span>
                 </div>
                 <div class="row">
+                    <!-- TODO: add pause/start and an exit button -->
                     <span ng-model="timer.displayTime">{{timer.displayTime}}</span>
                 </div>
             </div>
         </div>
 
+        <div ng-if="converter.show" ng-include src="'partials/widgets/unit-converter/conversion.html'"></div>
         <div ng-view></div>
     </div>
 </body>

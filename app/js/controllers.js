@@ -1,4 +1,4 @@
-app.controller("cuisineMachineController", function($scope, $location, $http, RandRService, RecipeService, TextToSpeechService, TimerService, UnitConversionParser) {
+app.controller("cuisineMachineController", function($scope, $location, $http, $interval, RandRService, RecipeService, TextToSpeechService, TimerService, UnitConversionParser) {
 
     $scope.searchText = "";
     $scope.recipes = RecipeService.getRecipes();
@@ -9,8 +9,10 @@ app.controller("cuisineMachineController", function($scope, $location, $http, Ra
     $scope.currentInstructionStep = 0;
     $scope.timer = TimerService.getTimer();
     $scope.timer.displayTime = TimerService.prettyPrintTime();
+    $scope.converter = {};
+    $scope.converter.show  = false;
 
-    // Utility functionss
+    // Utility functions
     var scrollTo = function(selector, offset, time) {
         $('html,body').animate({
             scrollTop: $(selector).offset().top - offset
@@ -119,14 +121,11 @@ app.controller("cuisineMachineController", function($scope, $location, $http, Ra
         $scope.timer.show = true;
         $scope.timer.showTitlePage = true;
         console.log("opening");
-        // results = convert(sentence);
-
     }
 
     $scope.setTimerTitle = function(timerTitle) {
         $scope.timer.showTitlePage = false;
         $scope.timer.showTimePage = true;
-
         console.log("Timer Title: " + timerTitle);
     }
 
@@ -134,20 +133,44 @@ app.controller("cuisineMachineController", function($scope, $location, $http, Ra
         $scope.timer.show = false;
         $scope.timer.showTitlePage = false;
         $scope.timer.showTimePage = false;
-
     }
 
     $scope.startTimer = function() {
-        $scope.timer.displayTime = TimerService.prettyPrintTime();
         $scope.closeTimer();
         $scope.timer.isActive = true;
+        var totalSeconds = TimerService.setTotalSeconds();
         console.log($scope.timer.displayTime);
+        $interval(function(){
+            $scope.timer.displayTime = TimerService.prettyPrintTime();
+            TimerService.decrementTime();
+            console.log($scope.timer.time.totalSeconds);
+            if($scope.timer.time.totalSeconds == 0){
+                $scope.timerFinished();
+            }
+        }, 1000, totalSeconds);
     }
 
-
+    $scope.timerFinished = function(){
+        var title = $scope.timer.title;
+        $scope.timer.isActive = false;
+        TextToSpeechService.speak("The " + title + " is done.");
+        $scope.timer = TimerService.resetTimer();
+    }
 
     $scope.openUnitConverter = function(){
-        //TODO: implement this similarly to timer widget
+        $scope.converter.show  = true;
+    }
+
+    $scope.setUnitConversionSentence = function(sentence){
+        UnitConversionParser.parseSentence(sentence);
+        var sourceValue = UnitConversionParser.getSourceValue();
+        var sourceType = UnitConversionParser.getSourceType();
+        var targetType = UnitConversionParser.getTargetType();
+
+        console.log(sourceValue);
+        console.log(sourceType);
+        console.log(targetType);
+
     }
     var convert = function(sentence) {
         var volume = [1, 3, 6, 48, 96, 192, 768, 0.202884, 202.884]; //teaspooon, tblspoon, ounce, cup, pint, quart, gallon, milliliter, liter

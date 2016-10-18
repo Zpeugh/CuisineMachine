@@ -50,6 +50,8 @@ how many kilograms in twenty seven grams,unit_conversion
 how many ounces in a gallon,unit_conversion 
 how many grams in an ounce,unit_conversion
 how many ounces in three pounds,unit_conversion
+ounces in a cup,unit_conversion
+grams in 3 pounds,unit_conversion
 gram to cup,unit_conversion
 eight grams to pounds,unit_conversion
 ounce to gram,unit_conversion
@@ -63,3 +65,4 @@ forty two degrees fahrenheit to celsius,unit_conversion
 minus three degrees celsius to fahrenheit,unit_conversion
 negative ten degrees fahrenheit to celsius,unit_conversion
 four hundred degrees celsius to fahrenheit,unit_conversion
+how many degrees celsius is one hundred degrees fahrenheit,unit_conversion
