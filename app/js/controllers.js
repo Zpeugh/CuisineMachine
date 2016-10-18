@@ -1,4 +1,4 @@
-app.controller("cuisineMachineController", function($scope, $location, $interval, $rootScope, RandRService, ClassifyService, RecipeService, TextToSpeechService, TimerService, UnitConversionParser, ListeningService) {
+app.controller("cuisineMachineController", function($scope, $location, $interval, $rootScope, RandRService, ClassifyService, RecipeService, TextToSpeechService, TimerService, ConversionService, UnitConversionParser, ListeningService) {
 
     $scope.searchText = "";
     $scope.recipes = RecipeService.getRecipes();
@@ -8,7 +8,7 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     $scope.currentInstructionStep = 0;
     $scope.timer = TimerService.getTimer();
     $scope.timer.displayTime = TimerService.prettyPrintTime();
-    $scope.converter = UnitConversionParser.getConverter();
+    $scope.converter = ConversionService.getConverter();
     $scope.listener = ListeningService.getListener();
 
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
@@ -204,46 +204,83 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         $scope.converter.show = false;
     }
 
-    $scope.setUnitConversionSentence = function(sentence){
-        console.log("converting sentence: "+ sentence);
-        // UnitConversionParser.parseSentence(sentence);
-        // var sourceValue = UnitConversionParser.getSourceValue();
-        // var sourceType = UnitConversionParser.getSourceType();
-        // var targetType = UnitConversionParser.getTargetType();
-        //
-        // console.log(sourceValue);
-        // console.log(sourceType);
-        // console.log(targetType);
 
+    $scope.setUnitConversionSentence = function(sentence){
+        UnitConversionParser.parseSentence(sentence);
+        var sourceValue = UnitConversionParser.getSourceValue();
+        var sourceType = UnitConversionParser.getSourceType();
+        var targetType = UnitConversionParser.getTargetType();
+
+		$scope.converter.targetValue = convert(sourceValue, sourceType, targetType);
+		$scope.converter.targetType = abbrev(targetType);
+		console.log($scope.converter.targetValue + $scope.converter.targetType);
     }
-    var convert = function(sentence) {
+
+	var abbrev = function(targType){
+		var typeIDs = ["teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "milliliter", "liter", "ounce", "pound", "gram", "kilogram","fahrenheit","celsius"];
+		var typeAbbrev = ["tspn","tblspn","fl oz","c","pnt","qrt","gal","ml","l","oz","lb","g","kg","°F","°C"]
+		var id = typeIDs.indexOf(targType);
+		return typeAbbrev[id];
+	}
+    var convert = function(srcVal, srcType, targType) {
         var volume = [1, 3, 6, 48, 96, 192, 768, 0.202884, 202.884]; //teaspooon, tblspoon, ounce, cup, pint, quart, gallon, milliliter, liter
         var weight = [1, 16, 0.035274, 35.274]; //ounce, pound, gram, kilogram
-        var typeIDs = ["tspn", "tblspn", "floz", "cup", "pnt", "qrt", "gal", "ml", "l", "oz", "lb", "g", "kg"];
-        var srcUnit = 0; //volume, weight
+		var temp = [] //Fahrenheit, Celsius
+        var typeIDs = ["teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "milliliter", "liter", "ounce", "pound", "gram", "kilogram","fahrenheit","celsius"];
+        var srcUnit = 0; //volume, weight, temp
         var targUnit = 0;
 
-        UnitConversionParser.parseSentence(sentence);
-
-        var srcType = UnitConversionParser.getSourceType();
-        var srcVal = UnitConversionParser.getSourceValue();
-        var srcID = typeIDs.indexOf(srcType);
-
-        var targType = UnitConversionParser.getTargetType();
         var targVal;
+
+		srcID = typeIDs.indexOf(srcType);
+		targID = typeIDs.indexOf(targType);
+
+		if(targID > 8 && targID <= 12){
+			targID = targID - 9;
+			targUnit = 1;}
+		else if(targID <= 8)
+			targUnit = 0;
+		else if(targID > 12){
+			targID = targID - 13;
+			targUnit = 2;}
+
+		if(srcID > 8 && srcID <= 12){
+			srcID = srcID - 9;
+			srcUnit = 1;}
+		else if(srcID <= 8)
+			srcUnit = 0;
+		else if(srcID > 12){
+			srcID = srcID - 13;
+			srcUnit = 2;}
+
+
+		var srcSize = 0;
 
         if (srcUnit == 0) {
             srcSize = srcVal * volume[srcID];
             targSize = srcSize / volume[targID];
-            console.log(srcID);
-            console.log(targID);
         }
         if (srcUnit == 1) {
             srcSize = srcVal * weight[srcID];
             targSize = srcSize / weight[targID];
         }
+		if(srcUnit == 2){
+			console.log(srcID);
+			console.log(targID);
+			if(srcID == 0 && targID == 1){ //Fahrenheit to Celsius
+				targSize = (srcVal - 32)* 5.0/9;
+			}
+			else if(srcID == 1 && targID == 0){	//Celsius to Fahrenheit
+				targSize = srcVal * 1.8 +32;
+			}
+			else{
+				targSize = srcVal;
+			}
+		}
 
-        return "5 Grams"
+
+
+        return targSize;
 
 
     }

@@ -11,6 +11,9 @@
             <img id="widget-next-arrow" ng-click="setUnitConversionSentence(converter.sentence)" class="clickable" src="../images/next.png" />
         </div>
         <div class="row widget-row">
+            <span ng-model="converter.targetValue">{{converter.targetValue}} </span><span ng-model="converter.targetType">{{converter.targetType}}</span>
+        </div>
+        <div class="row widget-row">
             <img class="small-ripple" src="../images/ripple.svg" /><br /><span id="listening-text">Listening . . .</span>
         </div>
     </div>
