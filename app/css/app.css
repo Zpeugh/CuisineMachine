@@ -60,7 +60,7 @@ p.side-menu-item{
     margin-left: -300px;
 }
 
-h1#timer-title{
+h1.widget-title{
     color: white;
     font-weight: bold;
 }
@@ -130,13 +130,14 @@ img#widget-next-arrow{
 #listener-box{
     position: fixed;
     right: 0%;
-    top: 0%;
+    bottom: 0%;
+    padding: 15px;
     background-color: rgba(0, 0, 0,.6);
-    z-index: 100;
+    z-index: 10;
     box-shadow: 0 20px 12px -10px rgba(0, 0, 0, 0.4);
     vertical-align: middle;
     text-align: center;
-    width: 200px;
+    width: auto;
     color: white;
     font-size: 20px;
 }
@@ -173,6 +174,12 @@ img.small-ripple{
     height: 75px;
     width: 75px;
 }
+
+img.smaller-ripple{
+    height: 50px;
+    width: 50px;
+}
+
 
 
 /***************** Top navigation bar ***************/
@@ -285,6 +292,14 @@ img.small-ripple{
     color: white;
 }
 
+#listening-text-small{
+    font-size: 1em;
+    color: white;
+}
+#listening-text-smaller{
+    font-size: .8em;
+    color: white;
+}
 
 
 
