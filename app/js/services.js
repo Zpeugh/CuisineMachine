@@ -1,12 +1,3 @@
-// const NLP_SERVICE_CREDENTIAL = "";
-// const NLP_SERVICE_PASSWORD = "";
-// const TEXT_TO_SPEECH_UN = "dbedbd53-5ac1-4f44-a97b-d682c856acc6"
-// const TEXT_TO_SPEECH_PASS = "X47ysWgxe4mD"
-// const TEXT_TO_SPEECH_URL = "https://stream.watsonplatform.net/text-to-speech/api";
-// const VOICE = "en-GB_KateVoice";
-console.log("Initializing Services...");
-
-
 app.service('RandRService', function($http){
     this.sendRequest = function(sentence){
         return $http.get("/api/recipes?q=" + sentence);
@@ -94,7 +85,32 @@ app.service('RecipeService', function(){
 
 });
 
+app.service('InstructionService', function(){
+    var instruction = {};
+    instruction.currentInstruction = "";
+    instruction.stepNumber = 0;
 
+    this.getInstruction = function(){
+        return instruction;
+    }
+
+    this.setCurrentInstruction = function(instr){
+        instruction.currentInstruction = instr;
+    }
+
+    this.setCurrentInstructionStep = function(step){
+        instruction.stepNumber = step;
+    }
+
+    this.incrementStep = function(){
+        instruction.stepNumber++;
+    }
+
+    this.decrementStep = function(){
+        instruction.stepNumber--;
+    }
+
+});
 
 app.service('TextToSpeechService', function($http) {
 
@@ -453,6 +469,7 @@ app.service('UnitConversionParser', function() {
         }
     }
 });
+
 
 
 app.service('TimerService', function(){

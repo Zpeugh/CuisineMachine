@@ -1,15 +1,21 @@
-app.controller("cuisineMachineController", function($scope, $location, $interval, $rootScope, RandRService, ClassifyService, RecipeService, TextToSpeechService, TimerService, ConversionService, UnitConversionParser, ListenerService) {
+app.controller("cuisineMachineController", function($scope, $location, $interval, $rootScope, RandRService,
+                                                    ClassifyService, RecipeService, TextToSpeechService,
+                                                    InstructionService, TimerService, ConversionService,
+                                                    UnitConversionParser, ListenerService) {
 
-    $scope.searchText = "";
-    $scope.recipes = RecipeService.getRecipes();
-    $scope.currentRecipe = RecipeService.getSelectedRecipe();
-    $scope.recipeRows = RecipeService.getRecipeRows();
-    $scope.currentInstruction = "";
-    $scope.currentInstructionStep = 0;
-    $scope.timer = TimerService.getTimer();
-    $scope.timer.displayTime = TimerService.prettyPrintTime();
-    $scope.converter = ConversionService.getConverter();
-    $scope.listener = ListenerService.getListener();
+    var init = function(){
+        $scope.searchText = "";
+        $scope.recipes = RecipeService.getRecipes();
+        $scope.currentRecipe = RecipeService.getSelectedRecipe();
+        $scope.recipeRows = RecipeService.getRecipeRows();
+        $scope.instruction = InstructionService.getInstruction();
+        $scope.timer = TimerService.getTimer();
+        $scope.timer.displayTime = TimerService.prettyPrintTime();
+        $scope.converter = ConversionService.getConverter();
+        $scope.listener = ListenerService.getListener();
+    }
+
+    init();
 
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
         var nextPath = next.$$route.originalPath;
@@ -42,7 +48,6 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     $("body").on("mousemove", function(event) {
         if (event.pageX < 25) {
             $('#side-menu').show();
-            console.log($scope.converter.show);
         }
     });
 
@@ -54,14 +59,14 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
 
     // Explore page's function to handle search being pressed
     $scope.onSubmit = function() {
-        console.log("testData: " + $scope.testData);
         $scope.responseData = TextToSpeechService.speakText($scope.testData);
-        console.log($scope.responseData);
     }
 
-
-
     $scope.search = function(sentence) {
+        $scope.currentRecipe = RecipeService.getSelectedRecipe();
+        $scope.instruction = InstructionService.getInstruction();
+        console.log("recipe on click");
+        console.log($scope.currentRecipe);
         $scope.searchText = sentence;
         ClassifyService.classifyRequest(sentence).success(function(className){
             console.log("Classified as: " + className);
@@ -91,7 +96,6 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
             } else if(className == "nav_end"){
                 $scope.nextStep();
             }else if(className == "unit_conversion"){
-                console.log("opening converter");
                 $scope.openUnitConverter();
                 $scope.setUnitConversionSentence(sentence);
             }
@@ -104,7 +108,6 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     $scope.selectRecipe = function(recipe) {
         RecipeService.setSelectedRecipe(recipe);
         $scope.currentRecipe = RecipeService.getSelectedRecipe();
-        console.log($scope.currentRecipe);
         $location.path("/create");
         scrollTo("body", 50);
     }
@@ -123,46 +126,51 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     }
 
     $scope.startCooking = function() {
-        $scope.currentInstructionStep = z0;
-        $scope.currentInstruction = $scope.currentRecipe.instructions[$scope.instructionStep];
+        console.log("Current instruction");
+        console.log($scope.instruction);
+        InstructionService.setCurrentInstructionStep(0);
+        InstructionService.setCurrentInstruction($scope.currentRecipe.instructions[0]);
         scrollTo('#instruction_0', 200, 1200);
         goToStep(0);
     }
 
     $scope.nextStep = function() {
-        endStep($scope.currentInstructionStep);
-        if ($scope.currentRecipe.instructions.length > $scope.currentInstructionStep + 1) {
-            $scope.currentInstructionStep++;
-            goToStep($scope.currentInstructionStep);
-            scrollTo('#instruction_' + $scope.currentInstructionStep, 0, 1200);
+        endStep($scope.instruction.stepNumber);
+        if ($scope.currentRecipe.instructions.length > $scope.instruction.stepNumber + 1) {
+            InstructionService.incrementStep();
+            InstructionService.setCurrentInstruction($scope.currentRecipe.instructions[$scope.instruction.stepNumber])
+            goToStep($scope.instruction.stepNumber);
+            scrollTo('#instruction_' + $scope.instruction.stepNumber, 0, 1200);
         }
     }
 
     $scope.goBackAStep = function() {
-        endStep($scope.currentInstructionStep);
-        if ($scope.currentInstructionStep > 0) {
-            $scope.currentInstructionStep--;
-            goToStep($scope.currentInstructionStep);
-            scrollTo('#instruction_' + $scope.currentInstructionStep, 0, 1200);
+        endStep($scope.instruction.stepNumber);
+        console.log("Current instruction");
+        console.log($scope.instruction);
+        if ($scope.instruction.stepNumber > 0) {
+            InstructionService.decrementStep();
+            InstructionService.setCurrentInstruction($scope.currentRecipe.instructions[$scope.instruction.stepNumber])
+            console.log("Back an instruction");
+            console.log($scope.instruction);
+            goToStep($scope.instruction.stepNumber);
+            scrollTo('#instruction_' + $scope.instruction.stepNumber, 0, 1200);
         }
     }
 
     $scope.readInstruction = function() {
-        var text = $('#instruction_' + $scope.currentInstructionStep + ' > li').html();
+        var text = $('#instruction_' + $scope.instruction.stepNumber + ' > li').html();
         TextToSpeechService.speak(text);
     }
-
 
     $scope.openTimer = function() {
         $scope.timer.show = true;
         $scope.timer.showTitlePage = true;
-        console.log("opening");
     }
 
     $scope.setTimerTitle = function(timerTitle) {
         $scope.timer.showTitlePage = false;
         $scope.timer.showTimePage = true;
-        console.log("Timer Title: " + timerTitle);
     }
 
     $scope.closeTimer = function() {
@@ -175,11 +183,9 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         $scope.closeTimer();
         $scope.timer.isActive = true;
         var totalSeconds = TimerService.setTotalSeconds();
-        console.log($scope.timer.displayTime);
         $interval(function(){
             $scope.timer.displayTime = TimerService.prettyPrintTime();
             TimerService.decrementTime();
-            console.log($scope.timer.time.totalSeconds);
             if($scope.timer.time.totalSeconds == 0){
                 $scope.timerFinished();
             }
@@ -189,7 +195,7 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     $scope.timerFinished = function(){
         var title = $scope.timer.title;
         $scope.timer.isActive = false;
-        TextToSpeechService.speak("The " + title + "timer is done.");
+        TextToSpeechService.speak("The " + title + " timer is done.");
         $scope.timer = TimerService.resetTimer();
     }
 
@@ -201,7 +207,6 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         ConversionService.hideConverter();
         ConversionService.resetConverter();
     }
-
 
     $scope.setUnitConversionSentence = function(sentence){
         $scope.converter.sentence = sentence;
@@ -215,6 +220,4 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     $scope.closeListenerTextBox = function(){
         ListenerService.hideText();
     }
-
-
 });
