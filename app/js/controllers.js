@@ -223,8 +223,6 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
             targSize = srcSize / weight[targID];
         }
 		if(srcUnit == 2){
-			console.log(srcID);
-			console.log(targID);
 			if(srcID == 0 && targID == 1){ //Fahrenheit to Celsius
 				targSize = (srcVal - 32)* 5.0/9;
 			}
