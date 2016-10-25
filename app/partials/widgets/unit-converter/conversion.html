@@ -1,17 +1,21 @@
 <div class="popup-panel">
     <div class="container-fluid text-center">
         <div class="row widget-row text-right">
-            <img id="exit" ng-click="closeTimer()" class="clickable" src="../images/exit.png" />
+            <img id="exit" ng-click="closeUnitConverter()" class="clickable" src="../images/exit.png" />
         </div>
         <div class="row widget-row">
-            <h1 id="timer-title">Convert units</h1>
+            <h1 class="widget-title">Convert units</h1>
         </div>
         <div id= "widget-title-row" class="row widget-row-tall">
             <input class="col-sm-9 col-sm-offset-2" id="widget-searchbox" type="text" ng-model="converter.sentence"></input>
             <img id="widget-next-arrow" ng-click="setUnitConversionSentence(converter.sentence)" class="clickable" src="../images/next.png" />
         </div>
         <div class="row widget-row">
-            <img src="../images/ripple.svg" /><br /><span id="listening-text">Listening . . .</span>
+            <span class="widget-text" ng-model="converter.result">{{converter.result}} </span>
+            <br />
+        </div>
+        <div class="row widget-row">
+            <img class="small-ripple" src="../images/ripple.svg" /><br /><span id="listening-text">Listening . . .</span>
         </div>
     </div>
 </div>

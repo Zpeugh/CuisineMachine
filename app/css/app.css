@@ -60,7 +60,7 @@ p.side-menu-item{
     margin-left: -300px;
 }
 
-h1#timer-title{
+h1.widget-title{
     color: white;
     font-weight: bold;
 }
@@ -116,7 +116,7 @@ img#widget-next-arrow{
 #timer-display{
     position: fixed;
     left: 0%;
-    bottom: 00%;
+    bottom: 0%;
     background-color: rgba(0, 0, 0,.6);
     z-index: 100;
     box-shadow: 0 20px 12px -10px rgba(0, 0, 0, 0.4);
@@ -127,6 +127,20 @@ img#widget-next-arrow{
     font-size: 20px;
 }
 
+#listener-box{
+    position: fixed;
+    right: 0%;
+    bottom: 0%;
+    padding: 15px;
+    background-color: rgba(0, 0, 0,.6);
+    z-index: 10;
+    box-shadow: 0 20px 12px -10px rgba(0, 0, 0, 0.4);
+    vertical-align: middle;
+    text-align: center;
+    width: auto;
+    color: white;
+    font-size: 20px;
+}
 
 /************ Reusable classes/ids ************/
 
@@ -154,6 +168,16 @@ img#exit{
     padding: 5px;
     height: 30px;
     width: 30px;
+}
+
+img.small-ripple{
+    height: 75px;
+    width: 75px;
+}
+
+img.smaller-ripple{
+    height: 50px;
+    width: 50px;
 }
 
 
@@ -268,6 +292,14 @@ img#exit{
     color: white;
 }
 
+#listening-text-small{
+    font-size: 1em;
+    color: white;
+}
+#listening-text-smaller{
+    font-size: .8em;
+    color: white;
+}
 
 
 

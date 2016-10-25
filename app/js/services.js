@@ -1,15 +1,12 @@
-// const NLP_SERVICE_CREDENTIAL = "";
-// const NLP_SERVICE_PASSWORD = "";
-// const TEXT_TO_SPEECH_UN = "dbedbd53-5ac1-4f44-a97b-d682c856acc6"
-// const TEXT_TO_SPEECH_PASS = "X47ysWgxe4mD"
-// const TEXT_TO_SPEECH_URL = "https://stream.watsonplatform.net/text-to-speech/api";
-// const VOICE = "en-GB_KateVoice";
-console.log("Initializing Services...");
-
-
 app.service('RandRService', function($http){
     this.sendRequest = function(sentence){
-        return $http.get("/api/search?q=" + sentence);
+        return $http.get("/api/recipes?q=" + sentence);
+    }
+});
+
+app.service('ClassifyService', function($http){
+    this.classifyRequest = function(sentence){
+        return $http.get("/api/classify?q=" + sentence);
     }
 });
 
@@ -88,7 +85,32 @@ app.service('RecipeService', function(){
 
 });
 
+app.service('InstructionService', function(){
+    var instruction = {};
+    instruction.currentInstruction = "";
+    instruction.stepNumber = 0;
 
+    this.getInstruction = function(){
+        return instruction;
+    }
+
+    this.setCurrentInstruction = function(instr){
+        instruction.currentInstruction = instr;
+    }
+
+    this.setCurrentInstructionStep = function(step){
+        instruction.stepNumber = step;
+    }
+
+    this.incrementStep = function(){
+        instruction.stepNumber++;
+    }
+
+    this.decrementStep = function(){
+        instruction.stepNumber--;
+    }
+
+});
 
 app.service('TextToSpeechService', function($http) {
 
@@ -110,13 +132,59 @@ app.service('TextToSpeechService', function($http) {
 });
 
 
+app.service('ConversionService', function(){
+
+    var converter = {}
+    converter.sentence = ""
+    converter.result = "";
+    converter.show = false;
+
+    this.getConverter = function(){
+        return converter;
+    }
+
+    this.resetConverter = function(){
+        converter.sentence = ""
+        converter.result = "";
+    }
+    this.showConverter = function(){
+        converter.show = true;
+    };
+
+    this.hideConverter = function(){
+        converter.show = false;
+    };
+});
+
+
 app.service('UnitConversionParser', function() {
 
     var sourceValue = 0;
     var sourceType = "";
     var targetType = "";
 
-    this.parseSentence = function(sentence){
+
+    this.getSourceValue = function(){
+        return sourceValue;
+    }
+
+    this.getSourceType = function(){
+        return sourceType;
+    }
+
+    this.getTargetType = function(){
+        return targetType;
+    }
+
+    this.parseSentenceConvertUnits = function(sentence){
+        parseSentence(sentence);
+        targetValue = convert(sourceValue, sourceType, targetType);
+		targetType = abbrev(targetType);
+
+        return targetValue + " " + targetType;
+    }
+
+    var parseSentence = function(sentence){
         var words = sentence.split(' ');
         var TargID;
 		var srcID;
@@ -253,12 +321,12 @@ app.service('UnitConversionParser', function() {
 		var value;
 		var place;
 		var sign = 1;
-		
+
 
 		if(textArray.length == 0 || (textArray.length == 1 && (textArray[0] === ("a") || textArray[0] === ("an")))){
 			number = 1;
 		}
-		
+
 		else if(textArray.length == 1 && !isNaN(textArray[0])){
 			number = parseFloat(textArray[0]);
 		}
@@ -332,24 +400,76 @@ app.service('UnitConversionParser', function() {
 		return number;
 	}
 
-    this.getSourceValue = function(){
-        return sourceValue;
-    }
-	
-	this.getSourceValue = function(){
-        return sourceValue;
-    }
+    var abbrev = function(targType){
+		var typeIDs = ["teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "milliliter", "liter", "ounce", "pound", "gram", "kilogram","fahrenheit","celsius"];
+		var typeAbbrev = ["tspn","tblspn","fl oz","c","pnt","qrt","gal","ml","l","oz","lb","g","kg","°F","°C"]
+		var id = typeIDs.indexOf(targType);
+		return typeAbbrev[id];
+	}
 
-    this.getSourceType = function(){
-        return sourceType;
+    var convert = function(srcVal, srcType, targType) {
+        var volume = [1, 3, 6, 48, 96, 192, 768, 0.202884, 202.884]; //teaspooon, tblspoon, ounce, cup, pint, quart, gallon, milliliter, liter
+        var weight = [1, 16, 0.035274, 35.274]; //ounce, pound, gram, kilogram
+		var temp = [] //Fahrenheit, Celsius
+        var typeIDs = ["teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "milliliter", "liter", "ounce", "pound", "gram", "kilogram","fahrenheit","celsius"];
+        var srcUnit = 0; //volume, weight, temp
+        var targUnit = 0;
+
+        var targVal;
+
+		srcID = typeIDs.indexOf(srcType);
+		targID = typeIDs.indexOf(targType);
+
+		if(targID > 8 && targID <= 12){
+			targID = targID - 9;
+			targUnit = 1;}
+		else if(targID <= 8)
+			targUnit = 0;
+		else if(targID > 12){
+			targID = targID - 13;
+			targUnit = 2;}
+
+		if(srcID > 8 && srcID <= 12){
+			srcID = srcID - 9;
+			srcUnit = 1;}
+		else if(srcID <= 8)
+			srcUnit = 0;
+		else if(srcID > 12){
+			srcID = srcID - 13;
+			srcUnit = 2;}
+
+
+		var srcSize = 0;
+
+        if (srcUnit == 0) {
+            srcSize = srcVal * volume[srcID];
+            targSize = srcSize / volume[targID];
+        }
+        if (srcUnit == 1) {
+            srcSize = srcVal * weight[srcID];
+            targSize = srcSize / weight[targID];
+        }
+		if(srcUnit == 2){
+			console.log(srcID);
+			console.log(targID);
+			if(srcID == 0 && targID == 1){ //Fahrenheit to Celsius
+				targSize = (srcVal - 32)* 5.0/9;
+			}
+			else if(srcID == 1 && targID == 0){	//Celsius to Fahrenheit
+				targSize = srcVal * 1.8 +32;
+			}
+			else{
+				targSize = srcVal;
+			}
+		}
+        if (Math.trunc(targSize) == (targSize).toFixed(2)){
+            return Math.trunc(targSize)
+        } else {
+            return (targSize).toFixed(2);
+        }
     }
-
-    this.getTargetType = function(){
-        return targetType;
-    }
-
-
 });
+
 
 
 app.service('TimerService', function(){
@@ -419,5 +539,35 @@ app.service('TimerService', function(){
 
         return timer;
     }
+
+});
+
+app.service('ListenerService', function(){
+
+    var listener = {};
+    listener.isActive = true;
+    listener.showText = false;
+
+    this.getListener = function(){
+        return listener;
+    }
+
+    this.setActive = function(){
+        listener.isActive = true;
+    }
+
+    this.setInactive = function(){
+        listener.isActive = false;
+    }
+
+    this.showText = function(){
+        listener.showText = true;
+    }
+
+    this.hideText = function(){
+        listener.showText = false;
+    }
+
+
 
 });
