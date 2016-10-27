@@ -58,6 +58,7 @@
         <div ng-if="converter.show" ng-include src="'partials/widgets/unit-converter/conversion.html'"></div>
         <div ng-if="listener.isActive" ng-include src="'partials/widgets/listener/listener.html'"></div>
         <div ng-if="listener.showText" ng-include src="'partials/widgets/listener/listener-text-box.html'"></div>
+        <div ng-if="filter.isActive" ng-include src="'partials/widgets/filter/filter.html'"></div>
         <div ng-view></div>
     </div>
 </body>

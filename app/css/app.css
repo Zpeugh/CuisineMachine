@@ -180,6 +180,28 @@ img.smaller-ripple{
     width: 50px;
 }
 
+.widget-searchbox-small{
+    height: 25px;
+    width: 150px;
+    padding: 5px;
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+}
+
+.widget-add-filter-button{
+    height: 25px;
+    width: 75px;
+    background-color: black;
+    color: white;
+    border: 1px solid white;
+}
+
+.widget-add-filter-button:hover{
+    cursor: pointer;
+    background-color: white;
+    color: black;
+}
 
 
 /***************** Top navigation bar ***************/
@@ -321,6 +343,15 @@ img.smaller-ripple{
     margin-right: 20%;
     margin-left: 20%;
     border-bottom: 2px solid black;
+}
+
+input#filter-box{
+    margin-top: 8px;
+    margin-right: 8px;
+    height: 25px;
+    width: 200px
+    background-color: rgba(255,255,255,.4);
+    border: 1px solid grey;
 }
 
 .recipe-row{
