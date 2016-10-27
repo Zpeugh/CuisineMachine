@@ -278,7 +278,7 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
 			
 		
 
-        return targSize;
+	return targSize;}
 
 
     $scope.closeUnitConverter = function(){

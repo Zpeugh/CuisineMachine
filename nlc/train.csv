@@ -17,6 +17,10 @@ new timer,timer
 could you setup a timer for 5 minutes,timer
 set a timer for 30 seconds,timer
 create a timer for an hour,timer
+remind me,timer
+set a timer for 2 hours,timer
+set an alarm,timer
+notify me in 30 minutes,timer
 start the recipe,nav_start
 start,nav_start
 show me the instructions,nav_start
@@ -27,6 +31,14 @@ let's make it,nav_start
 show me the cooking instructions,nav_start
 abort the recipe,nav_end
 stop,nav_end
+end,nav_end
+quit,nav_end
+close,nav_end
+cease,nav_end
+conclude,nav_end
+finish,nav_end
+terminate,nav_end
+abort,nav_end
 I want something different,nav_end
 give me a different one,nav_end
 give me something else,nav_end
