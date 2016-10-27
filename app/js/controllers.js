@@ -212,6 +212,8 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
 		var targetValue = convert(sourceValue, sourceType, targetType);
 		var targetAbbrev = abbrev(targetType);
 		
+		
+		
 		console.log(targetValue + targetAbbrev);
 
     }
