@@ -217,10 +217,13 @@ app.service('UnitConversionParser', function() {
 				currentWord++;
 			}
 			currentWord = words.indexOf("in");
+			if (words.indexOf("in") === -1){
+					currentWord = words.indexOf("per");
+				}
 			currentWord++;
 
 			numStart = currentWord;
-			while(units.indexOf(words[currentWord]) == -1){
+			while(units.indexOf(words[currentWord]) == -1 && currentWord < words.length){
 				currentWord++;
 			}
 			sourceValue = numParse(words.slice(numStart,currentWord));
@@ -235,7 +238,7 @@ app.service('UnitConversionParser', function() {
 			}
 		}
 		else if(units.indexOf(words[0]) != -1){
-			if(words[1] === ("in") || words[2] === ("in")){
+			if(words[1] === ("in") || words[2] === ("in") || words[1] === ("per") || words[2] === ("per")){
 				currentWord = 0;
 				targID = units.indexOf(words[currentWord]);
 				if(targID > 15){
@@ -247,6 +250,9 @@ app.service('UnitConversionParser', function() {
 				currentWord++;
 				}
 				currentWord = words.indexOf("in")+1;
+				if (words.indexOf("in") === -1){
+					currentWord = words.indexOf("per")+1;
+				}
 
 				numStart = currentWord;
 				while(units.indexOf(words[currentWord]) == -1){
@@ -285,6 +291,12 @@ app.service('UnitConversionParser', function() {
 					currentWord++;
 				}
 			}
+			
+			else{
+				targetType = "ERROR";
+				sourceType = "ERROR";
+				sourceValue = -1;
+			}
 
 		}
 		else if(ones.indexOf(words[0]) != -1  || tens.indexOf(words[0]) != -1  || teens.indexOf(words[0]) != -1 || mag.indexOf(words[0]) != -1 || !isNaN(words[0])){
@@ -315,6 +327,12 @@ app.service('UnitConversionParser', function() {
 				}
 
 		}
+		
+		else{
+				targetType = "ERROR";
+				sourceType = "ERROR";
+				sourceValue = -1;
+			}
 
 
     }
@@ -400,6 +418,10 @@ app.service('UnitConversionParser', function() {
 				}
 				else if(textArray[word] === ("minus") || textArray[word] === ("negative")){
 					sign = -1;
+					word++;
+				}
+				
+				else{
 					word++;
 				}
 

@@ -200,6 +200,84 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         ConversionService.showConverter();
     }
 
+    $scope.setUnitConversionSentence = function(sentence){
+        UnitConversionParser.parseSentence(sentence);
+        var sourceValue = UnitConversionParser.getSourceValue();
+        var sourceType = UnitConversionParser.getSourceType();
+        var targetType = UnitConversionParser.getTargetType();
+		
+		var targetValue = convert(sourceValue, sourceType, targetType);
+		var targetAbbrev = abbrev(targetType);
+		
+		console.log(targetValue + targetAbbrev);
+
+    }
+	
+	var abbrev = function(targType){
+		var typeIDs = ["teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "milliliter", "liter", "ounce", "pound", "gram", "kilogram","fahrenheit","celsius"];
+		var typeAbbrev = ["tspn","tblspn","fl oz","c","pnt","qrt","gal","ml","l","oz","lb","g","kg","°F","°C"]
+		var id = typeIDs.indexOf(targType);
+		return typeAbbrev[id];
+	}
+    var convert = function(srcVal, srcType, targType) {
+        var volume = [1, 3, 6, 48, 96, 192, 768, 0.202884, 202.884]; //teaspooon, tblspoon, ounce, cup, pint, quart, gallon, milliliter, liter
+        var weight = [1, 16, 0.035274, 35.274]; //ounce, pound, gram, kilogram
+		var temp = [] //Fahrenheit, Celsius
+        var typeIDs = ["teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "milliliter", "liter", "ounce", "pound", "gram", "kilogram","fahrenheit","celsius"];
+        var srcUnit = 0; //volume, weight, temp
+        var targUnit = 0;
+
+        var targVal;
+		
+		srcID = typeIDs.indexOf(srcType);
+		targID = typeIDs.indexOf(targType);
+		
+		if(targID > 8 && targID <= 12){
+			targID = targID - 9;
+			targUnit = 1;}
+		else if(targID <= 8)
+			targUnit = 0;
+		else if(targID > 12){
+			targID = targID - 13;
+			targUnit = 2;}
+			
+		if(srcID > 8 && srcID <= 12){
+			srcID = srcID - 9;
+			srcUnit = 1;}
+		else if(srcID <= 8)
+			srcUnit = 0;
+		else if(srcID > 12){
+			srcID = srcID - 13;
+			srcUnit = 2;}
+			
+		
+		var srcSize = 0;
+
+        if (srcUnit == 0) {
+            srcSize = srcVal * volume[srcID];
+            targSize = srcSize / volume[targID];
+        }
+        if (srcUnit == 1) {
+            srcSize = srcVal * weight[srcID];
+            targSize = srcSize / weight[targID];
+        }
+		if(srcUnit == 2){
+			if(srcID == 0 && targID == 1){ //Fahrenheit to Celsius
+				targSize = (srcVal - 32)* 5.0/9;
+			}
+			else if(srcID == 1 && targID == 0){	//Celsius to Fahrenheit
+				targSize = srcVal * 1.8 +32;
+			}	
+			else{
+				targSize = srcVal;
+			}
+		}
+			
+		
+
+	return targSize;}
+
+
     $scope.closeUnitConverter = function(){
         ConversionService.hideConverter();
         ConversionService.resetConverter();
