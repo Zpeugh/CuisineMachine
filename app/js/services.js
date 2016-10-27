@@ -16,6 +16,16 @@ app.service('RecipeService', function(){
     var selectedRecipe = {};
     var recipes = [];
     var recipeRows = [];
+    var filter = {};
+    filter.isActive = false;
+    filter.exclude = {};
+    filter.exclude.sentence = "";
+    filter.include = {};
+    filter.include.sentence = "";
+
+    this.getFilter = function(){
+        return filter
+    }
 
     this.addRecipe = function(json){
         recipe = {};

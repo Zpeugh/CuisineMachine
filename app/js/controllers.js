@@ -13,26 +13,23 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         $scope.timer.displayTime = TimerService.prettyPrintTime();
         $scope.converter = ConversionService.getConverter();
         $scope.listener = ListenerService.getListener();
+        $scope.filter = RecipeService.getFilter();
     }
 
     init();
 
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
         var nextPath = next.$$route.originalPath;
+        $scope.listener = ListenerService.getListener();
         if (nextPath == "/discover"){
             ListenerService.setActive();
-            $scope.listener = ListenerService.getListener();
-
         } else if (nextPath == "/create"){
             ListenerService.setActive();
-            $scope.listener = ListenerService.getListener();
-
         } else if (nextPath == "/explore"){
             ListenerService.setInactive();
-            $scope.listener = ListenerService.getListener();
-
         } else {
             console.log("unknown path: " + nextPath);
+            ListenerService.setInactive();
         }
     });
 
@@ -219,5 +216,9 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
 
     $scope.closeListenerTextBox = function(){
         ListenerService.hideText();
+    }
+
+    $scope.openFilters = function(){
+        $scope.filter.isActive = true;
     }
 });
