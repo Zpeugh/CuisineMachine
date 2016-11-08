@@ -93,15 +93,25 @@ app.service('RecipeService', function(){
         return selectedRecipe;
     }
 
-
-    this.excludeIngredients = function(ingredients){
-        console.log(ingredients);
+    this.includeIngredients = function(){
+      for(var i = recipes.length-1; i >= 0; i--) {
+        for(var j = 0; j < recipes[i].ingredients.length; j++){
+          if(recipes[i].ingredients.indexOf(filter.include.sentence) == -1) {
+            this.removeRecipe(i);
+          }
+        }
+      }
     }
 
-    this.includeIngredients = function(ingredients){
-        console.log(ingredients);
+    this.excludeIngredients = function(){
+      for(var i = recipes.length-1; i >= 0; i--) {
+        for(var j = 0; j < recipes[i].ingredients.length; j++){
+          if(recipes[i].ingredients.indexOf(filter.exclude.sentence) == -1) {
+            this.removeRecipe(i);
+          }
+        }
+      }
     }
-
 });
 
 app.service('InstructionService', function(){
@@ -150,7 +160,6 @@ app.service('TextToSpeechService', function($http) {
 
 });
 
-
 app.service('ConversionService', function(){
 
     var converter = {}
@@ -174,7 +183,6 @@ app.service('ConversionService', function(){
         converter.show = false;
     };
 });
-
 
 app.service('UnitConversionParser', function() {
 
@@ -510,8 +518,6 @@ app.service('UnitConversionParser', function() {
         }
     }
 });
-
-
 
 app.service('TimerService', function(){
 
