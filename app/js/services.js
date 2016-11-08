@@ -614,29 +614,22 @@ app.service('ListenerService', function(){
 });
 
 
-app.service('FilterService', function(){
+app.service('SubstitutionService', function(){
 
-  this.includeIngredients = function(ingredients){
-    var ingredientList = ingredients.split("^A-Za-z");
-    var localRecipes = this.getRecipes;
-    for(var i = localRecipes.length-1; i >= 0; i--) {
-      for(var j = 0; j < ingredients.length; j++){
-        if(localRecipes[i].ingredients.indexOf(ingredientList[j]) == -1) {
-          this.removeRecipe(i);
-        }
-      }
-    }
-  }
+    var substitutioner = {};
+    substitutioner.sentence = "";
+    substitutioner.isActive = false;
+    substitutioner.result = "";
 
-  this.excludeIngredients = function(ingredients){
-    var ingredientList = ingredients.split("^A-Za-z");
-    var localRecipes = this.getRecipes;
-    for(var i = localRecipes.length-1; i >= 0; i--) {
-      for(var j = 0; j < ingredients.length; j++){
-        if(localRecipes[i].ingredients.indexOf(ingredientList[j]) != -1) {
-          this.removeRecipe(i);
-        }
-      }
+
+    this.getSubstitutions = function(sentence){
+        console.log(sentence);
     }
-  }
+
+
+    this.getSubstitutioner = function(){
+        return substitutioner;
+    }
+
+
 });

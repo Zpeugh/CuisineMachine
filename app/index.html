@@ -38,6 +38,7 @@
         <div id="side-menu">
             <p ng-click="openTimer()" class="side-menu-item clickable">Start a timer</p>
             <p ng-click="openUnitConverter()" class="side-menu-item clickable">Convert units</p>
+            <p ng-click="openSubstitutions()" class="side-menu-item clickable">Substitutions</p>
         </div>
         <div ng-if="timer.show">
             <div ng-if="timer.showTitlePage" ng-include src="'partials/widgets/timer/set-title.html'"></div>
@@ -56,6 +57,7 @@
         </div>
 
         <div ng-if="converter.show" ng-include src="'partials/widgets/unit-converter/conversion.html'"></div>
+        <div ng-if="substitutioner.isActive" ng-include src="'partials/widgets/substitution/substitution.html'"></div>
         <div ng-if="listener.isActive" ng-include src="'partials/widgets/listener/listener.html'"></div>
         <div ng-if="listener.showText" ng-include src="'partials/widgets/listener/listener-text-box.html'"></div>
         <div ng-if="filter.isActive" ng-include src="'partials/widgets/filter/filter.html'"></div>

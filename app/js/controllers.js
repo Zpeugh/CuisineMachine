@@ -1,7 +1,7 @@
 app.controller("cuisineMachineController", function($scope, $location, $interval, $rootScope, RandRService,
                                                     ClassifyService, RecipeService, TextToSpeechService,
                                                     InstructionService, TimerService, ConversionService,
-                                                    UnitConversionParser, ListenerService) {
+                                                    UnitConversionParser, ListenerService, SubstitutionService) {
 
     var init = function(){
         $scope.searchText = "";
@@ -14,6 +14,7 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         $scope.converter = ConversionService.getConverter();
         $scope.listener = ListenerService.getListener();
         $scope.filter = RecipeService.getFilter();
+        $scope.substitutioner = SubstitutionService.getSubstitutioner();
     }
 
     init();
@@ -236,6 +237,17 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         $scope.recipeRows = RecipeService.getRecipeRows();
     }
 
+    $scope.setsubstitutionSentence = function(sentence){
+        SubstitutionService.getSubstitutions(sentence);
+    }
 
+    $scope.openSubstitutions = function(){
+        $scope.substitutioner.isActive = true;
+        console.log("opening");
+    }
+
+    $scope.closeSubstitutions = function(){
+        $scope.substitutioner.isActive = false;
+    }
 
 });
