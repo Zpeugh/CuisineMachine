@@ -181,13 +181,19 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         $scope.closeTimer();
         $scope.timer.isActive = true;
         var totalSeconds = TimerService.setTotalSeconds();
-        $interval(function(){
-            $scope.timer.displayTime = TimerService.prettyPrintTime();
-            TimerService.decrementTime();
-            if($scope.timer.time.totalSeconds == 0){
-                $scope.timerFinished();
-            }
-        }, 1000, totalSeconds);
+		if(totalSeconds == 0){
+			$scope.timerFinished();
+		}
+		else{
+			$interval(function(){
+				$scope.timer.displayTime = TimerService.prettyPrintTime();
+				TimerService.decrementTime();
+				if($scope.timer.time.totalSeconds == 0){
+					$scope.timerFinished();
+				}
+			}, 1000, totalSeconds);
+		}
+        
     }
 
     $scope.timerFinished = function(){

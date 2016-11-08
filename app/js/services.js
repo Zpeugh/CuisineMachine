@@ -93,15 +93,25 @@ app.service('RecipeService', function(){
         return selectedRecipe;
     }
 
-
-    this.excludeIngredients = function(ingredients){
-        console.log(ingredients);
+    this.includeIngredients = function(){
+      for(var i = recipes.length-1; i >= 0; i--) {
+        for(var j = 0; j < recipes[i].ingredients.length; j++){
+          if(recipes[i].ingredients.indexOf(filter.include.sentence) == -1) {
+            this.removeRecipe(i);
+          }
+        }
+      }
     }
 
-    this.includeIngredients = function(ingredients){
-        console.log(ingredients);
+    this.excludeIngredients = function(){
+      for(var i = recipes.length-1; i >= 0; i--) {
+        for(var j = 0; j < recipes[i].ingredients.length; j++){
+          if(recipes[i].ingredients.indexOf(filter.exclude.sentence) == -1) {
+            this.removeRecipe(i);
+          }
+        }
+      }
     }
-
 });
 
 app.service('InstructionService', function(){
@@ -150,7 +160,6 @@ app.service('TextToSpeechService', function($http) {
 
 });
 
-
 app.service('ConversionService', function(){
 
     var converter = {}
@@ -175,7 +184,6 @@ app.service('ConversionService', function(){
     };
 });
 
-
 app.service('UnitConversionParser', function() {
 
     var sourceValue = 0;
@@ -199,13 +207,27 @@ app.service('UnitConversionParser', function() {
         parseSentence(sentence);
         targetValue = convert(sourceValue, sourceType, targetType);
     targetType = abbrev(targetType);
+		var ret = "";
+		if(isNaN(targetValue) || targetType == null){
+			ret = "Try asking that a different way";
+		}
+		else{
+			ret = targetValue + " " + targetType;
+		}
 
-        return targetValue + " " + targetType;
+        return ret;
     }
 
     var parseSentence = function(sentence){
-        var words = sentence.split(' ');
-        var TargID;
+		
+		if(sentence.length > 0 && sentence.includes(" ")){
+			var words = sentence.split(' ');
+			var TargID;
+		}
+		else{
+		var words = "ERROR";
+      }
+        
     var srcID;
     var ones = ["zero","one","two","three","four","five","six","seven","eight","nine"];
     var teens = ["null","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"]
@@ -511,8 +533,6 @@ app.service('UnitConversionParser', function() {
     }
 });
 
-
-
 app.service('TimerService', function(){
 
     var timer = {};
@@ -557,7 +577,7 @@ app.service('TimerService', function(){
     }
 
     this.decrementTime = function(){
-        if(timer.time.totalSeconds == 1){
+        if(timer.time.totalSeconds == 1 || timer.time.totalSeconds == 0){
             timer.time.seconds = 0;
             timer.time.totalSeconds = 0;
             return true;
