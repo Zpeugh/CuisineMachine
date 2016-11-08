@@ -190,13 +190,27 @@ app.service('UnitConversionParser', function() {
         parseSentence(sentence);
         targetValue = convert(sourceValue, sourceType, targetType);
     targetType = abbrev(targetType);
+		var ret = "";
+		if(isNaN(targetValue) || targetType == null){
+			ret = "Try asking that a different way";
+		}
+		else{
+			ret = targetValue + " " + targetType;
+		}
 
-        return targetValue + " " + targetType;
+        return ret;
     }
 
     var parseSentence = function(sentence){
-        var words = sentence.split(' ');
-        var TargID;
+		
+		if(sentence.length > 0 && sentence.includes(" ")){
+			var words = sentence.split(' ');
+			var TargID;
+		}
+		else{
+		var words = "ERROR";
+      }
+        
     var srcID;
     var ones = ["zero","one","two","three","four","five","six","seven","eight","nine"];
     var teens = ["null","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"]
@@ -548,7 +562,7 @@ app.service('TimerService', function(){
     }
 
     this.decrementTime = function(){
-        if(timer.time.totalSeconds == 1){
+        if(timer.time.totalSeconds == 1 || timer.time.totalSeconds == 0){
             timer.time.seconds = 0;
             timer.time.totalSeconds = 0;
             return true;
