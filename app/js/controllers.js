@@ -227,4 +227,21 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     $scope.openFilters = function(){
         $scope.filter.isActive = true;
     }
+
+    $scope.closeFilter = function(){
+        $scope.filter.isActive = false;
+    }
+
+    $scope.addExlusionFilter = function(sentence){
+        RecipeService.excludeIngredients(sentence);
+        $scope.recipeRows = RecipeService.getRecipeRows();
+    }
+
+    $scope.addInclusionFilter = function(sentence){
+        RecipeService.includeIngredients(sentence);
+        $scope.recipeRows = RecipeService.getRecipeRows();
+    }
+
+
+
 });

@@ -93,6 +93,25 @@ app.service('RecipeService', function(){
         return selectedRecipe;
     }
 
+    this.includeIngredients = function(){
+      for(var i = recipes.length-1; i >= 0; i--) {
+        for(var j = 0; j < recipes[i].ingredients.length; j++){
+          if(recipes[i].ingredients.indexOf(filter.include.sentence) == -1) {
+            this.removeRecipe(i);
+          }
+        }
+      }
+    }
+
+    this.excludeIngredients = function(){
+      for(var i = recipes.length-1; i >= 0; i--) {
+        for(var j = 0; j < recipes[i].ingredients.length; j++){
+          if(recipes[i].ingredients.indexOf(filter.exclude.sentence) == -1) {
+            this.removeRecipe(i);
+          }
+        }
+      }
+    }
 });
 
 app.service('InstructionService', function(){
@@ -141,7 +160,6 @@ app.service('TextToSpeechService', function($http) {
 
 });
 
-
 app.service('ConversionService', function(){
 
     var converter = {}
@@ -165,7 +183,6 @@ app.service('ConversionService', function(){
         converter.show = false;
     };
 });
-
 
 app.service('UnitConversionParser', function() {
 
@@ -305,7 +322,7 @@ app.service('UnitConversionParser', function() {
           currentWord++;
         }
       }
-      
+
       else{
         targetType = "ERROR";
         sourceType = "ERROR";
@@ -341,7 +358,7 @@ app.service('UnitConversionParser', function() {
         }
 
     }
-    
+
     else{
         targetType = "ERROR";
         sourceType = "ERROR";
@@ -434,7 +451,7 @@ app.service('UnitConversionParser', function() {
           sign = -1;
           word++;
         }
-        
+
         else{
           word++;
         }
@@ -515,8 +532,6 @@ app.service('UnitConversionParser', function() {
         }
     }
 });
-
-
 
 app.service('TimerService', function(){
 
@@ -620,7 +635,7 @@ app.service('ListenerService', function(){
 
 
 app.service('FilterService', function(){
-  
+
   this.includeIngredients = function(ingredients){
     var ingredientList = ingredients.split("^A-Za-z");
     var localRecipes = this.getRecipes;
@@ -632,7 +647,7 @@ app.service('FilterService', function(){
       }
     }
   }
-  
+
   this.excludeIngredients = function(ingredients){
     var ingredientList = ingredients.split("^A-Za-z");
     var localRecipes = this.getRecipes;
@@ -645,4 +660,3 @@ app.service('FilterService', function(){
     }
   }
 });
-
