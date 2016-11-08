@@ -93,6 +93,15 @@ app.service('RecipeService', function(){
         return selectedRecipe;
     }
 
+
+    this.excludeIngredients = function(ingredients){
+        console.log(ingredients);
+    }
+
+    this.includeIngredients = function(ingredients){
+        console.log(ingredients);
+    }
+
 });
 
 app.service('InstructionService', function(){
@@ -291,7 +300,7 @@ app.service('UnitConversionParser', function() {
           currentWord++;
         }
       }
-      
+
       else{
         targetType = "ERROR";
         sourceType = "ERROR";
@@ -327,7 +336,7 @@ app.service('UnitConversionParser', function() {
         }
 
     }
-    
+
     else{
         targetType = "ERROR";
         sourceType = "ERROR";
@@ -420,7 +429,7 @@ app.service('UnitConversionParser', function() {
           sign = -1;
           word++;
         }
-        
+
         else{
           word++;
         }
@@ -606,7 +615,7 @@ app.service('ListenerService', function(){
 
 
 app.service('FilterService', function(){
-  
+
   this.includeIngredients = function(ingredients){
     var ingredientList = ingredients.split("^A-Za-z");
     var localRecipes = this.getRecipes;
@@ -618,7 +627,7 @@ app.service('FilterService', function(){
       }
     }
   }
-  
+
   this.excludeIngredients = function(ingredients){
     var ingredientList = ingredients.split("^A-Za-z");
     var localRecipes = this.getRecipes;
@@ -631,4 +640,3 @@ app.service('FilterService', function(){
     }
   }
 });
-
