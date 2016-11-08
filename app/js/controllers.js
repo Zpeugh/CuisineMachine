@@ -200,7 +200,6 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         ConversionService.showConverter();
     }
 
-
     $scope.closeUnitConverter = function(){
         ConversionService.hideConverter();
         ConversionService.resetConverter();
