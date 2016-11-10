@@ -93,6 +93,14 @@ app.service('RecipeService', function() {
         return selectedRecipe;
     }
 
+    this.clearExclusionFilter = function() {
+        filter.exclude.sentence = "";
+    }
+
+    this.clearInclusionFilter = function() {
+        filter.include.sentence = "";
+    }
+
     this.includeIngredients = function() {
         for (var i = recipes.length - 1; i >= 0; i--) {
             for (var j = 0; j < recipes[i].ingredients.length; j++) {
@@ -606,22 +614,27 @@ app.service('ListenerService', function() {
 });
 
 
-app.service('SubstitutionService', function() {
+app.service('SubstitutionService', function($http) {
 
     var substitutioner = {};
     substitutioner.sentence = "";
     substitutioner.isActive = false;
     substitutioner.result = "";
 
+    $http.get('/api/substitutions').success(function(data){
+        substitutioner.substitutions = data;
+        console.log("Got substitutions");
+    });
+
 
     this.getSubstitutions = function(sentence) {
-        console.log(sentence);
+        return "Try this";
     }
-
 
     this.getSubstitutioner = function() {
         return substitutioner;
     }
+
 
 
 });

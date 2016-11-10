@@ -5,6 +5,7 @@ var bodyParser = require('body-parser');
 var retrieve_and_rank = require("./retrieve-rank/retrieve-rank").search_rank;
 var classify = require("./nlc/classifier");
 var fs = require('fs');
+var substitutions = require('./substitution/substitution.js')
 
 
 var app = express();
@@ -68,8 +69,14 @@ app.get('/api/recipes', function(req, res) {
     });
 });
 
+app.get('/api/substitutions', function(req, res) {
+    console.log("Retrieving Substitutions");
+    res.send(substitutions);
+});
+
+
+
 var buffer = "";
-var fs = require("fs");
 
 app.post('/speech_to_text', function(req, res) {
     console.log("receive speech to text request");
