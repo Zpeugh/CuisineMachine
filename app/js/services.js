@@ -558,8 +558,8 @@ app.service('TimerService', function() {
         return timer.time.totalSeconds;
     }
 
-    this.decrementTime = function() {
-        if (timer.time.totalSeconds == 1 || timer.time.totalSeconds == 0) {
+    this.decrementTime = function(){
+        if(timer.time.totalSeconds == 1 || timer.time.totalSeconds <= 0){
             timer.time.seconds = 0;
             timer.time.totalSeconds = 0;
             return true;
@@ -628,7 +628,15 @@ app.service('SubstitutionService', function($http) {
 
 
     this.getSubstitutions = function(sentence) {
-        return "Try this";
+        // return "Try this";
+        var words = input.split(' ');
+        for(var i = 0; i < words.length; i++) {
+          var word = words[i];
+          if(substitutioner.substitutions[word]) {
+            return "You can substitute " + substitutioner.substitutions[word]['amount'] + " of " + word + " for " + substitutioner.substitutions[word]['sub'];
+          }
+        }
+        return "Sorry I can't find a substitution"
     }
 
     this.getSubstitutioner = function() {
