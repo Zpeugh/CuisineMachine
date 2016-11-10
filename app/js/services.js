@@ -219,7 +219,7 @@ app.service('UnitConversionParser', function() {
     }
 
     var parseSentence = function(sentence){
-		
+
 		if(sentence.length > 0 && sentence.includes(" ")){
 			var words = sentence.split(' ');
 			var TargID;
@@ -227,7 +227,7 @@ app.service('UnitConversionParser', function() {
 		else{
 		var words = "ERROR";
       }
-        
+
     var srcID;
     var ones = ["zero","one","two","three","four","five","six","seven","eight","nine"];
     var teens = ["null","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"]
@@ -606,7 +606,7 @@ app.service('TimerService', function(){
 app.service('ListenerService', function(){
 
     var listener = {};
-    listener.isActive = true;
+    listener.isActive = false;
     listener.showText = false;
 
     this.getListener = function(){
@@ -628,8 +628,6 @@ app.service('ListenerService', function(){
     this.hideText = function(){
         listener.showText = false;
     }
-
-
 
 });
 
