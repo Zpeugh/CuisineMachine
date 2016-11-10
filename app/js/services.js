@@ -61,7 +61,10 @@ app.service('RecipeService', function(){
 
 //removes recipe by index in recipes
     this.removeRecipe = function(index){
-        recipes.slice(index,1);
+        console.log("removing index " + index);
+        console.log("before length " + recipes.length);
+        recipes.splice(index,1);
+        console.log("after length " + recipes.length);
     };
 
     this.getRecipes = function(){
@@ -94,20 +97,26 @@ app.service('RecipeService', function(){
     }
 
     this.includeIngredients = function(){
-      for(var i = recipes.length-1; i >= 0; i--) {
-        for(var j = 0; j < recipes[i].ingredients.length; j++){
-          if(recipes[i].ingredients.indexOf(filter.include.sentence) == -1) {
+      for(var i = 0; i < recipes.length; i++) {
+        var removed = false;
+        for(var j = 0; !removed && j < recipes[i].ingredients.length; j++){
+          if(recipes[i].ingredients[j].toLowerCase().indexOf(filter.include.sentence) == -1) {
             this.removeRecipe(i);
+            removed = true;
+            i--;
           }
         }
       }
     }
-
     this.excludeIngredients = function(){
-      for(var i = recipes.length-1; i >= 0; i--) {
-        for(var j = 0; j < recipes[i].ingredients.length; j++){
-          if(recipes[i].ingredients.indexOf(filter.exclude.sentence) == -1) {
+      var removed;
+      for(var i = 0; i < recipes.length; i++) {
+        removed = false;
+        for(var j = 0; !removed && j < recipes[i].ingredients.length; j++){
+          if(recipes[i].ingredients[j].toLowerCase().indexOf(filter.exclude.sentence) != -1) {
             this.removeRecipe(i);
+            removed = true;
+            i--;
           }
         }
       }
@@ -207,25 +216,25 @@ app.service('UnitConversionParser', function() {
         parseSentence(sentence);
         targetValue = convert(sourceValue, sourceType, targetType);
     targetType = abbrev(targetType);
-		var ret = "";
-		if(isNaN(targetValue) || targetType == null){
-			ret = "Try asking that a different way";
-		}
-		else{
-			ret = targetValue + " " + targetType;
-		}
+    var ret = "";
+    if(isNaN(targetValue) || targetType == null){
+      ret = "Try asking that a different way";
+    }
+    else{
+      ret = targetValue + " " + targetType;
+    }
 
         return ret;
     }
 
     var parseSentence = function(sentence){
-		
-		if(sentence.length > 0 && sentence.includes(" ")){
-			var words = sentence.split(' ');
-			var TargID;
-		}
-		else{
-		var words = "ERROR";
+    
+    if(sentence.length > 0 && sentence.includes(" ")){
+      var words = sentence.split(' ');
+      var TargID;
+    }
+    else{
+    var words = "ERROR";
       }
         
     var srcID;
