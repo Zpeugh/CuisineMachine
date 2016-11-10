@@ -193,7 +193,7 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
 				}
 			}, 1000, totalSeconds);
 		}
-        
+
     }
 
     $scope.timerFinished = function(){
@@ -235,11 +235,13 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
 
     $scope.addExlusionFilter = function(sentence){
         RecipeService.excludeIngredients(sentence);
+        RecipeService.clearAddFilter();
         $scope.recipeRows = RecipeService.getRecipeRows();
     }
 
     $scope.addInclusionFilter = function(sentence){
         RecipeService.includeIngredients(sentence);
+        RecipeService.clearExclusionFilter();
         $scope.recipeRows = RecipeService.getRecipeRows();
     }
 

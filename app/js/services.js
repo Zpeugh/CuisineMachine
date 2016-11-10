@@ -1,17 +1,17 @@
-app.service('RandRService', function($http){
-    this.sendRequest = function(sentence){
+app.service('RandRService', function($http) {
+    this.sendRequest = function(sentence) {
         return $http.get("/api/recipes?q=" + sentence);
     }
 });
 
-app.service('ClassifyService', function($http){
-    this.classifyRequest = function(sentence){
+app.service('ClassifyService', function($http) {
+    this.classifyRequest = function(sentence) {
         return $http.get("/api/classify?q=" + sentence);
     }
 });
 
 
-app.service('RecipeService', function(){
+app.service('RecipeService', function() {
 
     var selectedRecipe = {};
     var recipes = [];
@@ -23,11 +23,11 @@ app.service('RecipeService', function(){
     filter.include = {};
     filter.include.sentence = "";
 
-    this.getFilter = function(){
+    this.getFilter = function() {
         return filter
     }
 
-    this.addRecipe = function(json){
+    this.addRecipe = function(json) {
         recipe = {};
 
         recipe.id = json.id;
@@ -39,19 +39,19 @@ app.service('RecipeService', function(){
         recipe.yield = json.yield[0];
         recipe.about = json.about[0];
         var ingredients = json.ingredients[0].split(';');
-        for (var i = 0; i < ingredients.length ; i++){
+        for (var i = 0; i < ingredients.length; i++) {
             var ingr = ingredients[i].trim();
             recipe.ingredients[i] = ingr.charAt(0).toUpperCase() + ingr.slice(1);
         };
         var instructions = json.instructions[0].split(';');
-        for (var i = 0; i < instructions.length ; i++){
+        for (var i = 0; i < instructions.length; i++) {
             var inst = instructions[i].trim();
-            if (/^([1-9]\d*)$/.test(inst) == false){
+            if (/^([1-9]\d*)$/.test(inst) == false) {
                 recipe.instructions.push(inst.charAt(0).toUpperCase() + inst.slice(1));
             }
         };
         var tags = json.tags[0].split(';');
-        for (var i = 0; i < tags.length ; i++){
+        for (var i = 0; i < tags.length; i++) {
             var tag = tags[i].trim();
             recipe.tags[i] = tag.charAt(0).toUpperCase() + tag.slice(1);
         };
@@ -59,83 +59,91 @@ app.service('RecipeService', function(){
 
     }
 
-//removes recipe by index in recipes
-    this.removeRecipe = function(index){
-        recipes.slice(index,1);
+    //removes recipe by index in recipes
+    this.removeRecipe = function(index) {
+        recipes.slice(index, 1);
     };
 
-    this.getRecipes = function(){
+    this.getRecipes = function() {
         return recipes;
     }
 
 
-    this.getRecipeRows = function(){
+    this.getRecipeRows = function() {
         recipeRows = [];
-        for(var i = 0; i < recipes.length - 3; i += 3){
+        for (var i = 0; i < recipes.length - 3; i += 3) {
             row = [];
             row.push(recipes[i]);
-            row.push(recipes[i+1]);
-            row.push(recipes[i+2]);
+            row.push(recipes[i + 1]);
+            row.push(recipes[i + 2]);
             recipeRows.push(row);
         }
         return recipeRows
     }
 
-    this.clearRecipes = function(){
+    this.clearRecipes = function() {
         recipes = [];
     }
 
-    this.setSelectedRecipe = function(recipe){
+    this.setSelectedRecipe = function(recipe) {
         selectedRecipe = recipe;
     }
 
-    this.getSelectedRecipe = function(){
+    this.getSelectedRecipe = function() {
         return selectedRecipe;
     }
 
-    this.includeIngredients = function(){
-      for(var i = recipes.length-1; i >= 0; i--) {
-        for(var j = 0; j < recipes[i].ingredients.length; j++){
-          if(recipes[i].ingredients.indexOf(filter.include.sentence) == -1) {
-            this.removeRecipe(i);
-          }
-        }
-      }
+    this.clearExclusionFilter = function() {
+        filter.exclude.sentence = "";
     }
 
-    this.excludeIngredients = function(){
-      for(var i = recipes.length-1; i >= 0; i--) {
-        for(var j = 0; j < recipes[i].ingredients.length; j++){
-          if(recipes[i].ingredients.indexOf(filter.exclude.sentence) == -1) {
-            this.removeRecipe(i);
-          }
+    this.clearInclusionFilter = function() {
+        filter.include.sentence = "";
+    }
+
+    this.includeIngredients = function() {
+        for (var i = recipes.length - 1; i >= 0; i--) {
+            for (var j = 0; j < recipes[i].ingredients.length; j++) {
+                if (recipes[i].ingredients.indexOf(filter.include.sentence) == -1) {
+                    this.removeRecipe(i);
+                }
+            }
         }
-      }
+    }
+
+    this.excludeIngredients = function() {
+        for (var i = recipes.length - 1; i >= 0; i--) {
+            for (var j = 0; j < recipes[i].ingredients.length; j++) {
+                if (recipes[i].ingredients.indexOf(filter.exclude.sentence) == -1) {
+                    this.removeRecipe(i);
+                }
+            }
+        }
     }
 });
 
-app.service('InstructionService', function(){
+app.service('InstructionService', function() {
     var instruction = {};
     instruction.currentInstruction = "";
     instruction.stepNumber = 0;
 
-    this.getInstruction = function(){
+    this.getInstruction = function() {
         return instruction;
     }
 
-    this.setCurrentInstruction = function(instr){
+    this.setCurrentInstruction = function(instr) {
         instruction.currentInstruction = instr;
     }
 
-    this.setCurrentInstructionStep = function(step){
+    this.setCurrentInstructionStep = function(step) {
         instruction.stepNumber = step;
     }
 
-    this.incrementStep = function(){
+    this.incrementStep = function() {
         instruction.stepNumber++;
     }
 
-    this.decrementStep = function(){
+    this.decrementStep = function() {
         instruction.stepNumber--;
     }
 
@@ -146,40 +154,42 @@ app.service('TextToSpeechService', function($http) {
     var utterance = new SpeechSynthesisUtterance();
     var voices = window.speechSynthesis.getVoices();
     // utterance.voice = voices[2]; // Note: some voices don't support altering params
-    utterance.voice = voices.filter(function(voice) { return voice.name === 'Google UK English Female'; })[0];
+    utterance.voice = voices.filter(function(voice) {
+        return voice.name === 'Google UK English Female';
+    })[0];
 
     utterance.voiceURI = 'native';
     utterance.volume = 1; // 0 to 1
     utterance.rate = 1; // 0.1 to 10
     utterance.pitch = 7;
 
-    this.speak = function(text){
+    this.speak = function(text) {
         utterance.text = text;
         window.speechSynthesis.speak(utterance);
     }
 
 });
 
-app.service('ConversionService', function(){
+app.service('ConversionService', function() {
 
     var converter = {}
     converter.sentence = ""
     converter.result = "";
     converter.show = false;
 
-    this.getConverter = function(){
+    this.getConverter = function() {
         return converter;
     }
 
-    this.resetConverter = function(){
+    this.resetConverter = function() {
         converter.sentence = ""
         converter.result = "";
     }
-    this.showConverter = function(){
+    this.showConverter = function() {
         converter.show = true;
     };
 
-    this.hideConverter = function(){
+    this.hideConverter = function() {
         converter.show = false;
     };
 });
@@ -191,318 +201,292 @@ app.service('UnitConversionParser', function() {
     var targetType = "";
 
 
-    this.getSourceValue = function(){
+    this.getSourceValue = function() {
         return sourceValue;
     }
 
-    this.getSourceType = function(){
+    this.getSourceType = function() {
         return sourceType;
     }
 
-    this.getTargetType = function(){
+    this.getTargetType = function() {
         return targetType;
     }
 
-    this.parseSentenceConvertUnits = function(sentence){
+    this.parseSentenceConvertUnits = function(sentence) {
         parseSentence(sentence);
         targetValue = convert(sourceValue, sourceType, targetType);
-    targetType = abbrev(targetType);
-		var ret = "";
-		if(isNaN(targetValue) || targetType == null){
-			ret = "Try asking that a different way";
-		}
-		else{
-			ret = targetValue + " " + targetType;
-		}
+        targetType = abbrev(targetType);
+        var ret = "";
+        if (isNaN(targetValue) || targetType == null) {
+            ret = "Try asking that a different way";
+        } else {
+            ret = targetValue + " " + targetType;
+        }
 
         return ret;
     }
 
-    var parseSentence = function(sentence){
-		
-		if(sentence.length > 0 && sentence.includes(" ")){
-			var words = sentence.split(' ');
-			var TargID;
-		}
-		else{
-		var words = "ERROR";
-      }
-        
-    var srcID;
-    var ones = ["zero","one","two","three","four","five","six","seven","eight","nine"];
-    var teens = ["null","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"]
-    var tens = ["null","ten","twenty","thirty","forty","fifty","sixty","seven","eight","nine"];
-    var mag = ["a","point","minus","negative","hundred","thousand"];
-    var units = ["celsius","fahrenheit","degree","teaspoon","tablespoon","fluid ounce","cup","pint","quart","gallon","milliliter","liter","ounce","pound","gram","kilogram","celsius","fahrenheit","degrees","teaspoons","tablespoons","fluid","cups","pints","quarts","gallons","milliliters","liters","ounces","pounds","grams","kilograms"]
+    var parseSentence = function(sentence) {
 
-    currentWord = 0;
-    if(words[0] === ("how") && words[1] === ("many")){
-      currentWord = 2;
-      targID = units.indexOf(words[currentWord]);
-      if(targID > 15){
-        targID = targID - 16;
-      }
-      targetType = units[targID];
-      if(targetType === ("degree") || targetType === ("degrees")){
-        targetType = words[currentWord + 1];
-        currentWord++;
-      }
-      currentWord = words.indexOf("in");
-      if (words.indexOf("in") === -1){
-          currentWord = words.indexOf("per");
+        if (sentence.length > 0 && sentence.includes(" ")) {
+            var words = sentence.split(' ');
+            var TargID;
+        } else {
+            var words = "ERROR";
         }
-      currentWord++;
 
-      numStart = currentWord;
-      while(units.indexOf(words[currentWord]) == -1 && currentWord < words.length){
-        currentWord++;
-      }
-      sourceValue = numParse(words.slice(numStart,currentWord));
-      srcID = units.indexOf(words[currentWord]);
-      if(srcID > 15){
-        srcID = srcID - 16;
-      }
-      sourceType = units[srcID];
-      if(sourceType === ("degree") || sourceType === ("degrees")){
-        sourceType = words[currentWord + 1];
-        currentWord++;
-      }
-    }
-    else if(units.indexOf(words[0]) != -1){
-      if(words[1] === ("in") || words[2] === ("in") || words[1] === ("per") || words[2] === ("per")){
+        var srcID;
+        var ones = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+        var teens = ["null", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
+        var tens = ["null", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seven", "eight", "nine"];
+        var mag = ["a", "point", "minus", "negative", "hundred", "thousand"];
+        var units = ["celsius", "fahrenheit", "degree", "teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "milliliter", "liter", "ounce", "pound", "gram", "kilogram", "celsius", "fahrenheit", "degrees", "teaspoons", "tablespoons", "fluid", "cups", "pints", "quarts", "gallons", "milliliters", "liters", "ounces", "pounds", "grams", "kilograms"]
+
         currentWord = 0;
-        targID = units.indexOf(words[currentWord]);
-        if(targID > 15){
-          targID = targID - 16;
-        }
-        targetType = units[targID];
-        if(targetType === ("degree") || targetType === ("degrees")){
-        targetType = words[currentWord + 1];
-        currentWord++;
-        }
-        currentWord = words.indexOf("in")+1;
-        if (words.indexOf("in") === -1){
-          currentWord = words.indexOf("per")+1;
+        if (words[0] === ("how") && words[1] === ("many")) {
+            currentWord = 2;
+            targID = units.indexOf(words[currentWord]);
+            if (targID > 15) {
+                targID = targID - 16;
+            }
+            targetType = units[targID];
+            if (targetType === ("degree") || targetType === ("degrees")) {
+                targetType = words[currentWord + 1];
+                currentWord++;
+            }
+            currentWord = words.indexOf("in");
+            if (words.indexOf("in") === -1) {
+                currentWord = words.indexOf("per");
+            }
+            currentWord++;
+
+            numStart = currentWord;
+            while (units.indexOf(words[currentWord]) == -1 && currentWord < words.length) {
+                currentWord++;
+            }
+            sourceValue = numParse(words.slice(numStart, currentWord));
+            srcID = units.indexOf(words[currentWord]);
+            if (srcID > 15) {
+                srcID = srcID - 16;
+            }
+            sourceType = units[srcID];
+            if (sourceType === ("degree") || sourceType === ("degrees")) {
+                sourceType = words[currentWord + 1];
+                currentWord++;
+            }
+        } else if (units.indexOf(words[0]) != -1) {
+            if (words[1] === ("in") || words[2] === ("in") || words[1] === ("per") || words[2] === ("per")) {
+                currentWord = 0;
+                targID = units.indexOf(words[currentWord]);
+                if (targID > 15) {
+                    targID = targID - 16;
+                }
+                targetType = units[targID];
+                if (targetType === ("degree") || targetType === ("degrees")) {
+                    targetType = words[currentWord + 1];
+                    currentWord++;
+                }
+                currentWord = words.indexOf("in") + 1;
+                if (words.indexOf("in") === -1) {
+                    currentWord = words.indexOf("per") + 1;
+                }
+
+                numStart = currentWord;
+                while (units.indexOf(words[currentWord]) == -1) {
+                    currentWord++;
+                }
+                sourceValue = numParse(words.slice(numStart, currentWord));
+                srcID = units.indexOf(words[currentWord]);
+                if (srcID > 15) {
+                    srcID = srcID - 16;
+                }
+                sourceType = units[srcID];
+                if (sourceType === ("degree") || sourceType === ("degrees")) {
+                    sourceType = words[currentWord + 1];
+                    currentWord++;
+                }
+            } else if (words[1] === ("to")) {
+                srcID = units.indexOf(words[currentWord]);
+                if (srcID > 15) {
+                    srcID = srcID - 16;
+                }
+                sourceType = units[srcID];
+                if (sourceType === ("degree") || sourceType === ("degrees")) {
+                    sourceType = words[currentWord + 1];
+                    currentWord++;
+                }
+                sourceValue = 1;
+                currentWord = 2;
+                targID = units.indexOf(words[currentWord]);
+                if (targID > 15) {
+                    targID = targID - 16;
+                }
+                targetType = units[targID];
+                if (targetType === ("degree") || targetType === ("degrees")) {
+                    targetType = words[currentWord + 1];
+                    currentWord++;
+                }
+            } else {
+                targetType = "ERROR";
+                sourceType = "ERROR";
+                sourceValue = -1;
+            }
+
+        } else if (ones.indexOf(words[0]) != -1 || tens.indexOf(words[0]) != -1 || teens.indexOf(words[0]) != -1 || mag.indexOf(words[0]) != -1 || !isNaN(words[0])) {
+            numStart = currentWord;
+            while (units.indexOf(words[currentWord]) == -1) {
+                currentWord++;
+            }
+            sourceValue = numParse(words.slice(numStart, currentWord));
+            srcID = units.indexOf(words[currentWord]);
+            if (srcID > 15) {
+                srcID = srcID - 16;
+            }
+            sourceType = units[srcID];
+            if (sourceType === ("degree") || sourceType === ("degrees")) {
+                sourceType = words[currentWord + 1];
+                currentWord++;
+            }
+            currentWord = words.indexOf("to");
+            currentWord++;
+            targID = units.indexOf(words[currentWord]);
+            if (targID > 15) {
+                targID = targID - 16;
+            }
+            targetType = units[targID];
+            if (targetType === ("degree") || targetType === ("degrees")) {
+                targetType = words[currentWord + 1];
+                currentWord++;
+            }
+
+        } else {
+            targetType = "ERROR";
+            sourceType = "ERROR";
+            sourceValue = -1;
         }
 
-        numStart = currentWord;
-        while(units.indexOf(words[currentWord]) == -1){
-          currentWord++;
-        }
-        sourceValue = numParse(words.slice(numStart,currentWord));
-        srcID = units.indexOf(words[currentWord]);
-        if(srcID > 15){
-          srcID = srcID - 16;
-        }
-        sourceType = units[srcID];
-        if(sourceType === ("degree") || sourceType === ("degrees")){
-          sourceType = words[currentWord + 1];
-          currentWord++;
-        }
-      }
-      else if(words[1] === ("to")){
-        srcID = units.indexOf(words[currentWord]);
-        if(srcID > 15){
-          srcID = srcID - 16;
-        }
-        sourceType = units[srcID];
-        if(sourceType === ("degree") || sourceType === ("degrees")){
-          sourceType = words[currentWord + 1];
-          currentWord++;
-        }
-        sourceValue = 1;
-        currentWord = 2;
-        targID = units.indexOf(words[currentWord]);
-        if(targID > 15){
-          targID = targID - 16;
-        }
-        targetType = units[targID];
-        if(targetType === ("degree") || targetType === ("degrees")){
-          targetType = words[currentWord + 1];
-          currentWord++;
-        }
-      }
-
-      else{
-        targetType = "ERROR";
-        sourceType = "ERROR";
-        sourceValue = -1;
-      }
 
     }
-    else if(ones.indexOf(words[0]) != -1  || tens.indexOf(words[0]) != -1  || teens.indexOf(words[0]) != -1 || mag.indexOf(words[0]) != -1 || !isNaN(words[0])){
-      numStart = currentWord;
-      while(units.indexOf(words[currentWord]) == -1){
-        currentWord++;
-      }
-      sourceValue = numParse(words.slice(numStart,currentWord));
-      srcID = units.indexOf(words[currentWord]);
-      if(srcID > 15){
-        srcID = srcID - 16;
-      }
-      sourceType = units[srcID];
-      if(sourceType === ("degree") || sourceType === ("degrees")){
-        sourceType = words[currentWord + 1];
-        currentWord++;
-      }
-      currentWord = words.indexOf("to");
-      currentWord++;
-      targID = units.indexOf(words[currentWord]);
-      if(targID > 15){
-        targID = targID - 16;
-      }
-      targetType = units[targID];
-      if(targetType === ("degree") || targetType === ("degrees")){
-        targetType = words[currentWord + 1];
-        currentWord++;
+
+    function numParse(textArray) {
+        var ones = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+        var teens = ["null", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
+        var tens = ["null", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seven", "eight", "nine"];
+        var mag = ["null", "null", "hundred"];
+        var misc = ["a", "point", "minus", "negative", "and"];
+
+        var word = 0;
+        var number = 0;
+        var value;
+        var place;
+        var sign = 1;
+
+
+        if (textArray.length == 0 || (textArray.length == 1 && (textArray[0] === ("a") || textArray[0] === ("an")))) {
+            number = 1;
+        } else if (textArray.length == 1 && !isNaN(textArray[0])) {
+            number = parseFloat(textArray[0]);
+        } else if (textArray.indexOf("half") != -1) {
+            number = 0.5
+        } else if (textArray.indexOf("quarter") != -1) {
+            number = 0.25
+        } else if (textArray.indexOf("eighth") != -1) {
+            number = 0.125
+        } else {
+            while (word < textArray.length) {
+                value = 0;
+                place = 0;
+                if (ones.indexOf(textArray[word]) != -1) {
+                    value = ones.indexOf(textArray[word]);
+                    word++;
+                    if (mag.indexOf(textArray[word]) != -1) {
+                        place = Math.pow(10, mag.indexOf(textArray[word]));
+                    } else {
+                        place = 1;
+                    }
+                    word++;
+                    if (word < textArray.length && textArray[word] === ("and")) {
+                        word++;
+                    }
+
+                } else if (teens.indexOf(textArray[word]) != -1) {
+                    value = teens.indexOf(textArray[word]) + 10;
+                    word++;
+                    if (mag.indexOf(textArray[word]) != -1) {
+                        place = Math.pow(10, mag.indexOf(textArray[word]));
+                    } else {
+                        place = 1;
+                    }
+                    word++;
+                } else if (tens.indexOf(textArray[word]) != -1) {
+                    value = tens.indexOf(textArray[word]);
+                    place = 10;
+                    word++;
+                } else if (textArray[word] === ("a")) {
+                    value = 1;
+                    if (mag.indexOf(textArray[word]) != -1) {
+                        place = Math.pow(10, mag.indexOf(textArray[word]));
+                    } else {
+                        place = 1;
+                    }
+                    word++;
+                } else if (textArray[word] === ("minus") || textArray[word] === ("negative")) {
+                    sign = -1;
+                    word++;
+                } else {
+                    word++;
+                }
+
+                number += sign * value * place;
+            }
         }
 
+        return number;
     }
 
-    else{
-        targetType = "ERROR";
-        sourceType = "ERROR";
-        sourceValue = -1;
-      }
-
-
+    var abbrev = function(targType) {
+        var typeIDs = ["teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "milliliter", "liter", "ounce", "pound", "gram", "kilogram", "fahrenheit", "celsius"];
+        var typeAbbrev = ["tspn", "tblspn", "fl oz", "c", "pnt", "qrt", "gal", "ml", "l", "oz", "lb", "g", "kg", "°F", "°C"]
+        var id = typeIDs.indexOf(targType);
+        return typeAbbrev[id];
     }
-
-  function numParse(textArray){
-    var ones = ["zero","one","two","three","four","five","six","seven","eight","nine"];
-    var teens = ["null","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"]
-    var tens = ["null","ten","twenty","thirty","forty","fifty","sixty","seven","eight","nine"];
-    var mag = ["null","null","hundred"];
-    var misc = ["a","point","minus","negative","and"];
-
-    var word = 0;
-    var number = 0;
-    var value;
-    var place;
-    var sign = 1;
-
-
-    if(textArray.length == 0 || (textArray.length == 1 && (textArray[0] === ("a") || textArray[0] === ("an")))){
-      number = 1;
-    }
-
-    else if(textArray.length == 1 && !isNaN(textArray[0])){
-      number = parseFloat(textArray[0]);
-    }
-
-    else if(textArray.indexOf("half") != -1){
-      number = 0.5
-    }
-
-    else if(textArray.indexOf("quarter") != -1){
-      number = 0.25
-    }
-
-    else if(textArray.indexOf("eighth") != -1){
-      number = 0.125
-    }
-
-    else{
-      while(word < textArray.length){
-        value = 0;
-        place = 0;
-        if(ones.indexOf(textArray[word]) != -1){
-          value = ones.indexOf(textArray[word]);
-          word++;
-          if(mag.indexOf(textArray[word]) != -1){
-            place = Math.pow(10, mag.indexOf(textArray[word]));
-          }
-          else{
-            place = 1;
-          }
-          word++;
-          if(word < textArray.length && textArray[word] === ("and")){
-          word++;
-          }
-
-        }
-        else if(teens.indexOf(textArray[word]) != -1){
-          value = teens.indexOf(textArray[word]) + 10;
-          word++;
-          if(mag.indexOf(textArray[word]) != -1){
-            place = Math.pow(10, mag.indexOf(textArray[word]));
-          }
-          else{
-            place = 1;
-          }
-          word++;
-        }
-        else if(tens.indexOf(textArray[word]) != -1){
-          value = tens.indexOf(textArray[word]);
-          place = 10;
-          word++;
-        }
-        else if(textArray[word] === ("a")){
-          value = 1;
-          if(mag.indexOf(textArray[word]) != -1){
-            place = Math.pow(10, mag.indexOf(textArray[word]));
-          }
-          else{
-            place = 1;
-          }
-          word++;
-        }
-        else if(textArray[word] === ("minus") || textArray[word] === ("negative")){
-          sign = -1;
-          word++;
-        }
-
-        else{
-          word++;
-        }
-
-        number += sign*value*place;
-      }
-    }
-
-    return number;
-  }
-
-    var abbrev = function(targType){
-    var typeIDs = ["teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "milliliter", "liter", "ounce", "pound", "gram", "kilogram","fahrenheit","celsius"];
-    var typeAbbrev = ["tspn","tblspn","fl oz","c","pnt","qrt","gal","ml","l","oz","lb","g","kg","°F","°C"]
-    var id = typeIDs.indexOf(targType);
-    return typeAbbrev[id];
-  }
 
     var convert = function(srcVal, srcType, targType) {
         var volume = [1, 3, 6, 48, 96, 192, 768, 0.202884, 202.884]; //teaspooon, tblspoon, ounce, cup, pint, quart, gallon, milliliter, liter
         var weight = [1, 16, 0.035274, 35.274]; //ounce, pound, gram, kilogram
-    var temp = [] //Fahrenheit, Celsius
-        var typeIDs = ["teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "milliliter", "liter", "ounce", "pound", "gram", "kilogram","fahrenheit","celsius"];
+        var temp = [] //Fahrenheit, Celsius
+        var typeIDs = ["teaspoon", "tablespoon", "fluid ounce", "cup", "pint", "quart", "gallon", "milliliter", "liter", "ounce", "pound", "gram", "kilogram", "fahrenheit", "celsius"];
         var srcUnit = 0; //volume, weight, temp
         var targUnit = 0;
 
         var targVal;
 
-    srcID = typeIDs.indexOf(srcType);
-    targID = typeIDs.indexOf(targType);
+        srcID = typeIDs.indexOf(srcType);
+        targID = typeIDs.indexOf(targType);
 
-    if(targID > 8 && targID <= 12){
-      targID = targID - 9;
-      targUnit = 1;}
-    else if(targID <= 8)
-      targUnit = 0;
-    else if(targID > 12){
-      targID = targID - 13;
-      targUnit = 2;}
+        if (targID > 8 && targID <= 12) {
+            targID = targID - 9;
+            targUnit = 1;
+        } else if (targID <= 8)
+            targUnit = 0;
+        else if (targID > 12) {
+            targID = targID - 13;
+            targUnit = 2;
+        }
 
-    if(srcID > 8 && srcID <= 12){
-      srcID = srcID - 9;
-      srcUnit = 1;}
-    else if(srcID <= 8)
-      srcUnit = 0;
-    else if(srcID > 12){
-      srcID = srcID - 13;
-      srcUnit = 2;}
+        if (srcID > 8 && srcID <= 12) {
+            srcID = srcID - 9;
+            srcUnit = 1;
+        } else if (srcID <= 8)
+            srcUnit = 0;
+        else if (srcID > 12) {
+            srcID = srcID - 13;
+            srcUnit = 2;
+        }
 
 
-    var srcSize = 0;
+        var srcSize = 0;
 
         if (srcUnit == 0) {
             srcSize = srcVal * volume[srcID];
@@ -512,20 +496,18 @@ app.service('UnitConversionParser', function() {
             srcSize = srcVal * weight[srcID];
             targSize = srcSize / weight[targID];
         }
-    if(srcUnit == 2){
-      console.log(srcID);
-      console.log(targID);
-      if(srcID == 0 && targID == 1){ //Fahrenheit to Celsius
-        targSize = (srcVal - 32)* 5.0/9;
-      }
-      else if(srcID == 1 && targID == 0){ //Celsius to Fahrenheit
-        targSize = srcVal * 1.8 +32;
-      }
-      else{
-        targSize = srcVal;
-      }
-    }
-        if (Math.trunc(targSize) == (targSize).toFixed(2)){
+        if (srcUnit == 2) {
+            console.log(srcID);
+            console.log(targID);
+            if (srcID == 0 && targID == 1) { //Fahrenheit to Celsius
+                targSize = (srcVal - 32) * 5.0 / 9;
+            } else if (srcID == 1 && targID == 0) { //Celsius to Fahrenheit
+                targSize = srcVal * 1.8 + 32;
+            } else {
+                targSize = srcVal;
+            }
+        }
+        if (Math.trunc(targSize) == (targSize).toFixed(2)) {
             return Math.trunc(targSize)
         } else {
             return (targSize).toFixed(2);
@@ -533,7 +515,7 @@ app.service('UnitConversionParser', function() {
     }
 });
 
-app.service('TimerService', function(){
+app.service('TimerService', function() {
 
     var timer = {};
     timer.show = false;
@@ -546,36 +528,37 @@ app.service('TimerService', function(){
     timer.time.seconds = "";
     timer.time.totalSeconds = 0;
 
-    var padWithZeros = function(t){
-        if (t < 10){
+    var padWithZeros = function(t) {
+        if (t < 10) {
             return "0" + t;
         } else {
             return "" + t;
         }
     }
 
-    var refreshTimeFields = function(){
+    var refreshTimeFields = function() {
         timer.time.seconds = timer.time.totalSeconds % 60;
         timer.time.minutes = Math.floor(timer.time.totalSeconds / 60) % 60;
         timer.time.hours = Math.floor(timer.time.totalSeconds / 3600);
     }
 
-    this.getTimer = function(){
+    this.getTimer = function() {
         return timer;
     }
 
-    this.prettyPrintTime = function(){
+    this.prettyPrintTime = function() {
         var strHours = padWithZeros(timer.time.hours);
         var strMinutes = padWithZeros(timer.time.minutes);
         var strSeconds = padWithZeros(timer.time.seconds);
         return strHours + ":" + strMinutes + ":" + strSeconds;
     }
 
-    this.setTotalSeconds = function(){
-        timer.time.totalSeconds = timer.time.hours*3600 + timer.time.minutes*60 + timer.time.seconds
+    this.setTotalSeconds = function() {
+        timer.time.totalSeconds = timer.time.hours * 3600 + timer.time.minutes * 60 + timer.time.seconds
         return timer.time.totalSeconds;
     }
 
+<<<<<<< HEAD
     this.decrementTime = function(){
         if(timer.time.totalSeconds == 1 || timer.time.totalSeconds <= 0){
             timer.time.seconds = 0;
@@ -587,7 +570,7 @@ app.service('TimerService', function(){
         }
     }
 
-    this.resetTimer = function(){
+    this.resetTimer = function() {
         timer.show = false;
         timer.showTitlePage = false;
         timer.showTimePage = false;
@@ -603,53 +586,56 @@ app.service('TimerService', function(){
 
 });
 
-app.service('ListenerService', function(){
+app.service('ListenerService', function() {
 
     var listener = {};
-    listener.isActive = true;
+    listener.isActive = false;
     listener.showText = false;
 
-    this.getListener = function(){
+    this.getListener = function() {
         return listener;
     }
 
-    this.setActive = function(){
+    this.setActive = function() {
         listener.isActive = true;
     }
 
-    this.setInactive = function(){
+    this.setInactive = function() {
         listener.isActive = false;
     }
 
-    this.showText = function(){
+    this.showText = function() {
         listener.showText = true;
     }
 
-    this.hideText = function(){
+    this.hideText = function() {
         listener.showText = false;
     }
-
-
 
 });
 
 
-app.service('SubstitutionService', function(){
+app.service('SubstitutionService', function($http) {
 
     var substitutioner = {};
     substitutioner.sentence = "";
     substitutioner.isActive = false;
     substitutioner.result = "";
 
+    $http.get('/api/substitutions').success(function(data){
+        substitutioner.substitutions = data;
+        console.log("Got substitutions");
+    });
 
-    this.getSubstitutions = function(sentence){
-        console.log(sentence);
+
+    this.getSubstitutions = function(sentence) {
+        return "Try this";
     }
 
-
-    this.getSubstitutioner = function(){
+    this.getSubstitutioner = function() {
         return substitutioner;
     }
+
 
 
 });
