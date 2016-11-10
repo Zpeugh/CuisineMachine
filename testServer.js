@@ -1,16 +1,11 @@
 //current issues: text search should not go through the nlc classifier
 //classifier has trouble with 1 word queries
 /*
-Error: end returned nav_start instead of nav_end
-Error: close returned nav_start instead of nav_end
-Error: remind me in an hour returned unit_conversion instead of timer
-Error: quit returned nav_start instead of nav_end
 
 
-Error: widgets need better error handling
-Ex. entering nothing in the converter crashes the program
-Ex. entering nothing in the time selection window gives a negative counter
-
+Errors:
+"go" returns nav_prev instead of nav_start
+"continue" returns nav_start instead of nav_next
 
 */
 
@@ -81,7 +76,7 @@ for(i =0;i<nlcConversionTestQueries.length;i++) {
 }
 
 
-var nlcNavEndTestQueries = ["I'm done", "I'm finished"];
+var nlcNavEndTestQueries = ["I'm done", "I'm finished","stop"];
 for(i =0;i<nlcNavEndTestQueries.length;i++) {
   classify(nlcNavEndTestQueries[i], function(err, response) {
     //console.log(response + "\n");
@@ -98,7 +93,7 @@ for(i =0;i<nlcNavEndTestQueries.length;i++) {
 }
 
 
-var nlcNavStartTestQueries = ["start"];
+var nlcNavStartTestQueries = ["start","begin","go"];//go
 for(i =0;i<nlcNavStartTestQueries.length;i++) {
   classify(nlcNavStartTestQueries[i], function(err, response) {
     //console.log(response + "\n");
@@ -114,7 +109,7 @@ for(i =0;i<nlcNavStartTestQueries.length;i++) {
   });
 }
 
-var nlcNavNextTestQueries = ["next"];
+var nlcNavNextTestQueries = ["next","continue"];
 for(i =0;i<nlcNavNextTestQueries.length;i++) {
   classify(nlcNavNextTestQueries[i], function(err, response) {
     //console.log(response + "\n");
@@ -131,7 +126,7 @@ for(i =0;i<nlcNavNextTestQueries.length;i++) {
 }
 
 
-var nlcNavPrevTestQueries = ["previous"];
+var nlcNavPrevTestQueries = ["previous","back"];
 for(i =0;i<nlcNavPrevTestQueries.length;i++) {
   classify(nlcNavPrevTestQueries[i], function(err, response) {
     //console.log(response + "\n");

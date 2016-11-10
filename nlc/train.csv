@@ -29,6 +29,7 @@ let's do this,nav_start
 show me how to make it,nav_start
 let's make it,nav_start
 show me the cooking instructions,nav_start
+go,nav_start
 abort the recipe,nav_end
 stop,nav_end
 end,nav_end
@@ -51,6 +52,7 @@ what's the last step,nav_prev
 go to the next step,nav_next
 next step,nav_next
 what's next,nav_next
+continue,nav_next
 how many grams in a pound,unit_conversion
 how many cups in three gallons,unit_conversion
 how many fluid ounces in two pints,unit_conversion
