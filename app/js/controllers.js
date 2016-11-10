@@ -110,7 +110,6 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         scrollTo("body", 50);
     }
 
-
     var goToStep = function(stepNum) {
         var inst = $('#instruction_' + stepNum);
         inst.addClass('current-instruction-box');
