@@ -577,7 +577,7 @@ app.service('TimerService', function(){
     }
 
     this.decrementTime = function(){
-        if(timer.time.totalSeconds == 1 || timer.time.totalSeconds == 0){
+        if(timer.time.totalSeconds == 1 || timer.time.totalSeconds <= 0){
             timer.time.seconds = 0;
             timer.time.totalSeconds = 0;
             return true;
