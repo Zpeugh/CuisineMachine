@@ -209,8 +209,8 @@ app.controller("cuisineMachineController", function($scope, $location, $http, $i
     // TODO: 
     // Move to separate file
 
-    
-    var audio_encoding = 'audio/ogg; codecs=opus';
+    /*
+    var audio_encoding = 'audio/wav';
     
     // get token and connect to web socket
     $http.get( "/api/stt/gettoken").success(function(data) {
@@ -222,80 +222,73 @@ app.controller("cuisineMachineController", function($scope, $location, $http, $i
         var ws = new WebSocket(STTSocketURL);
 
         // open watson connection
+        // TODO: Use sessions
         ws.onopen = function(evt) { 
             console.log("START");
-            var message = {
+            var startMessage = {
                 action: 'start',
-                interim_results: true,
+                interim_results: false,
+                continuous: true,
                 "content-type": audio_encoding, //rate=22050
                 keywords: ["Watson", "Chef", "Dawg"],
                 keywords_threshold: 0.5,
                 smart_formatting: true
-            };
-            ws.send(JSON.stringify(message));
-            
+            };            
             
             // send chunks of audio binary data over socket
             var sendAudioToWatson = function(data) {
-                if (ws) {
+                if (ws.readyState == ws.OPEN) {
                     console.log("SENDNG DATA");
                     ws.send(data);  
+                } else {
+                    console.log("Web Socket closed");
                 }
             }
             
-            
             // access the microphone and start recording
+            function successCallback(stream) {
+                var context = new AudioContext();
+                var mediaStreamSource = context.createMediaStreamSource(stream);
+                var rec = new Recorder(mediaStreamSource);
+                
+                // record for x seconds and send to watson
+                rec.record();
+                ws.send(JSON.stringify(startMessage));
+                var count = 0;
+                var max = 2;
+                setInterval(function(){
+                    if (count === max) {
+                        ws.send(JSON.stringify({action: "stop"}));
+                        count = 0;
+                    } else if (count < max) {
+                        if (count === 0) {
+                            ws.send(JSON.stringify(startMessage));
+                        }
+                        rec.exportWAV(function(blob) {
+                            console.log("exporting");
+                            rec.clear();
+                            sendAudioToWatson(blob);
+                            count++;      
+                        });
+                        
+                    }
+                }, 1000);          
+            }
+            
+            
+            function errorCallback(stream) {
+                console.log("Error accessing microphone");
+            }
+            
+            
             navigator.getUserMedia = navigator.getUserMedia ||
                                  navigator.webkitGetUserMedia ||
                                  navigator.mozGetUserMedia;
-
-            if (navigator.getUserMedia) {
-                console.log('getUserMedia supported.');
-                navigator.getUserMedia (
-                    { audio: true },
-
-                    // if microphone available listen to it
-                    function(stream) {
-                        console.log("RECORDING");
-                        var opts = {
-                            mimeType: 'audio/webm;codecs=opus'
-                        };
-                        var mediaRecorder = new MediaRecorder(stream, opts);
-                        mediaRecorder.start();
-
-                        // store data in chunks
-                        var chunks = [];
-                        mediaRecorder.ondataavailable = function(e) {
-                            chunks.push(e.data);
-                                                        
-                            // send data to server every 100? bytes
-                            if (chunks.length >= 256) {
-                                var blob = new Blob(chunks, { 'type' : audio_encoding });
-                                sendAudioToWatson(blob);
-                                chunks = [];   
-                                
-                                // eventually remove this and figures out why intermediate results aren't coming
-                                mediaRecorder.stop(true);
-                                var message = {
-                                    action: 'stop'
-                                };
-                                ws.send(JSON.stringify(message));
-                            }
-                        };
-                    },
-
-                    // Error callback
-                    function(err) {
-                        console.log('Error recording audio: ' + err);
-                    }
-                );
-            } else {
-                console.log('getUserMedia not supported on your browser!');
-            }
+            navigator.getUserMedia({audio:true}, successCallback, errorCallback);
         };
         
         // close watson connection
-        ws.onclose = function(evt) {  
+        ws.onclose = function(evt) { 
             console.log("STOP. details below");
             console.log(evt);
         };
@@ -310,7 +303,9 @@ app.controller("cuisineMachineController", function($scope, $location, $http, $i
             console.log("ERROR. details below");
             console.log(evt);
         };
-    });   
+        
+        
+    }); */  
 });
 
 

@@ -17,11 +17,16 @@
     <script src="app.js"></script>
     <script src="js/services.js"></script>
     <script src="js/controllers.js"></script>
+    <script src="libs/Recorder/recorder.js"></script>
 </head>
 
 <body>
     <div ng-app="cuisineMachineApp">
 
+        <audio id="audio_sample" controls="controls">
+            <source id="wavSource" type="audio/wav"></source>
+        </audio>
+        
         <!-- Navigation Tabs -->
         <ul id="main-navbar" class="nav nav-justified">
             <li id="explore-tab" class="navtab">
