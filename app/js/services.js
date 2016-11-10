@@ -558,8 +558,8 @@ app.service('TimerService', function() {
         return timer.time.totalSeconds;
     }
 
-    this.decrementTime = function() {
-        if (timer.time.totalSeconds == 1 || timer.time.totalSeconds == 0) {
+    this.decrementTime = function(){
+        if(timer.time.totalSeconds == 1 || timer.time.totalSeconds <= 0){
             timer.time.seconds = 0;
             timer.time.totalSeconds = 0;
             return true;
