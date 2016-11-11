@@ -558,8 +558,8 @@ app.service('TimerService', function() {
         return timer.time.totalSeconds;
     }
 
-    this.decrementTime = function(){
-        if(timer.time.totalSeconds == 1 || timer.time.totalSeconds <= 0){
+    this.decrementTime = function() {
+        if (timer.time.totalSeconds == 1 || timer.time.totalSeconds == 0) {
             timer.time.seconds = 0;
             timer.time.totalSeconds = 0;
             return true;
@@ -621,26 +621,30 @@ app.service('SubstitutionService', function($http) {
     substitutioner.isActive = false;
     substitutioner.result = "";
 
-    $http.get('/api/substitutions').success(function(data){
+    $http.get('/api/substitutions').success(function(data) {
         substitutioner.substitutions = data;
         console.log("Got substitutions");
     });
 
 
-    this.getSubstitutions = function(sentence) {
+    this.getSubstitutions = function(input) {
         // return "Try this";
         var words = input.split(' ');
-        for(var i = 0; i < words.length; i++) {
-          var word = words[i];
-          if(substitutioner.substitutions[word]) {
-            return "You can substitute " + substitutioner.substitutions[word]['amount'] + " of " + word + " for " + substitutioner.substitutions[word]['sub'];
-          }
+        for (var i = 0; i < words.length; i++) {
+            var word = words[i];
+            if (substitutioner.substitutions[word]) {
+                substitutioner.result = "You can substitute " + substitutioner.substitutions[word]['amount'] + " of " + word + " for " + substitutioner.substitutions[word]['sub'];
+            }
         }
         return "Sorry I can't find a substitution"
     }
 
     this.getSubstitutioner = function() {
         return substitutioner;
+    }
+
+    this.clearQuery = function(){
+        substitutioner.sentence = "";
     }
 
 

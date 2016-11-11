@@ -142,6 +142,13 @@ img#widget-next-arrow{
     font-size: 20px;
 }
 
+.substitution-text{
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 20px;
+    text-align: left;
+}
+
 /************ Reusable classes/ids ************/
 
 .clickable:hover{

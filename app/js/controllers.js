@@ -255,6 +255,7 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
 
     $scope.closeSubstitutions = function(){
         $scope.substitutioner.isActive = false;
+        SubstitutionService.clearQuery();
     }
 
 });
