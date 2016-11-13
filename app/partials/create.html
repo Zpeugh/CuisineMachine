@@ -5,7 +5,7 @@
 
         <div id="picture-box" class="row container-fluid text-center">
             <div class="full-width">
-                <span id="recipe-header" ng-bind="currentRecipe.title"></span>
+                <span id="recipe-header" ng-bind="recipeService.selectedRecipe.title"></span>
             </div>
             <div class="col-sm-1 text-center text-middle">
                 <a id="right-arrow-div" href="#discover">
@@ -13,7 +13,7 @@
                 </a>
             </div>
             <div class="col-sm-10 text-center blur">
-                <img id="create-recipe" src={{currentRecipe.pictureUrl}} />
+                <img id="create-recipe" src={{recipeService.selectedRecipe.pictureUrl}} />
             </div>
             <div id="right-arrow-div" class="col-sm-1 text-center text-middle">
                 <img ng-click="startCooking()" src="../images/play-button.png" />
@@ -21,14 +21,14 @@
         </div>
         <div class="light-container" class="text-center">
             <h1 class="create-header padding-top" class="recipe-header">A<span class="spacing"> </span>B<span class="spacing"> </span>O<span class="spacing"> </span>U<span class="spacing"> </span>T<span class="spacing"> </span></h3>
-            <p class="recipe-text text-left">{{currentRecipe.about}}</p>
+            <p class="recipe-text text-left">{{recipeService.selectedRecipe.about}}</p>
             <br />
             <div class="row">
                 <div class="col-sm-12 col-md-12">
                     <h3 class="create-header">I<span class="spacing"> </span>N<span class="spacing"> </span>G<span class="spacing"> </span>R<span class="spacing"> </span>E<span class="spacing"> </span>D<span class="spacing"> </span>I<span class="spacing"> </span>E<span class="spacing"> </span>N<span class="spacing"> </span>T<span class="spacing"> </span>S</h3>
                     <br />
                     <ul class="text-left">
-                        <div ng-repeat="ingredient in currentRecipe.ingredients track by $index">
+                        <div ng-repeat="ingredient in recipeService.selectedRecipe.ingredients track by $index">
                             <li type="square" class="recipe-text">{{ingredient}}</li>
                         </div>
                     </ul>
@@ -37,7 +37,7 @@
                     <h3 class="create-header">I<span class="spacing"> </span>N<span class="spacing"> </span>S<span class="spacing"> </span>T<span class="spacing"> </span>R<span class="spacing"> </span>U<span class="spacing"> </span>C<span class="spacing"> </span>T<span class="spacing"> </span>I<span class="spacing"> </span>O<span class="spacing"> </span>N<span class="spacing"> </span>S</h3>
                     <br />
                     <ol>
-                        <div ng-repeat="step in currentRecipe.instructions track by $index" class="center-instructions">
+                        <div ng-repeat="step in recipeService.selectedRecipe.instructions track by $index" class="center-instructions">
                             <div id="instruction_{{$index}}">
                                 <li class="recipe-text text-left">{{step}}</li>
                                 <br />

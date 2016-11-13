@@ -5,15 +5,15 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
 
     var init = function(){
         $scope.searchText = "";
-        $scope.recipes = RecipeService.getRecipes();
-        $scope.currentRecipe = RecipeService.getSelectedRecipe();
-        $scope.recipeRows = RecipeService.getRecipeRows();
+        $scope.recipeService = RecipeService.getRecipeService();
+        // $scope.recipeService.currentRecipe = RecipeService.getSelectedRecipe();
+        // $scope.recipeService.recipeRows = RecipeService.getRecipeRows();
+        // $scope.recipeService.filter = RecipeService.getFilter();
         $scope.instruction = InstructionService.getInstruction();
         $scope.timer = TimerService.getTimer();
         $scope.timer.displayTime = TimerService.prettyPrintTime();
         $scope.converter = ConversionService.getConverter();
         $scope.listener = ListenerService.getListener();
-        $scope.filter = RecipeService.getFilter();
         $scope.substitutioner = SubstitutionService.getSubstitutioner();
     }
 
@@ -61,10 +61,10 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     }
 
     $scope.search = function(sentence) {
-        $scope.currentRecipe = RecipeService.getSelectedRecipe();
+        // $scope.recipeService.currentRecipe = RecipeService.getSelectedRecipe();
         $scope.instruction = InstructionService.getInstruction();
         console.log("recipe on click");
-        console.log($scope.currentRecipe);
+        console.log($scope.recipeService.currentRecipe);
         $scope.searchText = sentence;
         ClassifyService.classifyRequest(sentence).success(function(className){
             console.log("Classified as: " + className);
@@ -76,8 +76,11 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
                         for (var i = 0; i < data.length; i++) {
                             RecipeService.addRecipe(data[i]);
                         }
-                        $scope.recipes = RecipeService.getRecipes();
-                        $scope.recipeRows = RecipeService.getRecipeRows();
+                        RecipeService.setRecipeRows()
+                        $scope.recipeService = RecipeService.getRecipeService();
+                        console.log("Recipe rows:" );
+                        console.log($scope.recipeService.recipeRows);
+                        // $scope.recipeService.recipeRows = RecipeService.getRecipeRows();
                         $location.path("/discover");
                     }).error(function(data) {
                         console.log("Error: " + data);
@@ -104,10 +107,11 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     }
 
     $scope.selectRecipe = function(recipe) {
-        RecipeService.setSelectedRecipe(recipe);
-        $scope.currentRecipe = RecipeService.getSelectedRecipe();
+        // $scope.recipeService.currentRecipe = RecipeService.getSelectedRecipe();
         $location.path("/create");
+        RecipeService.setSelectedRecipe(recipe);
         scrollTo("body", 50);
+        console.log($scope.recipeService)
     }
 
     var goToStep = function(stepNum) {
@@ -126,16 +130,16 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         console.log("Current instruction");
         console.log($scope.instruction);
         InstructionService.setCurrentInstructionStep(0);
-        InstructionService.setCurrentInstruction($scope.currentRecipe.instructions[0]);
+        InstructionService.setCurrentInstruction($scope.recipeService.currentRecipe.instructions[0]);
         scrollTo('#instruction_0', 200, 1200);
         goToStep(0);
     }
 
     $scope.nextStep = function() {
         endStep($scope.instruction.stepNumber);
-        if ($scope.currentRecipe.instructions.length > $scope.instruction.stepNumber + 1) {
+        if ($scope.recipeService.currentRecipe.instructions.length > $scope.instruction.stepNumber + 1) {
             InstructionService.incrementStep();
-            InstructionService.setCurrentInstruction($scope.currentRecipe.instructions[$scope.instruction.stepNumber])
+            InstructionService.setCurrentInstruction($scope.recipeService.currentRecipe.instructions[$scope.instruction.stepNumber])
             goToStep($scope.instruction.stepNumber);
             scrollTo('#instruction_' + $scope.instruction.stepNumber, 0, 1200);
         }
@@ -147,7 +151,7 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         console.log($scope.instruction);
         if ($scope.instruction.stepNumber > 0) {
             InstructionService.decrementStep();
-            InstructionService.setCurrentInstruction($scope.currentRecipe.instructions[$scope.instruction.stepNumber])
+            InstructionService.setCurrentInstruction($scope.recipeService.currentRecipe.instructions[$scope.instruction.stepNumber])
             console.log("Back an instruction");
             console.log($scope.instruction);
             goToStep($scope.instruction.stepNumber);
@@ -225,23 +229,28 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     }
 
     $scope.openFilters = function(){
-        $scope.filter.isActive = true;
+        $scope.recipeService.filter.isActive = true;
     }
 
     $scope.closeFilter = function(){
-        $scope.filter.isActive = false;
+        $scope.recipeService.filter.isActive = false;
     }
 
     $scope.addExlusionFilter = function(sentence){
-        RecipeService.excludeIngredients(sentence);
-        RecipeService.clearAddFilter();
-        $scope.recipeRows = RecipeService.getRecipeRows();
+        console.log("excluding recipes containing: "+ sentence);
+        $scope.recipeService.filter.exclude.sentence = sentence;
+        RecipeService.excludeIngredients();
+        RecipeService.clearInclusionFilter();
+        console.log("Recipe rows:");
+        console.log($scope.recipeService.recipeRows);
+        // $scope.recipeService.recipeRows = RecipeService.getRecipeRows();
     }
 
     $scope.addInclusionFilter = function(sentence){
+        $scope.recipeService.filter.include.sentence = sentence;
         RecipeService.includeIngredients(sentence);
         RecipeService.clearExclusionFilter();
-        $scope.recipeRows = RecipeService.getRecipeRows();
+        // $scope.recipeService.recipeRows = RecipeService.getRecipeRows();
     }
 
     $scope.setsubstitutionSentence = function(sentence){
