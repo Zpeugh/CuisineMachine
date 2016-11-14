@@ -641,14 +641,14 @@ app.service('SubstitutionService', function($http) {
 
     this.getSubstitutions = function(input) {
         // return "Try this";
-        var words = input.split(' ');
-        for (var i = 0; i < words.length; i++) {
-            var word = words[i];
-            if (substitutioner.substitutions[word]) {
-                substitutioner.result = "You can substitute " + substitutioner.substitutions[word]['amount'] + " of " + word + " for " + substitutioner.substitutions[word]['sub'];
-            }
-        }
-        return "Sorry I can't find a substitution"
+		var substitution = "Sorry I can't find a substitution";
+		for (term in substitutioner.substitutions){
+			if(input.includes(term)){
+				substitution = "You can substitute " + substitutioner.substitutions[term]['sub'] + " for " + substitutioner.substitutions[term]['amount'] + " of " + term;
+			}
+		}
+		substitutioner.result = substitution;
+        return substitutioner.result;
     }
 
     this.getSubstitutioner = function() {
