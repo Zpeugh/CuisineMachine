@@ -1,12 +1,12 @@
-app.controller("cuisineMachineController", function($scope, $http, $location, $interval, $rootScope, RandRService,
-                                                    ClassifyService, RecipeService, TextToSpeechService,
-                                                    InstructionService, TimerService, ConversionService,
-                                                    UnitConversionParser, ListenerService, SubstitutionService) {
+app.controller("cuisineMachineController", function($scope, $http, $rootScope, $location, $interval, $rootScope, RandRService,
+    ClassifyService, RecipeService, TextToSpeechService,
+    InstructionService, TimerService, ConversionService,
+    UnitConversionParser, ListenerService, SubstitutionService) {
 
-    var init = function(){
+    var init = function() {
         $scope.searchText = "";
         $scope.recipeService = RecipeService.getRecipeService();
-        // $scope.recipeService.currentRecipe = RecipeService.getSelectedRecipe();
+        // $scope.recipeService.selectedRecipe = RecipeService.getSelectedRecipe();
         // $scope.recipeService.recipeRows = RecipeService.getRecipeRows();
         // $scope.recipeService.filter = RecipeService.getFilter();
         $scope.instruction = InstructionService.getInstruction();
@@ -19,14 +19,14 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
 
     init();
 
-    $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+    $rootScope.$on("$routeChangeStart", function(event, next, current) {
         var nextPath = next.$$route.originalPath;
         $scope.listener = ListenerService.getListener();
-        if (nextPath == "/discover"){
+        if (nextPath == "/discover") {
             ListenerService.setActive();
-        } else if (nextPath == "/create"){
+        } else if (nextPath == "/create") {
             ListenerService.setActive();
-        } else if (nextPath == "/explore"){
+        } else if (nextPath == "/explore") {
             ListenerService.setInactive();
         } else {
             console.log("unknown path: " + nextPath);
@@ -55,25 +55,25 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
         }
     });
 
-    
-    
+
+
     // SEARCHING
-    
-    
+
+
     // Explore page's function to handle search being pressed
     $scope.onSubmit = function() {
         $scope.responseData = TextToSpeechService.speakText($scope.testData);
     }
 
     $scope.search = function(sentence) {
-        // $scope.recipeService.currentRecipe = RecipeService.getSelectedRecipe();
+        // $scope.recipeService.selectedRecipe = RecipeService.getSelectedRecipe();
         $scope.instruction = InstructionService.getInstruction();
         console.log("recipe on click");
-        console.log($scope.recipeService.currentRecipe);
+        console.log($scope.recipeService.selectedRecipe);
         $scope.searchText = sentence;
-        ClassifyService.classifyRequest(sentence).success(function(className){
+        ClassifyService.classifyRequest(sentence).success(function(className) {
             console.log("Classified as: " + className);
-            if (className == "recipes"){
+            if (className == "recipes") {
                 RecipeService.clearRecipes();
                 RandRService.sendRequest(sentence)
                     .success(function(data) {
@@ -83,7 +83,7 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
                         }
                         RecipeService.setRecipeRows()
                         $scope.recipeService = RecipeService.getRecipeService();
-                        console.log("Recipe rows:" );
+                        console.log("Recipe rows:");
                         console.log($scope.recipeService.recipeRows);
                         // $scope.recipeService.recipeRows = RecipeService.getRecipeRows();
                         $location.path("/discover");
@@ -91,38 +91,38 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
                         console.log("Error: " + data);
                         $scope.documents = [];
                     });
-            } else if(className == "timer"){
+            } else if (className == "timer") {
                 $scope.openTimer();
-            } else if(className == "nav_start"){
+            } else if (className == "nav_start") {
                 $scope.startCooking();
-            } else if(className == "nav_next"){
+            } else if (className == "nav_next") {
                 $scope.nextStep();
-            } else if(className == "nav_prev"){
+            } else if (className == "nav_prev") {
                 $scope.goBackAStep();
-            } else if(className == "nav_end"){
+            } else if (className == "nav_end") {
                 $scope.nextStep();
-            }else if(className == "unit_conversion"){
+            } else if (className == "unit_conversion") {
                 $scope.openUnitConverter();
                 $scope.setUnitConversionSentence(sentence);
             }
-        }).error(function(data){
-            console.log("Error classifying: "+ data);
+        }).error(function(data) {
+            console.log("Error classifying: " + data);
         });
         $scope.closeListenerTextBox();
     }
 
     $scope.selectRecipe = function(recipe) {
-        // $scope.recipeService.currentRecipe = RecipeService.getSelectedRecipe();
+        // $scope.recipeService.selectedRecipe = RecipeService.getSelectedRecipe();
         $location.path("/create");
         RecipeService.setSelectedRecipe(recipe);
         scrollTo("body", 50);
         console.log($scope.recipeService)
     }
 
-    
+
     // RECIPE INTERACTION
-    
-    
+
+
     var goToStep = function(stepNum) {
         var inst = $('#instruction_' + stepNum);
         inst.addClass('current-instruction-box');
@@ -139,16 +139,16 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
         console.log("Current instruction");
         console.log($scope.instruction);
         InstructionService.setCurrentInstructionStep(0);
-        InstructionService.setCurrentInstruction($scope.recipeService.currentRecipe.instructions[0]);
+        InstructionService.setCurrentInstruction($scope.recipeService.selectedRecipe.instructions[0]);
         scrollTo('#instruction_0', 200, 1200);
         goToStep(0);
     }
 
     $scope.nextStep = function() {
         endStep($scope.instruction.stepNumber);
-        if ($scope.recipeService.currentRecipe.instructions.length > $scope.instruction.stepNumber + 1) {
+        if ($scope.recipeService.selectedRecipe.instructions.length > $scope.instruction.stepNumber + 1) {
             InstructionService.incrementStep();
-            InstructionService.setCurrentInstruction($scope.recipeService.currentRecipe.instructions[$scope.instruction.stepNumber])
+            InstructionService.setCurrentInstruction($scope.recipeService.selectedRecipe.instructions[$scope.instruction.stepNumber])
             goToStep($scope.instruction.stepNumber);
             scrollTo('#instruction_' + $scope.instruction.stepNumber, 0, 1200);
         }
@@ -160,7 +160,7 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
         console.log($scope.instruction);
         if ($scope.instruction.stepNumber > 0) {
             InstructionService.decrementStep();
-            InstructionService.setCurrentInstruction($scope.recipeService.currentRecipe.instructions[$scope.instruction.stepNumber])
+            InstructionService.setCurrentInstruction($scope.recipeService.selectedRecipe.instructions[$scope.instruction.stepNumber])
             console.log("Back an instruction");
             console.log($scope.instruction);
             goToStep($scope.instruction.stepNumber);
@@ -172,7 +172,7 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
         var text = $('#instruction_' + $scope.instruction.stepNumber + ' > li').html();
         TextToSpeechService.speak(text);
     }
-    
+
     // TIMERS
 
     $scope.openTimer = function() {
@@ -195,112 +195,136 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
         $scope.closeTimer();
         $scope.timer.isActive = true;
         var totalSeconds = TimerService.setTotalSeconds();
-		if(totalSeconds <= 0){
-			$scope.timerFinished();
-		}
-		else{
-			$interval(function(){
-				$scope.timer.displayTime = TimerService.prettyPrintTime();
-				TimerService.decrementTime();
-				if($scope.timer.time.totalSeconds <= 0){
-					$scope.timerFinished();
-				}
-			}, 1000, totalSeconds);
-		}
+        if (totalSeconds <= 0) {
+            $scope.timerFinished();
+        } else {
+            $interval(function() {
+                $scope.timer.displayTime = TimerService.prettyPrintTime();
+                TimerService.decrementTime();
+                if ($scope.timer.time.totalSeconds <= 0) {
+                    $scope.timerFinished();
+                }
+            }, 1000, totalSeconds);
+        }
 
     }
 
-    $scope.timerFinished = function(){
+    $scope.timerFinished = function() {
         var title = $scope.timer.title;
         $scope.timer.isActive = false;
         TextToSpeechService.speak("The " + title + " timer is done.");
         $scope.timer = TimerService.resetTimer();
     }
-    
-    
+
+
     // CONVERSIONS
 
-    
-    $scope.openUnitConverter = function(){
+
+    $scope.openUnitConverter = function() {
         ConversionService.showConverter();
     }
 
-    $scope.closeUnitConverter = function(){
+    $scope.closeUnitConverter = function() {
         ConversionService.hideConverter();
         ConversionService.resetConverter();
     }
 
-    $scope.setUnitConversionSentence = function(sentence){
+    $scope.setUnitConversionSentence = function(sentence) {
         $scope.converter.sentence = sentence;
-		$scope.converter.result = UnitConversionParser.parseSentenceConvertUnits(sentence);
+        $scope.converter.result = UnitConversionParser.parseSentenceConvertUnits(sentence);
     }
 
-    $scope.openListenerTextBox = function(){
+    $scope.openListenerTextBox = function() {
         ListenerService.showText();
+        $scope.speechTrigger();
     }
 
-    $scope.closeListenerTextBox = function(){
+    $scope.closeListenerTextBox = function() {
         ListenerService.hideText();
+        $scope.speechTrigger();
     }
 
-    
+
     // FILTERS
-    
-    
-    $scope.openFilters = function(){
+
+
+    $scope.openFilters = function() {
         $scope.recipeService.filter.isActive = true;
     }
 
-    $scope.closeFilter = function(){
+    $scope.closeFilter = function() {
         $scope.recipeService.filter.isActive = false;
     }
 
-    $scope.addExlusionFilter = function(sentence){
-        console.log("excluding recipes containing: "+ sentence);
+    $scope.addExlusionFilter = function(sentence) {
+        console.log("excluding recipes containing: " + sentence);
         $scope.recipeService.filter.exclude.sentence = sentence;
         RecipeService.excludeIngredients();
-        RecipeService.clearInclusionFilter();
+        RecipeService.clearExclusionFilter();
         console.log("Recipe rows:");
         console.log($scope.recipeService.recipeRows);
         // $scope.recipeService.recipeRows = RecipeService.getRecipeRows();
     }
 
-    $scope.addInclusionFilter = function(sentence){
+    $scope.addInclusionFilter = function(sentence) {
         $scope.recipeService.filter.include.sentence = sentence;
         RecipeService.includeIngredients(sentence);
-        RecipeService.clearExclusionFilter();
+        RecipeService.clearInclusionFilter();
         // $scope.recipeService.recipeRows = RecipeService.getRecipeRows();
     }
-    
-    
-    // SUBSTITUTIONS
-    
 
-    $scope.setsubstitutionSentence = function(sentence){
+
+    // SUBSTITUTIONS
+
+
+    $scope.setsubstitutionSentence = function(sentence) {
         SubstitutionService.getSubstitutions(sentence);
     }
 
-    $scope.openSubstitutions = function(){
+    $scope.openSubstitutions = function() {
         $scope.substitutioner.isActive = true;
         console.log("opening");
     }
 
-    $scope.closeSubstitutions = function(){
+    $scope.closeSubstitutions = function() {
         $scope.substitutioner.isActive = false;
         SubstitutionService.clearQuery();
     }
 
-    
-    
-    
-    
-    
-    
-    // ------------- SPEECH TO TEXT ----------- 
-    // TODO: 
-    // Move to separate file    
-    
-    
+
+
+    $scope.listenBasedOnLocation = function() {
+        var currentLocation = $location.path();
+        console.log(currentLocation);
+        if (currentLocation == "/explore") {
+            console.log("Triggering speech");
+            $scope.speechTrigger();
+        }
+        else if (currentLocation == "/create") {
+            if ($scope.listener.showText) {
+                console.log("Closing Listener");
+                $scope.closeListenerTextBox();
+            } else {
+                console.log("Opening Listener");
+                $scope.openListenerTextBox();
+            }
+        }
+    }
+
+    // ------------- SPEECH TO TEXT -----------
+    // TODO:
+    // Create a service for this.
+
+
+    $(document).on("keypress", function(e) {
+        if (e.which == 96) {
+            $scope.listenBasedOnLocation();
+        } else if (e.which == 32 && $location.path() == "/create") {
+            $scope.listenBasedOnLocation();
+        }
+    });
+
+
     var token;
     $scope.speechOn = false;
     $scope.speechProcessing = false;
@@ -317,15 +341,15 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
     var stopMessage = {
         action: 'stop'
     };
-    
-   
+
+
     // get token from node server - happens on startup
-    $http.get( "/api/stt/gettoken").success(function(data) {
+    $http.get("/api/stt/gettoken").success(function(data) {
         // get token
         token = data.token;
     });
 
-     // send start message to watson
+    // send start message to watson
     var sendStart = function() {
         if (watsonSocket != null && watsonSocket.readyState == watsonSocket.OPEN) {
             watsonSocket.send(JSON.stringify(startMessage));
@@ -376,45 +400,48 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
 
         // connect to microphone
         navigator.getUserMedia = navigator.getUserMedia ||
-                                 navigator.webkitGetUserMedia ||
-                                 navigator.mozGetUserMedia;
-        navigator.getUserMedia({audio:true}, successCallback, errorCallback);
-    }
-    
-    
-    // put results in text box
-    var setSpeechResults = function(text) {
-        $scope.searchText = text;
-        $scope.$apply();
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia;
+        navigator.getUserMedia({
+            audio: true
+        }, successCallback, errorCallback);
     }
 
-                  
+
+    // put results in text box
+    var setSpeechResults = function(text) {
+        // $scope.searchText = text;
+        // $scope.$apply();
+        $scope.search(text);
+    }
+
+
     // connect to websocket
     var setupWebsocket = function() {
-        // connect to websocket 
+        // connect to websocket
         var STTSocketURL = "wss://stream.watsonplatform.net/speech-to-text/api/v1/recognize?watson-token=" + token + "&model=en-US_BroadbandModel";
         watsonSocket = new WebSocket(STTSocketURL);
-        
+
         // socket open - start recording and streaming audio data
-        watsonSocket.onopen = function(evt) { 
+        watsonSocket.onopen = function(evt) {
             console.log("SOCKET OPEN");
-            
+
             // send start message and begin recording/streaming
             sendStart();
             startStreamingAudio();
         };
 
         // socket close
-        watsonSocket.onclose = function(evt) { 
+        watsonSocket.onclose = function(evt) {
             console.log("SOCKET CLOSED. Details below");
             console.log(evt);
         };
-        
+
         // socket receives data
-        watsonSocket.onmessage = function(evt) { 
+        watsonSocket.onmessage = function(evt) {
             console.log("SOCKET MESSAGE: " + evt.data);
             var data = JSON.parse(evt.data);
-            
+
             // check if receiving results or state update
             if (data.results) {
                 $scope.speechProcessing = false;
@@ -430,9 +457,9 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
                 watsonSocket.close();
             }
         };
-        
+
         // socket error
-        watsonSocket.onerror = function(evt) { 
+        watsonSocket.onerror = function(evt) {
             console.log("SOCKET ERROR. Details below");
             console.log(evt);
         };
@@ -454,7 +481,7 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
             //connect to socket (starts recording and streaming automatically once opened)
             setupWebsocket();
         }
-        
+
         $scope.speechOn = !$scope.speechOn
     };
 });
