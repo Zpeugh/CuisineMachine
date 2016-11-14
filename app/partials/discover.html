@@ -11,7 +11,7 @@
             <br />
             <br />
             <div class="container-fluid">
-                <div class="row recipe-row text-center" ng-repeat="recipeRow in recipeRows">
+                <div class="row recipe-row text-center" ng-model="recipeService.recipeRows" ng-repeat="recipeRow in recipeService.recipeRows">
                     <div ng-repeat="recipe in recipeRow" class="col-sm-4 text-center">
                         <div ng-click="selectRecipe(recipe)" class="recipe-box">
                             <img class="recipe" src={{recipe.pictureUrl}} />

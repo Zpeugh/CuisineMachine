@@ -13,18 +13,19 @@ app.service('ClassifyService', function($http) {
 
 app.service('RecipeService', function() {
 
-    var selectedRecipe = {};
-    var recipes = [];
-    var recipeRows = [];
-    var filter = {};
-    filter.isActive = false;
-    filter.exclude = {};
-    filter.exclude.sentence = "";
-    filter.include = {};
-    filter.include.sentence = "";
+    var recipeService = {};
+    recipeService.selectedRecipe = {};
+    recipeService.recipes = [];
+    recipeService.recipeRows = [];
+    recipeService.filter = {};
+    recipeService.filter.isActive = false;
+    recipeService.filter.exclude = {};
+    recipeService.filter.exclude.sentence = "";
+    recipeService.filter.include = {};
+    recipeService.filter.include.sentence = "";
 
     this.getFilter = function() {
-        return filter
+        return recipeService.filter
     }
 
     this.addRecipe = function(json) {
@@ -55,30 +56,28 @@ app.service('RecipeService', function() {
             var tag = tags[i].trim();
             recipe.tags[i] = tag.charAt(0).toUpperCase() + tag.slice(1);
         };
-        recipes.push(recipe);
+        recipeService.recipes.push(recipe);
 
+    }
+
+    this.getRecipeService = function() {
+        return recipeService;
     }
 
     //removes recipe by index in recipes
-    this.removeRecipe = function(index) {
-        recipes.slice(index, 1);
+    var removeRecipe = function(index) {
+        recipeService.recipes.splice(index, 1);
     };
 
-    this.getRecipes = function() {
-        return recipes;
-    }
-
-
-    this.getRecipeRows = function() {
-        recipeRows = [];
-        for (var i = 0; i < recipes.length - 3; i += 3) {
+    this.setRecipeRows = function() {
+        recipeService.recipeRows = [];
+        for (var i = 0; i < recipeService.recipes.length - 3; i += 3) {
             row = [];
-            row.push(recipes[i]);
-            row.push(recipes[i + 1]);
-            row.push(recipes[i + 2]);
-            recipeRows.push(row);
+            row.push(recipeService.recipes[i]);
+            row.push(recipeService.recipes[i + 1]);
+            row.push(recipeService.recipes[i + 2]);
+            recipeService.recipeRows.push(row);
         }
-        return recipeRows
     }
 
     this.clearRecipes = function() {
@@ -86,39 +85,52 @@ app.service('RecipeService', function() {
     }
 
     this.setSelectedRecipe = function(recipe) {
-        selectedRecipe = recipe;
+        recipeService.selectedRecipe = recipe;
     }
 
     this.getSelectedRecipe = function() {
-        return selectedRecipe;
+        return recipeService.selectedRecipe;
     }
 
     this.clearExclusionFilter = function() {
-        filter.exclude.sentence = "";
+        recipeService.filter.exclude.sentence = "";
     }
 
     this.clearInclusionFilter = function() {
-        filter.include.sentence = "";
+        recipeService.filter.include.sentence = "";
     }
 
     this.includeIngredients = function() {
-        for (var i = recipes.length - 1; i >= 0; i--) {
-            for (var j = 0; j < recipes[i].ingredients.length; j++) {
-                if (recipes[i].ingredients.indexOf(filter.include.sentence) == -1) {
-                    this.removeRecipe(i);
+        for (var i = 0; i < recipeService.recipes.length - 1; i++) {
+            recipe = recipeService.recipes[i];
+            not_included = true;
+            for (var j = 0; j < recipeService.recipes[i].ingredients.length; j++) {
+                ingredient = recipe.ingredients[j]
+                if (recipeService.recipes[i].ingredients.indexOf(recipeService.filter.include.sentence) == -1) {
+                    console.log("removing recipe: " + i);
+                    included = true;
                 }
             }
+            if (not_included){
+                removeRecipe(i);
+            }
         }
+        this.setRecipeRows();
     }
 
     this.excludeIngredients = function() {
-        for (var i = recipes.length - 1; i >= 0; i--) {
-            for (var j = 0; j < recipes[i].ingredients.length; j++) {
-                if (recipes[i].ingredients.indexOf(filter.exclude.sentence) == -1) {
-                    this.removeRecipe(i);
+        for (var i = 0; i < recipeService.recipes.length - 1; i++) {
+            recipe = recipeService.recipes[i];
+            for (var j = 0; j < recipe.ingredients.length; j++) {
+                ingredient = recipe.ingredients[j]
+                if (ingredient.toLowerCase().indexOf(recipeService.filter.exclude.sentence) != -1) {
+                    console.log("removing recipe: "+ i);
+                    removeRecipe(i);
+                    break;
                 }
             }
         }
+        this.setRecipeRows();
     }
 });
 
