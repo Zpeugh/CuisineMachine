@@ -209,7 +209,7 @@ app.controller("cuisineMachineController", function($scope, $location, $http, $i
     // TODO: 
     // Move to separate file
 
-    /*
+    
     var audio_encoding = 'audio/wav';
     
     // get token and connect to web socket
@@ -218,7 +218,7 @@ app.controller("cuisineMachineController", function($scope, $location, $http, $i
         token = data.token;
         
         // connect to websocket 
-        var STTSocketURL = "wss://stream.watsonplatform.net/speech-to-text/api/v1/recognize?watson-token=" + token + "&model=en-US_BroadbandModel&continuous=true";
+        var STTSocketURL = "wss://stream.watsonplatform.net/speech-to-text/api/v1/recognize?watson-token=" + token + "&model=en-US_BroadbandModel";
         var ws = new WebSocket(STTSocketURL);
 
         // open watson connection
@@ -227,7 +227,7 @@ app.controller("cuisineMachineController", function($scope, $location, $http, $i
             console.log("START");
             var startMessage = {
                 action: 'start',
-                interim_results: false,
+                interim_results: true,
                 continuous: true,
                 "content-type": audio_encoding, //rate=22050
                 keywords: ["Watson", "Chef", "Dawg"],
@@ -238,12 +238,34 @@ app.controller("cuisineMachineController", function($scope, $location, $http, $i
             // send chunks of audio binary data over socket
             var sendAudioToWatson = function(data) {
                 if (ws.readyState == ws.OPEN) {
-                    console.log("SENDNG DATA");
-                    ws.send(data);  
+                    if (data.size >= 100) {
+                        console.log("SENDNG DATA");
+                        sendStart();
+                        ws.send(data);
+                        sendStop();
+                    } else {
+                        console.log("Data must be at least 100 bytes");
+                    }
                 } else {
                     console.log("Web Socket closed");
                 }
             }
+            
+            var sendStart = function() {
+                if (ws.readyState == ws.OPEN) {
+                    ws.send(JSON.stringify(startMessage));
+                } else {
+                    console.log("Can't send start.. socket closed")
+                }
+            }
+            
+            var sendStop = function() {
+                if (ws.readyState == ws.OPEN) {
+                    ws.send(JSON.stringify({action: "stop"}));
+                } else {
+                    console.log("Can't send stop.. socket closed")
+                }
+             }
             
             // access the microphone and start recording
             function successCallback(stream) {
@@ -253,33 +275,17 @@ app.controller("cuisineMachineController", function($scope, $location, $http, $i
                 
                 // record for x seconds and send to watson
                 rec.record();
-                ws.send(JSON.stringify(startMessage));
-                var count = 0;
-                var max = 2;
                 setInterval(function(){
-                    if (count === max) {
-                        ws.send(JSON.stringify({action: "stop"}));
-                        count = 0;
-                    } else if (count < max) {
-                        if (count === 0) {
-                            ws.send(JSON.stringify(startMessage));
-                        }
-                        rec.exportWAV(function(blob) {
-                            console.log("exporting");
-                            rec.clear();
-                            sendAudioToWatson(blob);
-                            count++;      
-                        });
-                        
-                    }
+                    rec.exportWAV(function(blob) {
+                        rec.clear();
+                        sendAudioToWatson(blob);
+                    });
                 }, 1000);          
             }
-            
             
             function errorCallback(stream) {
                 console.log("Error accessing microphone");
             }
-            
             
             navigator.getUserMedia = navigator.getUserMedia ||
                                  navigator.webkitGetUserMedia ||
@@ -305,7 +311,7 @@ app.controller("cuisineMachineController", function($scope, $location, $http, $i
         };
         
         
-    }); */  
+    }); 
 });
 
 
