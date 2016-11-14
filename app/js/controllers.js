@@ -302,7 +302,8 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
     
     
     var token;
-    var speechON = false;
+    $scope.speechOn = false;
+    $scope.speechProcessing = false;
     var audio_encoding = 'audio/wav';
     var watsonSocket;
     var startMessage = {
@@ -416,18 +417,17 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
             
             // check if receiving results or state update
             if (data.results) {
+                $scope.speechProcessing = false;
                 if (data.results[0]) {
                     var text = data.results[0].alternatives[0].transcript;
                     console.log("Search text: " + text);
                     setSpeechResults(text);
+                    $scope.search($scope.searchText);
                 } else {
                     console.log("Did not hear any speech...");
+                    setSpeechResults("");
                 }
-                
-                console.log("close socket!!");
                 watsonSocket.close();
-            } else {
-                console.log("Don't close socket!!")
             }
         };
         
@@ -437,24 +437,24 @@ app.controller("cuisineMachineController", function($scope, $http, $location, $i
             console.log(evt);
         };
     };
-    
 
     // handle click to start/stop recording
     $scope.speechTrigger = function() {
-        if (speechON) {
+        if ($scope.speechOn) {
             recorder.exportWAV(function(blob) {
                 recorder.clear();
                 sendAudioToWatson(blob);
             });
+            $scope.speechProcessing = true;
             // stop recording and send stop message
             setTimeout(function() {
                 sendStop();
-            }, 100);
+            }, 50);
         } else {
             //connect to socket (starts recording and streaming automatically once opened)
             setupWebsocket();
         }
         
-        speechON = !speechON
+        $scope.speechOn = !$scope.speechOn
     };
 });
