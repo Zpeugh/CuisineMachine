@@ -20,6 +20,7 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
     init();
 
     $rootScope.$on( "$routeChangeStart", function(event, next, current) {
+        debugger;
         var nextPath = next.$$route.originalPath;
         $scope.listener = ListenerService.getListener();
         if (nextPath == "/discover"){
@@ -55,6 +56,11 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         }
     });
 
+    
+    
+    // SEARCHING
+    
+    
     // Explore page's function to handle search being pressed
     $scope.onSubmit = function() {
         $scope.responseData = TextToSpeechService.speakText($scope.testData);
@@ -114,6 +120,10 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         console.log($scope.recipeService)
     }
 
+    
+    // RECIPE INTERACTION
+    
+    
     var goToStep = function(stepNum) {
         var inst = $('#instruction_' + stepNum);
         inst.addClass('current-instruction-box');
@@ -163,6 +173,8 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         var text = $('#instruction_' + $scope.instruction.stepNumber + ' > li').html();
         TextToSpeechService.speak(text);
     }
+    
+    // TIMERS
 
     $scope.openTimer = function() {
         $scope.timer.show = true;
@@ -205,7 +217,11 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         TextToSpeechService.speak("The " + title + " timer is done.");
         $scope.timer = TimerService.resetTimer();
     }
+    
+    
+    // CONVERSIONS
 
+    
     $scope.openUnitConverter = function(){
         ConversionService.showConverter();
     }
@@ -228,6 +244,10 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         ListenerService.hideText();
     }
 
+    
+    // FILTERS
+    
+    
     $scope.openFilters = function(){
         $scope.recipeService.filter.isActive = true;
     }
@@ -252,6 +272,10 @@ app.controller("cuisineMachineController", function($scope, $location, $interval
         RecipeService.clearExclusionFilter();
         // $scope.recipeService.recipeRows = RecipeService.getRecipeRows();
     }
+    
+    
+    // SUBSTITUTIONS
+    
 
     $scope.setsubstitutionSentence = function(sentence){
         SubstitutionService.getSubstitutions(sentence);
