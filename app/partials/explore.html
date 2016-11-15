@@ -14,8 +14,8 @@
     </br>
     <img src="../images/ripple.svg" ng-click="speechTrigger()" />
     <br />
-    <span id="listening-text" ng-show="speechOn" ng-click="speechTrigger()" >Listening . . .</span>
-    <span id="listening-text" ng-show="speechProcessing" ng-click="speechTrigger()" >Thinking . . .</span>
-    <span id="listening-text" ng-show="!speechProcessing && !speechOn" ng-click="speechTrigger()" >Click For Voice Search</span>
+    <span id="listening-text" ng-show="listener.recording" ng-click="speechTrigger()" >Listening . . .</span>
+    <span id="listening-text" ng-show="listener.speechProcessing" ng-click="speechTrigger()" >Thinking . . .</span>
+    <span id="listening-text" ng-show="!listener.speechProcessing" ng-click="speechTrigger()" >Click For Voice Search</span>
     <br />
 </div>

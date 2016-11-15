@@ -619,6 +619,10 @@ app.service('ListenerService', function() {
     var listener = {};
     listener.isActive = false;
     listener.showText = false;
+    listener.recording = false;
+    listener.processing = false;
+    listener.sentence = "";
+
 
     this.getListener = function() {
         return listener;
@@ -675,7 +679,5 @@ app.service('SubstitutionService', function($http) {
     this.clearQuery = function(){
         substitutioner.sentence = "";
     }
-
-
 
 });

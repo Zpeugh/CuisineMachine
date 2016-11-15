@@ -6,9 +6,6 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
     var init = function() {
         $scope.searchText = "";
         $scope.recipeService = RecipeService.getRecipeService();
-        // $scope.recipeService.selectedRecipe = RecipeService.getSelectedRecipe();
-        // $scope.recipeService.recipeRows = RecipeService.getRecipeRows();
-        // $scope.recipeService.filter = RecipeService.getFilter();
         $scope.instruction = InstructionService.getInstruction();
         $scope.timer = TimerService.getTimer();
         $scope.timer.displayTime = TimerService.prettyPrintTime();
@@ -235,13 +232,13 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
     }
 
     $scope.openListenerTextBox = function() {
-        ListenerService.showText();
         $scope.speechTrigger();
+        ListenerService.showText();
     }
 
     $scope.closeListenerTextBox = function() {
-        ListenerService.hideText();
         $scope.speechTrigger();
+        ListenerService.hideText();
     }
 
 
@@ -316,8 +313,8 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
     // Create a service for this.
 
 
-    $(document).on("keypress", function(e) {
-        if (e.which == 96) {
+    $(document).unbind('keyup').bind("keyup", function(e) {
+        if (e.which == 192) {
             $scope.listenBasedOnLocation();
         } else if (e.which == 32 && $location.path() == "/create") {
             $scope.listenBasedOnLocation();
@@ -326,8 +323,8 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
 
 
     var token;
-    $scope.speechOn = false;
-    $scope.speechProcessing = false;
+    $scope.listener.recording = false;
+    $scope.listener.speechProcessing = false;
     var audio_encoding = 'audio/wav';
     var watsonSocket;
     var startMessage = {
@@ -411,8 +408,11 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
     // put results in text box
     var setSpeechResults = function(text) {
         // $scope.searchText = text;
-        // $scope.$apply();
         $scope.search(text);
+        if ($location.path() == "/create"){
+            $scope.listener.sentence = text;
+        }
+        $scope.$apply();
     }
 
 
@@ -444,12 +444,11 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
 
             // check if receiving results or state update
             if (data.results) {
-                $scope.speechProcessing = false;
+                $scope.listener.speechProcessing = false;
                 if (data.results[0]) {
                     var text = data.results[0].alternatives[0].transcript;
                     console.log("Search text: " + text);
                     setSpeechResults(text);
-                    $scope.search($scope.searchText);
                 } else {
                     console.log("Did not hear any speech...");
                     setSpeechResults("");
@@ -467,12 +466,12 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
 
     // handle click to start/stop recording
     $scope.speechTrigger = function() {
-        if ($scope.speechOn) {
+        if ($scope.listener.recording) {
             recorder.exportWAV(function(blob) {
                 recorder.clear();
                 sendAudioToWatson(blob);
             });
-            $scope.speechProcessing = true;
+            $scope.listener.speechProcessing = true;
             // stop recording and send stop message
             setTimeout(function() {
                 sendStop();
@@ -482,6 +481,6 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
             setupWebsocket();
         }
 
-        $scope.speechOn = !$scope.speechOn
+        $scope.listener.recording = !$scope.listener.recording
     };
 });

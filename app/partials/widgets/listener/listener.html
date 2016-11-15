@@ -1,3 +1,6 @@
 <div class="clickable" ng-click="openListenerTextBox()" id="listener-box">
-    <img class="smaller-ripple" src="../images/ripple.svg" /><span id="listening-text-smaller">&nbsp;&nbsp;Listening . . .</span>
+    <img ng-show="listener.processing" class="smaller-ripple" src="../images/ripple.svg" />
+    <span ng-show="!listener.recording" ng-click="speechTrigger()" id="listening-text-smaller">Hit &lt;<em>space</em>&gt; or click to begin recording</span>
+    <span ng-show="listener.recording" ng-click="speechTrigger()" id="listening-text-smaller">Hit &lt;<em>space</em>&gt; or click to stop recording</span>
+    <span ng-show="listener.processing" id="listening-text-smaller">Thinking . . . </span>
 </div>
