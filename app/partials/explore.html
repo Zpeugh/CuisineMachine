@@ -14,7 +14,7 @@
     <img src="../images/ripple.svg" ng-click="triggerRecorder()" />
     <br />
     <span id="listening-text" ng-show="listener.recording" ng-click="triggerRecorder()" >Listening . . .</span>
-    <span id="listening-text" ng-show="listener.speechProcessing" ng-click="triggerRecorder()" >Thinking . . .</span>
-    <span id="listening-text" ng-show="!listener.speechProcessing" ng-click="triggerRecorder()" >Click For Voice Search</span>
+    <span id="thinking-text" ng-show="listener.speechProcessing" ng-click="triggerRecorder()" >Thinking . . .</span>
+    <span id="click-text" ng-show="!listener.speechProcessing && !listener.recording" ng-click="triggerRecorder()" >Click For Voice Search</span>
     <br />
 </div>

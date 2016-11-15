@@ -317,8 +317,9 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
         console.log("Result changed from '" + oldValue + "' to '"+ newValue + "'");
         if (newValue != '' && newValue != undefined && newValue != oldValue){
             console.log("Classifying: " + newValue);
-            scope.search(newValue);
+            debugger;
+            $scope.search(newValue);
         }
-    });
+    }, true);
 
 });
