@@ -18,15 +18,9 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
 
     $rootScope.$on("$routeChangeStart", function(event, next, current) {
         var nextPath = next.$$route.originalPath;
-        $scope.listener = ListenerService.getListener();
-        if (nextPath == "/discover") {
+        if (nextPath == "/create") {
             ListenerService.setActive();
-        } else if (nextPath == "/create") {
-            ListenerService.setActive();
-        } else if (nextPath == "/explore") {
-            ListenerService.setInactive();
         } else {
-            console.log("unknown path: " + nextPath);
             ListenerService.setInactive();
         }
     });
@@ -63,10 +57,7 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
     }
 
     $scope.search = function(sentence) {
-        // $scope.recipeService.selectedRecipe = RecipeService.getSelectedRecipe();
         $scope.instruction = InstructionService.getInstruction();
-        console.log("recipe on click");
-        console.log($scope.recipeService.selectedRecipe);
         $scope.searchText = sentence;
         ClassifyService.classifyRequest(sentence).success(function(className) {
             console.log("Classified as: " + className);
@@ -80,9 +71,6 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
                         }
                         RecipeService.setRecipeRows()
                         $scope.recipeService = RecipeService.getRecipeService();
-                        console.log("Recipe rows:");
-                        console.log($scope.recipeService.recipeRows);
-                        // $scope.recipeService.recipeRows = RecipeService.getRecipeRows();
                         $location.path("/discover");
                     }).error(function(data) {
                         console.log("Error: " + data);
@@ -113,7 +101,6 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
         $location.path("/create");
         RecipeService.setSelectedRecipe(recipe);
         scrollTo("body", 50);
-        console.log($scope.recipeService)
     }
 
 
@@ -133,8 +120,6 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
     }
 
     $scope.startCooking = function() {
-        console.log("Current instruction");
-        console.log($scope.instruction);
         InstructionService.setCurrentInstructionStep(0);
         InstructionService.setCurrentInstruction($scope.recipeService.selectedRecipe.instructions[0]);
         scrollTo('#instruction_0', 200, 1200);
@@ -153,13 +138,10 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
 
     $scope.goBackAStep = function() {
         endStep($scope.instruction.stepNumber);
-        console.log("Current instruction");
-        console.log($scope.instruction);
         if ($scope.instruction.stepNumber > 0) {
             InstructionService.decrementStep();
             InstructionService.setCurrentInstruction($scope.recipeService.selectedRecipe.instructions[$scope.instruction.stepNumber])
             console.log("Back an instruction");
-            console.log($scope.instruction);
             goToStep($scope.instruction.stepNumber);
             scrollTo('#instruction_' + $scope.instruction.stepNumber, 0, 1200);
         }
@@ -231,16 +213,6 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
         $scope.converter.result = UnitConversionParser.parseSentenceConvertUnits(sentence);
     }
 
-    $scope.openListenerTextBox = function() {
-        $scope.speechTrigger();
-        ListenerService.showText();
-    }
-
-    $scope.closeListenerTextBox = function() {
-        $scope.speechTrigger();
-        ListenerService.hideText();
-    }
-
 
     // FILTERS
 
@@ -254,20 +226,15 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
     }
 
     $scope.addExlusionFilter = function(sentence) {
-        console.log("excluding recipes containing: " + sentence);
         $scope.recipeService.filter.exclude.sentence = sentence;
         RecipeService.excludeIngredients();
         RecipeService.clearExclusionFilter();
-        console.log("Recipe rows:");
-        console.log($scope.recipeService.recipeRows);
-        // $scope.recipeService.recipeRows = RecipeService.getRecipeRows();
     }
 
     $scope.addInclusionFilter = function(sentence) {
         $scope.recipeService.filter.include.sentence = sentence;
         RecipeService.includeIngredients(sentence);
         RecipeService.clearInclusionFilter();
-        // $scope.recipeService.recipeRows = RecipeService.getRecipeRows();
     }
 
 
@@ -280,7 +247,7 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
 
     $scope.openSubstitutions = function() {
         $scope.substitutioner.isActive = true;
-        console.log("opening");
+        SubstitutionService.clearQuery();
     }
 
     $scope.closeSubstitutions = function() {
@@ -289,29 +256,41 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
     }
 
 
+    // SPEECH TO TEXT
+
+
+
+    $scope.openListenerTextBox = function() {
+        ListenerService.speechTrigger();
+        ListenerService.showText();
+        console.log("RESULTS: " + $scope.listener.results);
+    }
+
+    $scope.closeListenerTextBox = function() {
+        ListenerService.speechTrigger();
+        ListenerService.hideText();
+    }
 
     $scope.listenBasedOnLocation = function() {
         var currentLocation = $location.path();
         console.log(currentLocation);
         if (currentLocation == "/explore") {
             console.log("Triggering speech");
-            $scope.speechTrigger();
+            ListenerService.speechTrigger();
         }
         else if (currentLocation == "/create") {
+            console.log($scope.listener);
             if ($scope.listener.showText) {
-                console.log("Closing Listener");
-                $scope.closeListenerTextBox();
-            } else {
                 console.log("Opening Listener");
                 $scope.openListenerTextBox();
+                $scope.$apply();
+            } else {
+                console.log("Closing Listener");
+                $scope.closeListenerTextBox();
+                $scope.$apply();
             }
         }
     }
-
-    // ------------- SPEECH TO TEXT -----------
-    // TODO:
-    // Create a service for this.
-
 
     $(document).unbind('keyup').bind("keyup", function(e) {
         if (e.which == 192) {
@@ -321,166 +300,25 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
         }
     });
 
-
-    var token;
-    $scope.listener.recording = false;
-    $scope.listener.speechProcessing = false;
-    var audio_encoding = 'audio/wav';
-    var watsonSocket;
-    var startMessage = {
-        action: 'start',
-        continuous: true,
-        "content-type": audio_encoding, //rate=22050
-        keywords: ["Watson", "Chef", "Dawg"],
-        keywords_threshold: 0.5,
-        smart_formatting: true
-    };
-    var stopMessage = {
-        action: 'stop'
+    //Eliminate the default behavior of scrolling on spacebar press
+    window.onkeydown = function(e) {
+        if(e.keyCode == 32 && e.target == document.body) {
+            e.preventDefault();
+            return false;
+        }
     };
 
+    $scope.triggerRecorder = function(){
+        ListenerService.speechTrigger();
+    }
 
-    // get token from node server - happens on startup
-    $http.get("/api/stt/gettoken").success(function(data) {
-        // get token
-        token = data.token;
+    // Add watcher to result.listener text, and classify result once it changes
+    $scope.$watch("listener.results",function(newValue, oldValue, scope){
+        console.log("Result changed from '" + oldValue + "' to '"+ newValue + "'");
+        if (newValue != '' && newValue != undefined && newValue != oldValue){
+            console.log("Classifying: " + newValue);
+            scope.search(newValue);
+        }
     });
 
-    // send start message to watson
-    var sendStart = function() {
-        if (watsonSocket != null && watsonSocket.readyState == watsonSocket.OPEN) {
-            watsonSocket.send(JSON.stringify(startMessage));
-        } else {
-            console.log("Can't send start.. socket closed")
-        }
-    }
-
-    // send stop message to watson
-    var sendStop = function() {
-        if (watsonSocket != null && watsonSocket.readyState == watsonSocket.OPEN) {
-            watsonSocket.send(JSON.stringify(stopMessage));
-        } else {
-            console.log("Can't send stop.. socket closed")
-        }
-    }
-
-    // send chunk of data to watson
-    var sendAudioToWatson = function(data) {
-        if (watsonSocket != null && watsonSocket.readyState == watsonSocket.OPEN) {
-            if (data.size >= 100) {
-                console.log("SENDNG AUDIO CHUNK");
-                watsonSocket.send(data);
-            } else {
-                console.log("AUdio must be at least 100 bytes");
-            }
-        } else {
-            console.log("Web Socket closed!");
-        }
-    }
-
-    // record audio and stream to watson until stopped
-    var recordIntervalID;
-    var recorder;
-    var startStreamingAudio = function() {
-        // access the microphone and start recording
-        function successCallback(stream) {
-            var context = new AudioContext();
-            var mediaStreamSource = context.createMediaStreamSource(stream);
-            recorder = new Recorder(mediaStreamSource);
-            recorder.record();
-        }
-
-        // could not access microphone
-        function errorCallback(stream) {
-            console.log("Error accessing microphone");
-        }
-
-        // connect to microphone
-        navigator.getUserMedia = navigator.getUserMedia ||
-            navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia;
-        navigator.getUserMedia({
-            audio: true
-        }, successCallback, errorCallback);
-    }
-
-
-    // put results in text box
-    var setSpeechResults = function(text) {
-        // $scope.searchText = text;
-        $scope.search(text);
-        if ($location.path() == "/create"){
-            $scope.listener.sentence = text;
-        }
-        $scope.$apply();
-    }
-
-
-    // connect to websocket
-    var setupWebsocket = function() {
-        // connect to websocket
-        var STTSocketURL = "wss://stream.watsonplatform.net/speech-to-text/api/v1/recognize?watson-token=" + token + "&model=en-US_BroadbandModel";
-        watsonSocket = new WebSocket(STTSocketURL);
-
-        // socket open - start recording and streaming audio data
-        watsonSocket.onopen = function(evt) {
-            console.log("SOCKET OPEN");
-
-            // send start message and begin recording/streaming
-            sendStart();
-            startStreamingAudio();
-        };
-
-        // socket close
-        watsonSocket.onclose = function(evt) {
-            console.log("SOCKET CLOSED. Details below");
-            console.log(evt);
-        };
-
-        // socket receives data
-        watsonSocket.onmessage = function(evt) {
-            console.log("SOCKET MESSAGE: " + evt.data);
-            var data = JSON.parse(evt.data);
-
-            // check if receiving results or state update
-            if (data.results) {
-                $scope.listener.speechProcessing = false;
-                if (data.results[0]) {
-                    var text = data.results[0].alternatives[0].transcript;
-                    console.log("Search text: " + text);
-                    setSpeechResults(text);
-                } else {
-                    console.log("Did not hear any speech...");
-                    setSpeechResults("");
-                }
-                watsonSocket.close();
-            }
-        };
-
-        // socket error
-        watsonSocket.onerror = function(evt) {
-            console.log("SOCKET ERROR. Details below");
-            console.log(evt);
-        };
-    };
-
-    // handle click to start/stop recording
-    $scope.speechTrigger = function() {
-        if ($scope.listener.recording) {
-            recorder.exportWAV(function(blob) {
-                recorder.clear();
-                sendAudioToWatson(blob);
-            });
-            $scope.listener.speechProcessing = true;
-            // stop recording and send stop message
-            setTimeout(function() {
-                sendStop();
-            }, 50);
-        } else {
-            //connect to socket (starts recording and streaming automatically once opened)
-            setupWebsocket();
-        }
-
-        $scope.listener.recording = !$scope.listener.recording
-    };
 });

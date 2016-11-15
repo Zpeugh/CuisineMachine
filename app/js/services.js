@@ -258,6 +258,7 @@ app.service('UnitConversionParser', function() {
 
     var parseSentence = function(sentence) {
 
+        sentence = sentence.toLowerCase();
         if (sentence.length > 0 && sentence.includes(" ")) {
             var words = sentence.split(' ');
             var TargID;
@@ -614,16 +615,38 @@ app.service('TimerService', function() {
 
 });
 
-app.service('ListenerService', function() {
+app.service('ListenerService', function($http) {
 
     var listener = {};
     listener.isActive = false;
     listener.showText = false;
     listener.recording = false;
     listener.processing = false;
-    listener.sentence = "";
+    listener.results = "";
 
+    listener.token = {};
+    listener.recording = false;
+    listener.speechProcessing = false;
+    listener.watsonSocket = {};
+    listener.startMessage = {
+        action: 'start',
+        continuous: true,
+        "content-type": 'audio/wav', //;rate=22050
+        keywords: ["Watson", "Chef", "Dawg"],
+        keywords_threshold: 0.5,
+        smart_formatting: true
+    };
+    listener.stopMessage = {
+        action: 'stop'
+    };
 
+    // get token from node server - happens on startup
+    $http.get("/api/stt/gettoken").success(function(data) {
+        // get token
+        listener.token = data.token;
+    });
+
+    // Showing the GUI
     this.getListener = function() {
         return listener;
     }
@@ -643,6 +666,145 @@ app.service('ListenerService', function() {
     this.hideText = function() {
         listener.showText = false;
     }
+
+
+
+    // send start message to watson
+    var sendStart = function() {
+        if (listener.watsonSocket != null && listener.watsonSocket.readyState == listener.watsonSocket.OPEN) {
+            listener.watsonSocket.send(JSON.stringify(listener.startMessage));
+        } else {
+            console.log("Can't send start.. socket closed");
+        }
+    }
+
+    // send stop message to watson
+    var sendStop = function() {
+        if (listener.watsonSocket != null && listener.watsonSocket.readyState == listener.watsonSocket.OPEN) {
+            listener.watsonSocket.send(JSON.stringify(listener.stopMessage));
+        } else {
+            console.log("Can't send stop.. socket closed");
+        }
+    }
+
+    // send chunk of data to watson
+    var sendAudioToWatson = function(data) {
+        if (listener.watsonSocket != null && listener.watsonSocket.readyState == listener.watsonSocket.OPEN) {
+            if (data.size >= 100) {
+                console.log("SENDNG AUDIO CHUNK");
+                listener.watsonSocket.send(data);
+            } else {
+                console.log("Audio must be at least 100 bytes");
+            }
+        } else {
+            console.log("Web Socket closed!");
+        }
+    }
+
+    // record audio and stream to watson until stopped
+    // var recordIntervalID;
+    listener.recorder = {};
+    var startStreamingAudio = function() {
+        // access the microphone and start recording
+        function successCallback(stream) {
+            console.log("successfully captured microphone");
+            var context = new AudioContext();
+            var mediaStreamSource = context.createMediaStreamSource(stream);
+            listener.recorder = new Recorder(mediaStreamSource);
+            listener.recorder.record();
+        }
+
+        // could not access microphone
+        function errorCallback(stream) {
+            console.log("Error accessing microphone");
+        }
+
+        // connect to microphone
+        navigator.getUserMedia = navigator.getUserMedia ||
+            navigator.webkitGetUserMedia ||
+            navigator.mozGetUserMedia;
+        navigator.getUserMedia({
+            audio: true
+        }, successCallback, errorCallback);
+    }
+
+
+    // put results in text box
+    var setSpeechResults = function(text) {
+        listener.results = text;
+        console.log("HERE IS WHAT I HEARD: " + text);
+    }
+
+
+    // connect to websocket
+    var setupWebsocket = function() {
+        // connect to websocket
+        var STTSocketURL = "wss://stream.watsonplatform.net/speech-to-text/api/v1/recognize?watson-token=" + listener.token + "&model=en-US_BroadbandModel";
+        listener.watsonSocket = new WebSocket(STTSocketURL);
+
+        // socket open - start recording and streaming audio data
+        listener.watsonSocket.onopen = function(evt) {
+            console.log("SOCKET OPEN");
+
+            // send start message and begin recording/streaming
+            sendStart();
+            startStreamingAudio();
+        };
+
+        // socket close
+        listener.watsonSocket.onclose = function(evt) {
+            console.log("SOCKET CLOSED. Details below");
+            console.log(evt);
+        };
+
+        // socket receives data
+        listener.watsonSocket.onmessage = function(evt) {
+            console.log("SOCKET MESSAGE: " + evt.data);
+            var data = JSON.parse(evt.data);
+
+            // check if receiving results or state update
+            if (data.results) {
+                listener.speechProcessing = false;
+                if (data.results[0]) {
+                    var text = data.results[0].alternatives[0].transcript;
+                    console.log("Search text: " + text);
+                    setSpeechResults(text);
+                } else {
+                    console.log("Did not hear any speech...");
+                    setSpeechResults("");
+                }
+                listener.watsonSocket.close();
+            } else{
+                console.log("No results in data");
+            }
+        };
+
+        // socket error
+        listener.watsonSocket.onerror = function(evt) {
+            console.log("SOCKET ERROR. Details below");
+            console.log(evt);
+        };
+    };
+
+    // handle click to start/stop recording
+    this.speechTrigger = function() {
+        if (listener.recording) {
+            listener.recorder.exportWAV(function(blob) {
+                listener.recorder.clear();
+                sendAudioToWatson(blob);
+            });
+            listener.speechProcessing = true;
+            // stop recording and send stop message
+            setTimeout(function() {
+                sendStop();
+            }, 50);
+        } else {
+            //connect to socket (starts recording and streaming automatically once opened)
+            setupWebsocket();
+        }
+
+        listener.recording = !listener.recording
+    };
 
 });
 

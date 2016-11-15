@@ -1,7 +1,6 @@
 <div id="explore-page-container" class="container-fluid text-center">
 
     <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
-    <!-- <h1 id="cuisineMachineHeader">CuisineMachine</h1> -->
     <img id="cuisine-machine-logo" src="../images/logo.png" />
     <br />
 
@@ -11,11 +10,11 @@
     </div>
     <div>
     </div>
-    </br>
-    <img src="../images/ripple.svg" ng-click="speechTrigger()" />
     <br />
-    <span id="listening-text" ng-show="listener.recording" ng-click="speechTrigger()" >Listening . . .</span>
-    <span id="listening-text" ng-show="listener.speechProcessing" ng-click="speechTrigger()" >Thinking . . .</span>
-    <span id="listening-text" ng-show="!listener.speechProcessing" ng-click="speechTrigger()" >Click For Voice Search</span>
+    <img src="../images/ripple.svg" ng-click="triggerRecorder()" />
+    <br />
+    <span id="listening-text" ng-show="listener.recording" ng-click="triggerRecorder()" >Listening . . .</span>
+    <span id="listening-text" ng-show="listener.speechProcessing" ng-click="triggerRecorder()" >Thinking . . .</span>
+    <span id="listening-text" ng-show="!listener.speechProcessing" ng-click="triggerRecorder()" >Click For Voice Search</span>
     <br />
 </div>
