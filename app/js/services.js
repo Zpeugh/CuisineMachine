@@ -621,7 +621,7 @@ app.service('ListenerService', function($http) {
     listener.isActive = false;
     listener.showText = false;
     listener.results = "";
-
+    listener.triggeredWatch = false;
     listener.token = {};
     listener.audioCtx = new AudioContext();
     listener.recording = false;
@@ -790,6 +790,8 @@ app.service('ListenerService', function($http) {
     // handle click to start/stop recording
     this.speechTrigger = function(refreshCallback) {
         listener.refreshScope = refreshCallback;
+        listener.triggeredWatch = false;
+
         if (listener.recording) {
             listener.recorder.exportWAV(function(blob) {
                 listener.recorder.clear();
