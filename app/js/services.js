@@ -732,6 +732,7 @@ app.service('ListenerService', function($http) {
     // put results in text box
     var setSpeechResults = function(text) {
         listener.results = text;
+        listener.refreshScope();
         console.log("HERE IS WHAT I HEARD: " + text);
     }
 
@@ -787,7 +788,8 @@ app.service('ListenerService', function($http) {
     };
 
     // handle click to start/stop recording
-    this.speechTrigger = function() {
+    this.speechTrigger = function(refreshCallback) {
+        listener.refreshScope = refreshCallback;
         if (listener.recording) {
             listener.recorder.exportWAV(function(blob) {
                 listener.recorder.clear();
@@ -797,7 +799,7 @@ app.service('ListenerService', function($http) {
             // stop recording and send stop message
             setTimeout(function() {
                 sendStop();
-            }, 50);
+            }, 200);
         } else {
             //connect to socket (starts recording and streaming automatically once opened)
             setupWebsocket();

@@ -17,6 +17,7 @@ app.config( function($routeProvider) {
     })
     .otherwise({
         templateUrl: "partials/explore.html",
-        controller: "cuisineMachineController"
+        controller: "cuisineMachineController",
+        redirectTo: "/explore"
     })
 });
