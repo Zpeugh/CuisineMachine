@@ -93,7 +93,6 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
         }).error(function(data) {
             console.log("Error classifying: " + data);
         });
-        $scope.closeListenerTextBox();
     }
 
     $scope.selectRecipe = function(recipe) {
@@ -257,9 +256,6 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
 
 
     // SPEECH TO TEXT
-
-
-
     $scope.openListenerTextBox = function() {
         ListenerService.speechTrigger(function(){
             $scope.$apply();
@@ -290,12 +286,10 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
             console.log($scope.listener);
             if ($scope.listener.showText) {
                 console.log("Opening Listener");
-                $scope.$apply();
                 $scope.openListenerTextBox();
                 $scope.$apply();
             } else {
                 console.log("Closing Listener");
-                $scope.$apply();
                 $scope.closeListenerTextBox();
                 $scope.$apply();
             }
@@ -328,9 +322,12 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
     // Add watcher to result.listener text, and classify result once it changes
     $scope.$watch("listener.results", function(newValue, oldValue, scope) {
         console.log("Result changed from '" + oldValue + "' to '" + newValue + "'");
-        if (newValue != '' && newValue != undefined && newValue != oldValue) {
-            console.log("Classifying: " + newValue);
-            scope.search(newValue);
+        if (!$scope.listener.triggeredWatch){
+            if (newValue != '' && newValue != undefined && newValue != oldValue) {
+                console.log("Classifying: " + newValue);
+                $scope.listener.triggeredWatch = true;
+                $scope.search(newValue);
+            }
         }
     }, true);
 
