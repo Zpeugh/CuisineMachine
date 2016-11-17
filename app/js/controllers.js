@@ -1,7 +1,7 @@
-app.controller("cuisineMachineController", function($scope, $http, $rootScope, $location, $interval, $rootScope, RandRService,
-    ClassifyService, RecipeService, TextToSpeechService,
-    InstructionService, TimerService, ConversionService,
-    UnitConversionParser, ListenerService, SubstitutionService) {
+app.controller("cuisineMachineController", function($scope, $http, $rootScope, $location, $interval, $rootScope,
+                                                    RandRService, ClassifyService, RecipeService, TextToSpeechService,
+                                                    InstructionService, TimerService, ConversionService,
+                                                    UnitConversionParser, ListenerService, SubstitutionService) {
 
     var init = function() {
         $scope.searchText = "";
@@ -261,13 +261,19 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
 
 
     $scope.openListenerTextBox = function() {
-        ListenerService.speechTrigger();
+        ListenerService.speechTrigger(function(){
+            $scope.$apply();
+            console.log("Applying callback to refresh");
+        });
         ListenerService.showText();
         console.log("RESULTS: " + $scope.listener.results);
     }
 
     $scope.closeListenerTextBox = function() {
-        ListenerService.speechTrigger();
+        ListenerService.speechTrigger(function(){
+            $scope.$apply();
+            console.log("Applying callback to refresh");
+        });
         ListenerService.hideText();
     }
 
@@ -276,16 +282,20 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
         console.log(currentLocation);
         if (currentLocation == "/explore") {
             console.log("Triggering speech");
-            ListenerService.speechTrigger();
-        }
-        else if (currentLocation == "/create") {
+            ListenerService.speechTrigger(function(){
+                $scope.$apply();
+                console.log("Applying callback to refresh");
+            });
+        } else if (currentLocation == "/create") {
             console.log($scope.listener);
             if ($scope.listener.showText) {
                 console.log("Opening Listener");
+                $scope.$apply();
                 $scope.openListenerTextBox();
                 $scope.$apply();
             } else {
                 console.log("Closing Listener");
+                $scope.$apply();
                 $scope.closeListenerTextBox();
                 $scope.$apply();
             }
@@ -302,20 +312,23 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
 
     //Eliminate the default behavior of scrolling on spacebar press
     window.onkeydown = function(e) {
-        if(e.keyCode == 32 && e.target == document.body) {
+        if (e.keyCode == 32 && e.target == document.body) {
             e.preventDefault();
             return false;
         }
     };
 
-    $scope.triggerRecorder = function(){
-        ListenerService.speechTrigger();
+    $scope.triggerRecorder = function() {
+        ListenerService.speechTrigger(function(){
+            $scope.$apply();
+            console.log("Applying callback to refresh");
+        });
     }
 
     // Add watcher to result.listener text, and classify result once it changes
-    $scope.$watch("listener.results",function(newValue, oldValue, scope){
-        console.log("Result changed from '" + oldValue + "' to '"+ newValue + "'");
-        if (newValue != '' && newValue != undefined && newValue != oldValue){
+    $scope.$watch("listener.results", function(newValue, oldValue, scope) {
+        console.log("Result changed from '" + oldValue + "' to '" + newValue + "'");
+        if (newValue != '' && newValue != undefined && newValue != oldValue) {
             console.log("Classifying: " + newValue);
             debugger;
             $scope.search(newValue);
