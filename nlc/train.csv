@@ -20,6 +20,7 @@ create a timer for an hour,timer
 remind me,timer
 set a timer for 2 hours,timer
 set an alarm,timer
+start a timer,timer
 notify me in 30 minutes,timer
 start the recipe,nav_start
 start,nav_start
@@ -53,6 +54,13 @@ go to the next step,nav_next
 next step,nav_next
 what's next,nav_next
 continue,nav_next
+read it,read
+read the instruction to me,read
+can you read it,read
+can you read the instruction,read
+say that again,read
+repeat it,read
+what did you say,read
 how many grams in a pound,unit_conversion
 how many cups in three gallons,unit_conversion
 how many fluid ounces in two pints,unit_conversion
@@ -61,7 +69,7 @@ how many gallons in eight cups,unit_conversion
 how many pints in a quart,unit_conversion
 how many grams in six pounds,unit_conversion
 how many kilograms in twenty seven grams,unit_conversion
-how many ounces in a gallon,unit_conversion 
+how many ounces in a gallon,unit_conversion
 how many grams in an ounce,unit_conversion
 how many ounces in three pounds,unit_conversion
 ounces in a cup,unit_conversion
