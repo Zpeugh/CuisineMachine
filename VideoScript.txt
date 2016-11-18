@@ -1,0 +1,92 @@
+Cuisine Machine Script
+
+
+
+[Open shot with someone cooking in kitchen]
+
+[Cook is visibly struggling with trying to get recipe info while holding food]
+
+Narrator: Tired of cooking in the 20th century? 
+
+Cook: I just can't manage everything at once!
+
+Narrator: Well the new Cuisine Machine personal chef assistant, working in the kitchen has never been easier.
+
+[Cook walks up to laptop, camera behind laptop]
+
+Narrator: Search for recipes with a simple voice command
+
+[screen view, click on voice button]
+
+Cook: Find me a Summer recipe with chicken and lemons
+
+[recipes appear on screen]
+
+[Shot of cook]
+
+Cook: Oh, but I cant have dairy
+
+Narrator: Looking for something more specific? Simply enter any dietary restrictions or requirements
+
+[screen view, entering dairy into filter field and new search]
+
+[Shot of cook]
+
+Cook: This looks good.
+
+[see cook click on selection]
+
+Narrator: Once you've found a recipe, ask Cuisine Machine to begin and it will read instructions to you step-by-step
+
+Cook: Okay, let's begin.
+
+[Shot of screen in instructions screen]
+
+Cuisine Machine: {Read off instruction with quantity of ingredients}
+
+[shot of cook]
+
+Cook: Shoot, I'm out of [ingredient].
+
+Narrator: Not to worry, Cuisine Machine can offer substitutions for any ingredients you might not have.
+
+[shot of cook clicking on keyboard]
+
+Cook: What's something I can use instead of [ingredient]
+
+[shot of substitutions with units needed]
+
+[Shot of cook]
+
+Cook: Hmm... I don't have any tablespoons. Cuisine Machine, how many teaspoons are in 3 tablespoons?
+
+[Shot of conversion unit with results]
+
+[Shot of cook]
+
+Cook: Perfect!
+
+[Cook goes to grab teaspoons]
+
+Cook: Alright, what's next?
+
+[Shot of screen]
+
+Cuisine Machine: {reads next instruction with timer involved}
+
+Narrator: Start a timer to keep track of your dish.
+
+[Shot of cook putting dish in oven, then walking over to laptop]
+
+Cook: Start a timer.
+
+[Screen view, enter desired time]
+
+[Cut to timer going off and cook taking food out of oven]
+
+Cook: It's so easy!
+
+[Shot of homepage]
+
+Narrator: Cuisine Machine is the all in one personal sous-chef that will make your cooking a snap.
+
