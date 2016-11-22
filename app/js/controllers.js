@@ -86,6 +86,8 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
                 $scope.goBackAStep();
             } else if (className == "nav_end") {
                 $scope.nextStep();
+            } else if (className == "read"){
+                $scope.readInstruction();
             } else if (className == "unit_conversion") {
                 $scope.openUnitConverter();
                 $scope.setUnitConversionSentence(sentence);
