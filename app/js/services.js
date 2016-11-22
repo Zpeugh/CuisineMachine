@@ -653,6 +653,9 @@ app.service('TimerService', function() {
     this.parseTimerSentence = function(){
         //TODO: Jackson: Get sentence that says "start a timer for x minutes/hours/seconds"
         //TODO: and set the proper time.
+        timer.time.seconds = 10
+        timer.time.minutes = 0
+        timer.time.hours = 0
     }
 
     this.resetTimer = function() {

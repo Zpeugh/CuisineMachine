@@ -159,7 +159,7 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
         $scope.timer.showTimePage = true;
         if (sentence && sentence != ""){
             console.log("GOT THE TIMER SENTENCE: "+ sentence);
-            $scope.timer.parseTimerSentence(sentence);
+            TimerService.parseTimerSentence(sentence);
             $scope.startTimer();
         } else{
             // Let the user interact
@@ -199,7 +199,7 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
     $scope.timerFinished = function() {
         var title = $scope.timer.title;
         $scope.timer.isActive = false;
-        TextToSpeechService.speak("The " + title + " timer is done.");
+        TextToSpeechService.speak("The timer is done.");
         $scope.timer = TimerService.resetTimer();
     }
 
