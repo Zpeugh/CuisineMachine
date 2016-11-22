@@ -84,8 +84,8 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
                 $scope.nextStep();
             } else if (className == "nav_prev") {
                 $scope.goBackAStep();
-            } else if (className == "nav_end") {
-                $scope.nextStep();
+            } else if (className == "close_window") {
+                $scope.closeWindow();
             } else if (className == "read"){
                 $scope.readInstruction();
             } else if (className == "unit_conversion") {
@@ -332,5 +332,34 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
             }
         }
     }, true);
+
+
+
+    // Closing windows
+    $scope.closeWindow = function(){
+            // <div ng-if="converter.show" ng-include src="'partials/widgets/unit-converter/conversion.html'"></div>
+            // <div ng-if="substitutioner.isActive" ng-include src="'partials/widgets/substitution/substitution.html'"></div>
+            // <div ng-if="listener.isActive" ng-include src="'partials/widgets/listener/listener.html'"></div>
+            // <div ng-if="listener.showText" ng-include src="'partials/widgets/listener/listener-text-box.html'"></div>
+            // <div ng-if="recipeService.filter.isActive
+        if($scope.converter.show){
+            $scope.closeUnitConverter();
+        }
+        if($scope.substitutioner.isActive){
+            $scope.closeSubstitutions();
+        }
+        if($scope.listener.isActive){
+            $scope.closeListenerTextBox();
+        }
+        if($scope.recipeService.filter.isActive){
+            $scope.closeFilter();
+        }
+        if($scope.timer.show){
+            $scope.closeTimer();
+        }
+    }
+
+
+
 
 });
