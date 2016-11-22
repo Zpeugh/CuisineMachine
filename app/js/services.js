@@ -23,7 +23,21 @@ app.service('RecipeService', function() {
     recipeService.filter.exclude.sentence = "";
     recipeService.filter.include = {};
     recipeService.filter.include.sentence = "";
+    recipeService.filter.category = {};
+    recipeService.filter.category.vegan = {};
+    recipeService.filter.category.vegetarian = {};
+    recipeService.filter.category.dairy = {};
+    recipeService.filter.category.nut = {};
 
+    recipeService.filter.category.vegan.include = ["soy milk", "rice milk", "almond milk", "coconut milk"];
+    recipeService.filter.category.vegan.exclude = ["chicken", "duck", "turkey", "bison", "beef", "calf", "goat", "ham", "pork", "bacon", "goose", "fish", "anchovy", "basa", "bass", "black cod/sablefish", "blowfish", "bluefish", "bombay duck", "bream", "brill", "butter fish", "catfish", "cod", "dogfish", "dorade", "eel", "flounder", "grouper", "haddock", "hake", "halibut", "herring", "ilish", "john dory", "kingfish", "lamprey", "lingcod", "mackerel", "mahi mahi", "monkfish", "mullet", "orange roughy", "parrott fish", "patagonian toothfish", "pike", "pilchard", "pollock", "pomfret", "pompano", "sablefish", "salmon", "sanddab", "particularly pacific sanddab", "sardine", "sea bass", "shad", "shark", "skate", "smelt", "snakehead", "snapper", "sole", "sprat", "sturgeon", "surimi", "swordfish", "tilapia", "tilefish", "trout", "tuna", "turbot", "wahoo", "whitefish", "whiting", "cockle", "cuttlefish", "loco", "mussel", "octopus", "oyster", "periwinkle", "scallop", "squid", "crab", "crayfish", "prawn", "lobster", "shrimp butter", "buttermilk", "cheese", "milk", "crème", "creme", "yogurt", "yoghurt", "custard", "cream", "crema"];
+    recipeService.filter.category.vegetarian.include = [];
+    recipeService.filter.category.vegetarian.exclude = ["chicken", "duck", "turkey", "bison", "beef", "calf", "goat", "ham", "pork", "bacon", "goose", "fish", "anchovy", "basa", "bass", "black cod/sablefish", "blowfish", "bluefish", "bombay duck", "bream", "brill", "butter fish", "catfish", "cod", "dogfish", "dorade", "eel", "flounder", "grouper", "haddock", "hake", "halibut", "herring", "ilish", "john dory", "kingfish", "lamprey", "lingcod", "mackerel", "mahi mahi", "monkfish", "mullet", "orange roughy", "parrott fish", "patagonian toothfish", "pike", "pilchard", "pollock", "pomfret", "pompano", "sablefish", "salmon", "sanddab", "particularly pacific sanddab", "sardine", "sea bass", "shad", "shark", "skate", "smelt", "snakehead", "snapper", "sole", "sprat", "sturgeon", "surimi", "swordfish", "tilapia", "tilefish", "trout", "tuna", "turbot", "wahoo", "whitefish", "whiting", "cockle", "cuttlefish", "loco", "mussel", "octopus", "oyster", "periwinkle", "scallop", "squid", "crab", "crayfish", "prawn", "lobster", "shrimp"];
+    recipeService.filter.category.dairy.include = ["soy milk", "rice milk", "almond milk", "coconut milk"];
+    recipeService.filter.category.dairy.exclude = ["butter", "buttermilk", "cheese", "milk", "crème", "creme", "yogurt", "yoghurt", "custard", "cream", "crema"];
+    recipeService.filter.category.nut.include = [];
+    recipeService.filter.category.nut.exclude = ["nut", "peanut", "walnut", "pecan", "almond", "cashew", "chestnut", "coconut", "hazelnut", "pistachio"];
+    
     this.getFilter = function() {
         return recipeService.filter
     }
@@ -108,6 +122,7 @@ app.service('RecipeService', function() {
         recipeService.filter.include.sentence = "";
     }
 
+
     this.includeIngredients = function() {
         filteredRecipes = [];
         for (var i = 0; i < recipeService.recipes.length - 1; i++) {
@@ -132,14 +147,50 @@ app.service('RecipeService', function() {
 
     this.excludeIngredients = function() {
         filteredRecipes = [];
+        var excludeList;
+        var isCategory;
+        switch(recipeService.filter.exclude.sentence.toLowerCase()) {
+            case "vegan":
+            case "animal products":
+                excludeList = recipeService.filter.category.vegan.exclude;
+                isCategory = true;
+                break;
+            case "vegetarian":
+            case "meat":
+                excludeList =  recipeService.filter.category.vegetarian.exclude;
+                isCategory = true;
+                break;
+            case "dairy":
+                excludeList = recipeService.filter.category.dairy.exclude;
+                isCategory = true;
+                break;
+            case "nut":
+            case "nuts":
+                excludeList = recipeService.filter.category.nut.exclude;
+                isCategory = true;
+                break;
+            default: 
+                excludeList = recipeService.filter.exclude.sentence;
+                isCategory = false;
+        }  
+        
         for (var i = 0; i < recipeService.recipes.length; i++) {
             recipe = recipeService.recipes[i];
             ingredientNotFound = true;
-            for (var j = 0; j < recipe.ingredients.length; j++) {
+            for (var j = 0; ingredientNotFound && j < recipe.ingredients.length; j++) {
                 ingredient = recipe.ingredients[j].toLowerCase();
-                if (ingredient.indexOf(recipeService.filter.exclude.sentence) != -1) {
-                    ingredientNotFound = false;
-                    break;
+                if(!isCategory) {
+                    if (ingredient.indexOf(excludeList) != -1) {
+                        ingredientNotFound = false;
+                      }
+                } else {
+                    for(var k = 0; k<excludeList.length; k++) {
+                        if (ingredient.indexOf(excludeList[k]) != -1) {
+                            ingredientNotFound = false;
+                            break;
+                        }
+                    }
+                    
                 }
             }
             if(ingredientNotFound){
@@ -828,13 +879,13 @@ app.service('SubstitutionService', function($http) {
 
     this.getSubstitutions = function(input) {
         // return "Try this";
-		var substitution = "Sorry I can't find a substitution";
-		for (term in substitutioner.substitutions){
-			if(input.includes(term)){
-				substitution = "You can substitute " + substitutioner.substitutions[term]['sub'] + " for " + substitutioner.substitutions[term]['amount'] + " of " + term;
-			}
-		}
-		substitutioner.result = substitution;
+    var substitution = "Sorry I can't find a substitution";
+    for (term in substitutioner.substitutions){
+      if(input.includes(term)){
+        substitution = "You can substitute " + substitutioner.substitutions[term]['sub'] + " for " + substitutioner.substitutions[term]['amount'] + " of " + term;
+      }
+    }
+    substitutioner.result = substitution;
         return substitutioner.result;
     }
 
