@@ -77,7 +77,7 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
                         $scope.documents = [];
                     });
             } else if (className == "timer") {
-                $scope.openTimer();
+                $scope.openTimer(sentence);
             } else if (className == "nav_start") {
                 $scope.startCooking();
             } else if (className == "nav_next") {
@@ -98,7 +98,6 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
     }
 
     $scope.selectRecipe = function(recipe) {
-        // $scope.recipeService.selectedRecipe = RecipeService.getSelectedRecipe();
         $location.path("/create");
         RecipeService.setSelectedRecipe(recipe);
         scrollTo("body", 50);
@@ -155,9 +154,17 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
 
     // TIMERS
 
-    $scope.openTimer = function() {
+    $scope.openTimer = function(sentence) {
         $scope.timer.show = true;
-        $scope.timer.showTitlePage = true;
+        $scope.timer.showTimePage = true;
+        if (sentence && sentence != ""){
+            console.log("GOT THE TIMER SENTENCE: "+ sentence);
+            $scope.timer.parseTimerSentence(sentence);
+            $scope.startTimer();
+        } else{
+            // Let the user interact
+            console.log("no timer sentence");
+        }
     }
 
     $scope.setTimerTitle = function(timerTitle) {
@@ -302,7 +309,11 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
         if (e.which == 192) {
             $scope.listenBasedOnLocation();
         } else if (e.which == 32 && $location.path() == "/create") {
-            $scope.listenBasedOnLocation();
+            if ($('widget-searchbox').is(":focus")){
+                return e.keyCode;
+            }else{
+                $scope.listenBasedOnLocation();
+            }
         }
     });
 
@@ -337,11 +348,6 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
 
     // Closing windows
     $scope.closeWindow = function(){
-            // <div ng-if="converter.show" ng-include src="'partials/widgets/unit-converter/conversion.html'"></div>
-            // <div ng-if="substitutioner.isActive" ng-include src="'partials/widgets/substitution/substitution.html'"></div>
-            // <div ng-if="listener.isActive" ng-include src="'partials/widgets/listener/listener.html'"></div>
-            // <div ng-if="listener.showText" ng-include src="'partials/widgets/listener/listener-text-box.html'"></div>
-            // <div ng-if="recipeService.filter.isActive
         if($scope.converter.show){
             $scope.closeUnitConverter();
         }
