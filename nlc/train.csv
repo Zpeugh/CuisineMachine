@@ -31,21 +31,17 @@ show me how to make it,nav_start
 let's make it,nav_start
 show me the cooking instructions,nav_start
 go,nav_start
-abort the recipe,nav_end
-stop,nav_end
-end,nav_end
-quit,nav_end
-close,nav_end
-cease,nav_end
-conclude,nav_end
-finish,nav_end
-terminate,nav_end
-abort,nav_end
-I want something different,nav_end
-give me a different one,nav_end
-give me something else,nav_end
-give me the instructions,nav_end
-find me another one,nav_end
+abort the recipe,close_window
+stop,close_window
+end,close_window
+quit,close_window
+close,close_window
+cease,close_window
+close window,close_window
+can you close the window,close_window
+finish,close_window
+terminate,close_window
+abort,close_window
 go to the previous step,nav_prev
 go back,nav_prev
 last step,nav_prev
