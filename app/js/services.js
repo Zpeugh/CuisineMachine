@@ -37,7 +37,7 @@ app.service('RecipeService', function() {
     recipeService.filter.category.dairy.exclude = ["butter", "buttermilk", "cheese", "milk", "crème", "creme", "yogurt", "yoghurt", "custard", "cream", "crema"];
     recipeService.filter.category.nut.include = [];
     recipeService.filter.category.nut.exclude = ["nut", "peanut", "walnut", "pecan", "almond", "cashew", "chestnut", "coconut", "hazelnut", "pistachio"];
-    
+
     this.getFilter = function() {
         return recipeService.filter
     }
@@ -169,11 +169,11 @@ app.service('RecipeService', function() {
                 excludeList = recipeService.filter.category.nut.exclude;
                 isCategory = true;
                 break;
-            default: 
+            default:
                 excludeList = recipeService.filter.exclude.sentence;
                 isCategory = false;
-        }  
-        
+        }
+
         for (var i = 0; i < recipeService.recipes.length; i++) {
             recipe = recipeService.recipes[i];
             ingredientNotFound = true;
@@ -190,7 +190,7 @@ app.service('RecipeService', function() {
                             break;
                         }
                     }
-                    
+
                 }
             }
             if(ingredientNotFound){
@@ -648,6 +648,14 @@ app.service('TimerService', function() {
             timer.time.totalSeconds--;
             refreshTimeFields();
         }
+    }
+
+    this.parseTimerSentence = function(){
+        //TODO: Jackson: Get sentence that says "start a timer for x minutes/hours/seconds"
+        //TODO: and set the proper time.
+        timer.time.seconds = 10
+        timer.time.minutes = 0
+        timer.time.hours = 0
     }
 
     this.resetTimer = function() {
