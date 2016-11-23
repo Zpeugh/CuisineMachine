@@ -55,8 +55,10 @@ app.get('/api/recipes', function(req, res) {
                         res.send("Error searching for documents: " + err);
                     } else {
                         console.log('Found ' + searchResponse.response.numFound + ' document(s).');
-                        for (var i = 0; i < 50; i++) {
-                            console.log('First document: ' + JSON.stringify(searchResponse.response.docs[i]["ranker.confidence"], null, 2));
+                        if(searchResponse.response.numFound > 0){
+                            for (var i = 0; i < 50; i++) {
+                                console.log('First document: ' + JSON.stringify(searchResponse.response.docs[i]["ranker.confidence"], null, 2));
+                            }
                         }
                         res.send(JSON.stringify(searchResponse.response.docs));
                     }
@@ -73,7 +75,6 @@ app.get('/api/substitutions', function(req, res) {
     console.log("Retrieving Substitutions");
     res.send(substitutions);
 });
-
 
 
 var buffer = "";
@@ -107,7 +108,7 @@ var authorization = new watson.AuthorizationV1({
 authorization.getToken(function (err, token) {
     if (!token) {
         console.log('error:', err);
-    } else {        
+    } else {
         sttToken = token;
         console.log(token);
     }
@@ -118,4 +119,3 @@ authorization.getToken(function (err, token) {
 app.get('/api/stt/gettoken',function(req, res){
     return res.json({ token: sttToken });
 });
-

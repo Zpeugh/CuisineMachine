@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="css/app.css"></link>
 
     <!-- Javascript Files -->
-    <!-- <script src="libs/bootstrap/dist/js/bootstrap.min.js"></script> -->
     <script src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script>
@@ -48,10 +47,6 @@
         <div ng-if="timer.isActive">
             <div id="timer-display" class="container">
                 <div class="row">
-                    <span ng-model="timer.title">{{timer.title}}</span>
-                </div>
-                <div class="row">
-                    <!-- TODO: add pause/start and an exit button -->
                     <span ng-model="timer.displayTime">{{timer.displayTime}}</span>
                 </div>
             </div>

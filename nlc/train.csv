@@ -11,17 +11,17 @@ I want to eat some sushi,recipes
 find me some Chinese food,recipes
 what are some recipes with lettuce and tomato,recipes
 do you know any Korean food recipes,recipes
-set a timer for 20 minutes,timer
-create a timer,timer
-new timer,timer
-could you setup a timer for 5 minutes,timer
-set a timer for 30 seconds,timer
-create a timer for an hour,timer
-remind me,timer
-set a timer for 2 hours,timer
-set an alarm,timer
 start a timer,timer
-notify me in 30 minutes,timer
+set a timer,timer
+create a timer,timer
+set a timer for 20 minutes,timer
+create a timer for 2 hours,timer
+create a timer for 30 seconds,timer
+set a timer for 1 minute,timer
+create a timer for 1 hour and 30 minutes,timer
+set a timer for 10 minutes and 15 seconds,timer
+start a timer for 90 minutes,timer
+start a timer for 45 minutes and 10 seconds,timer
 start the recipe,nav_start
 start,nav_start
 show me the instructions,nav_start
@@ -31,21 +31,17 @@ show me how to make it,nav_start
 let's make it,nav_start
 show me the cooking instructions,nav_start
 go,nav_start
-abort the recipe,nav_end
-stop,nav_end
-end,nav_end
-quit,nav_end
-close,nav_end
-cease,nav_end
-conclude,nav_end
-finish,nav_end
-terminate,nav_end
-abort,nav_end
-I want something different,nav_end
-give me a different one,nav_end
-give me something else,nav_end
-give me the instructions,nav_end
-find me another one,nav_end
+abort the recipe,close_window
+stop,close_window
+end,close_window
+quit,close_window
+close,close_window
+cease,close_window
+close window,close_window
+can you close the window,close_window
+finish,close_window
+terminate,close_window
+abort,close_window
 go to the previous step,nav_prev
 go back,nav_prev
 last step,nav_prev
