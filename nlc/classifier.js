@@ -9,7 +9,7 @@ var natural_language_classifier = new NaturalLanguageClassifierV1({
   username: "ea81bd9c-8673-474d-9db1-4eba97f2d14f"
 });
 
-var id = '8d6f17x127-nlc-37';
+var id = '8d6ce2x125-nlc-34';
 // 8d6f17x127-nlc-37
 
 // list all classfier
@@ -24,7 +24,7 @@ var id = '8d6f17x127-nlc-37';
 
 // check status of the classifier
 natural_language_classifier.status({
-  classifier_id: "8d6f17x127-nlc-37" },
+  classifier_id: "8d6ce2x125-nlc-34" },
   function(err, response) {
     if (err)
       console.log('error:', err);
@@ -46,7 +46,7 @@ natural_language_classifier.status({
 
 
 //
-// natural_language_classifier.remove({ classifier_id: '2a3230x98-nlc-3419' }, function(err, response) {
+// natural_language_classifier.remove({ classifier_id: '8d6f17x127-nlc-43' }, function(err, response) {
 //     if (err)
 //       console.log('error:', err);
 //     else
