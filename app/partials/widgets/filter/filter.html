@@ -7,6 +7,18 @@
             <h1 class="widget-title">Filter Recipes</h1>
         </div>
         <br />
+        
+        <div class="row widget-row">
+            <div class="col-sm-4">
+                <span class="widget-text">Include</span>
+            </div>
+            <div class="col-sm-4">
+                <input class="widget-searchbox-small" type="text" ng-model="filter.include.sentence"></input>
+            </div>
+            <div class="col-sm-4">
+                <button class="filter-add-button" ng-click="addInclusionFilter(filter.include.sentence)">add filter</input>
+            </div>
+        </div>
         <div class="row widget-row">
             <div class="col-sm-4">
                 <span class="widget-text">Exclude</span>
@@ -19,15 +31,10 @@
             </div>
         </div>
         <div class="row widget-row">
-            <div class="col-sm-4">
-                <span class="widget-text">Include</span>
-            </div>
-            <div class="col-sm-4">
-                <input class="widget-searchbox-small" type="text" ng-model="filter.include.sentence"></input>
-            </div>
-            <div class="col-sm-4">
-                <button class="filter-add-button" ng-click="addInclusionFilter(filter.include.sentence)">add filter</input>
-            </div>
+          <img ng-click="addExlusionFilter('vegan')" class="clickable" src="../images/vegan.png" />
+          <img ng-click="addExlusionFilter('vegetarian')" class="clickable" src="../images/vegetarian.png" />
+          <img ng-click="addExlusionFilter('dairy')" class="clickable" src="../images/dairy.png" />
+          <img ng-click="addExlusionFilter('nut')" class="clickable" src="../images/nut.png" />
         </div>
     </div>
 </div>
