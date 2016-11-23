@@ -309,7 +309,10 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
         if (e.which == 192) {
             $scope.listenBasedOnLocation();
         } else if (e.which == 32 && $location.path() == "/create") {
-            if ($('widget-searchbox').is(":focus")){
+            if ($('#widget-searchbox').is(":focus")){
+                return e.keyCode;
+            }
+            if ($('#widget-number-field').is(":focus")){
                 return e.keyCode;
             }else{
                 $scope.listenBasedOnLocation();
@@ -335,7 +338,7 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
     // Add watcher to result.listener text, and classify result once it changes
     $scope.$watch("listener.results", function(newValue, oldValue, scope) {
         console.log("Result changed from '" + oldValue + "' to '" + newValue + "'");
-        if (!$scope.listener.triggeredWatch){
+         if (!$scope.listener.triggeredWatch){
             if (newValue != '' && newValue != undefined && newValue != oldValue) {
                 console.log("Classifying: " + newValue);
                 $scope.listener.triggeredWatch = true;
