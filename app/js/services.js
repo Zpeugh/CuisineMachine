@@ -798,11 +798,10 @@ app.service('ListenerService', function($http) {
     var listener = {};
     listener.isActive = false;
     listener.showText = false;
-    listener.recording = false;
-    listener.processing = false;
     listener.results = "";
     listener.triggeredWatch = false;
     listener.token = {};
+    listener.audioCtx = new AudioContext();
     listener.recording = false;
     listener.speechProcessing = false;
     listener.watsonSocket = {};
@@ -888,6 +887,7 @@ app.service('ListenerService', function($http) {
             console.log("successfully captured microphone");
             var context = new AudioContext();
             var mediaStreamSource = context.createMediaStreamSource(stream);
+            
             listener.recorder = new Recorder(mediaStreamSource);
             listener.recorder.record();
         }
@@ -985,7 +985,7 @@ app.service('ListenerService', function($http) {
             setupWebsocket();
         }
 
-        listener.recording = !listener.recording
+        listener.recording = !listener.recording;
     };
 
 });
