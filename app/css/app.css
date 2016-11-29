@@ -149,6 +149,14 @@ img#widget-next-arrow{
     text-align: left;
 }
 
+.filter-category:hover{
+    cursor: pointer;
+}
+
+.filter-category{
+    padding: 16px 16px 0px 16px;
+}
+
 /************ Reusable classes/ids ************/
 
 .clickable:hover{
