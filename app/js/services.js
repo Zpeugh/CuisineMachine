@@ -318,7 +318,7 @@ app.service('UnitConversionParser', function() {
         } else {
             var words = "ERROR";
         }
-		
+
 
         var srcID;
         var ones = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
@@ -654,24 +654,26 @@ app.service('TimerService', function() {
     }
 
     this.parseTimerSentence = function(sentence){
-		
+
 		sentence = sentence.toLowerCase();
+		sentence = sentence.trim();
         if (sentence.length > 0 && sentence.includes(" ")) {
             var words = sentence.split(' ');
             var TargID;
         } else {
             var words = "ERROR";
         }
-		
+
 		timer.time.seconds = 0
         timer.time.minutes = 0
         timer.time.hours = 0
-		
+
 		var timeUnits = ["second","minute","hour","seconds","minutes","hours"];
 		var begin = 0;
 		var end = 0;
 		var val = 0;
 		var currentWord = words.indexOf("for")+1;
+
 		while(currentWord < words.length){
 			begin = currentWord;
 			while(timeUnits.indexOf(words[currentWord]) == -1){
@@ -689,16 +691,16 @@ app.service('TimerService', function() {
 			else if(timeUnits.indexOf(words[currentWord]) % 3 == 2){
 				timer.time.hours = val
 			}
-			
+
 			currentWord++;
 			if(words[currentWord] == "and"){
 				currentWord++;
 			}
 		}
-		
+        console.log("finished");
 
     }
-	
+
 	function numParse(textArray) {
         var ones = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
         var teens = ["null", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
