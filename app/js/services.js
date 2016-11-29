@@ -103,7 +103,9 @@ app.service('RecipeService', function() {
     }
 
     this.clearRecipes = function() {
-        recipes = [];
+        recipeService.selectedRecipe = {};
+        recipeService.recipes = [];
+        recipeService.recipeRows = [];
     }
 
     this.setSelectedRecipe = function(recipe) {
@@ -316,6 +318,7 @@ app.service('UnitConversionParser', function() {
         } else {
             var words = "ERROR";
         }
+		
 
         var srcID;
         var ones = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
@@ -650,12 +653,126 @@ app.service('TimerService', function() {
         }
     }
 
-    this.parseTimerSentence = function(){
-        //TODO: Jackson: Get sentence that says "start a timer for x minutes/hours/seconds"
-        //TODO: and set the proper time.
-        timer.time.seconds = 10
+    this.parseTimerSentence = function(sentence){
+		
+		sentence = sentence.toLowerCase();
+        if (sentence.length > 0 && sentence.includes(" ")) {
+            var words = sentence.split(' ');
+            var TargID;
+        } else {
+            var words = "ERROR";
+        }
+		
+		timer.time.seconds = 0
         timer.time.minutes = 0
         timer.time.hours = 0
+		
+		var timeUnits = ["second","minute","hour","seconds","minutes","hours"];
+		var begin = 0;
+		var end = 0;
+		var val = 0;
+		var currentWord = words.indexOf("for")+1;
+		while(currentWord < words.length){
+			begin = currentWord;
+			while(timeUnits.indexOf(words[currentWord]) == -1){
+				currentWord++;
+			}
+			end = currentWord;
+			numStr = words.slice(begin,end);
+			var val = numParse(numStr);
+			if(timeUnits.indexOf(words[currentWord]) % 3 == 0){
+				timer.time.seconds = val
+			}
+			else if(timeUnits.indexOf(words[currentWord]) % 3 == 1){
+				timer.time.minutes = val
+			}
+			else if(timeUnits.indexOf(words[currentWord]) % 3 == 2){
+				timer.time.hours = val
+			}
+			
+			currentWord++;
+			if(words[currentWord] == "and"){
+				currentWord++;
+			}
+		}
+		
+
+    }
+	
+	function numParse(textArray) {
+        var ones = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+        var teens = ["null", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
+        var tens = ["null", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seven", "eight", "nine"];
+        var mag = ["null", "null", "hundred"];
+        var misc = ["a", "point", "minus", "negative", "and"];
+
+        var word = 0;
+        var number = 0;
+        var value;
+        var place;
+        var sign = 1;
+
+
+        if (textArray.length == 0 || (textArray.length == 1 && (textArray[0] === ("a") || textArray[0] === ("an")))) {
+            number = 1;
+        } else if (textArray.length == 1 && !isNaN(textArray[0])) {
+            number = parseFloat(textArray[0]);
+        } else if (textArray.indexOf("half") != -1) {
+            number = 0.5
+        } else if (textArray.indexOf("quarter") != -1) {
+            number = 0.25
+        } else if (textArray.indexOf("eighth") != -1) {
+            number = 0.125
+        } else {
+            while (word < textArray.length) {
+                value = 0;
+                place = 0;
+                if (ones.indexOf(textArray[word]) != -1) {
+                    value = ones.indexOf(textArray[word]);
+                    word++;
+                    if (mag.indexOf(textArray[word]) != -1) {
+                        place = Math.pow(10, mag.indexOf(textArray[word]));
+                    } else {
+                        place = 1;
+                    }
+                    word++;
+                    if (word < textArray.length && textArray[word] === ("and")) {
+                        word++;
+                    }
+
+                } else if (teens.indexOf(textArray[word]) != -1) {
+                    value = teens.indexOf(textArray[word]) + 10;
+                    word++;
+                    if (mag.indexOf(textArray[word]) != -1) {
+                        place = Math.pow(10, mag.indexOf(textArray[word]));
+                    } else {
+                        place = 1;
+                    }
+                    word++;
+                } else if (tens.indexOf(textArray[word]) != -1) {
+                    value = tens.indexOf(textArray[word]);
+                    place = 10;
+                    word++;
+                } else if (textArray[word] === ("a")) {
+                    value = 1;
+                    if (mag.indexOf(textArray[word]) != -1) {
+                        place = Math.pow(10, mag.indexOf(textArray[word]));
+                    } else {
+                        place = 1;
+                    }
+                    word++;
+                } else if (textArray[word] === ("minus") || textArray[word] === ("negative")) {
+                    sign = -1;
+                    word++;
+                } else {
+                    word++;
+                }
+
+                number += sign * value * place;
+            }
+        }
+
+        return number;
     }
 
     this.resetTimer = function() {
