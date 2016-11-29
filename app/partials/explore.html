@@ -15,6 +15,6 @@
     <br />
     <span id="listening-text" ng-show="listener.recording" ng-click="triggerRecorder()" >Listening . . .</span>
     <span id="listening-text" ng-show="listener.speechProcessing" ng-click="triggerRecorder()" >Thinking . . .</span>
-    <span id="listening-text" ng-show="!listener.speechProcessing" ng-click="triggerRecorder()" >Click For Voice Search</span>
+    <span id="listening-text" ng-show="!listener.speechProcessing && !listener.recording" ng-click="triggerRecorder()" >Click For Voice Search</span>
     <br />
 </div>
