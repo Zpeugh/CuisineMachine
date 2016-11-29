@@ -110,7 +110,7 @@ authorization.getToken(function (err, token) {
         console.log('error:', err);
     } else {
         sttToken = token;
-        console.log(token);
+        //console.log(token);
     }
 });
 
