@@ -456,7 +456,7 @@ app.service('UnitConversionParser', function() {
     function numParse(textArray) {
         var ones = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
         var teens = ["null", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
-        var tens = ["null", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seven", "eight", "nine"];
+        var tens = ["null", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
         var mag = ["null", "null", "hundred"];
         var misc = ["a", "point", "minus", "negative", "and"];
 
@@ -656,6 +656,7 @@ app.service('TimerService', function() {
     this.parseTimerSentence = function(sentence){
 		
 		sentence = sentence.toLowerCase();
+		sentence = sentence.trim();
         if (sentence.length > 0 && sentence.includes(" ")) {
             var words = sentence.split(' ');
             var TargID;
@@ -663,18 +664,21 @@ app.service('TimerService', function() {
             var words = "ERROR";
         }
 		
-		timer.time.seconds = 0
-        timer.time.minutes = 0
-        timer.time.hours = 0
+		timer.time.seconds = 0;
+        timer.time.minutes = 0;
+        timer.time.hours = 0;
 		
 		var timeUnits = ["second","minute","hour","seconds","minutes","hours"];
+		var numWords = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine","ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety","0","2","3","4","5","6","7","8","9"];
 		var begin = 0;
 		var end = 0;
 		var val = 0;
-		var currentWord = words.indexOf("for")+1;
+		var currentWord = 0;
+		while(currentWord <= words.length && numWords.indexOf(words[currentWord]) == -1){
+		currentWord++;}
 		while(currentWord < words.length){
 			begin = currentWord;
-			while(timeUnits.indexOf(words[currentWord]) == -1){
+			while(currentWord <= words.length && timeUnits.indexOf(words[currentWord]) == -1){
 				currentWord++;
 			}
 			end = currentWord;
@@ -702,7 +706,7 @@ app.service('TimerService', function() {
 	function numParse(textArray) {
         var ones = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
         var teens = ["null", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
-        var tens = ["null", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seven", "eight", "nine"];
+        var tens = ["null", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
         var mag = ["null", "null", "hundred"];
         var misc = ["a", "point", "minus", "negative", "and"];
 
