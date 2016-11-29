@@ -103,7 +103,9 @@ app.service('RecipeService', function() {
     }
 
     this.clearRecipes = function() {
-        recipes = [];
+        recipeService.selectedRecipe = {};
+        recipeService.recipes = [];
+        recipeService.recipeRows = [];
     }
 
     this.setSelectedRecipe = function(recipe) {

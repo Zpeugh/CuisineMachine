@@ -11,17 +11,17 @@ I want to eat some sushi,recipes
 find me some Chinese food,recipes
 what are some recipes with lettuce and tomato,recipes
 do you know any Korean food recipes,recipes
-set a timer for 20 minutes,timer
-create a timer,timer
-new timer,timer
-could you setup a timer for 5 minutes,timer
-set a timer for 30 seconds,timer
-create a timer for an hour,timer
-remind me,timer
-set a timer for 2 hours,timer
-set an alarm,timer
 start a timer,timer
-notify me in 30 minutes,timer
+set a timer,timer
+create a timer,timer
+set a timer for 20 minutes,timer
+create a timer for 2 hours,timer
+create a timer for 30 seconds,timer
+set a timer for 1 minute,timer
+create a timer for 1 hour and 30 minutes,timer
+set a timer for 10 minutes and 15 seconds,timer
+start a timer for 90 minutes,timer
+start a timer for 45 minutes and 10 seconds,timer
 start the recipe,nav_start
 start,nav_start
 show me the instructions,nav_start
