@@ -88,6 +88,9 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
                 $scope.closeWindow();
             } else if (className == "read"){
                 $scope.readInstruction();
+            } else if (className == "substitute"){
+                $scope.setsubstitutionSentence(sentence);
+                $scope.openSubstitutions();
             } else if (className == "unit_conversion") {
                 $scope.openUnitConverter();
                 $scope.setUnitConversionSentence(sentence);
