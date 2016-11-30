@@ -85,7 +85,7 @@ app.service('RecipeService', function() {
 
     this.setRecipeRows = function() {
         recipeService.recipeRows = [];
-        if (recipeService.recipes.length <= 3){
+        if (recipeService.recipes.length <= 3) {
             row = [];
             for (var i = 0; i < recipeService.recipes.length; i++) {
                 row.push(recipeService.recipes[i]);
@@ -137,7 +137,7 @@ app.service('RecipeService', function() {
                     console.log("" + i + "has ingredient");
                 }
             }
-            if (included){
+            if (included) {
                 console.log("pushing ");
                 console.log(recipe);
                 filteredRecipes.push(recipe);
@@ -151,7 +151,7 @@ app.service('RecipeService', function() {
         filteredRecipes = [];
         var excludeList;
         var isCategory;
-        switch(recipeService.filter.exclude.sentence.toLowerCase()) {
+        switch (recipeService.filter.exclude.sentence.toLowerCase()) {
             case "vegan":
             case "animal products":
                 excludeList = recipeService.filter.category.vegan.exclude;
@@ -159,7 +159,7 @@ app.service('RecipeService', function() {
                 break;
             case "vegetarian":
             case "meat":
-                excludeList =  recipeService.filter.category.vegetarian.exclude;
+                excludeList = recipeService.filter.category.vegetarian.exclude;
                 isCategory = true;
                 break;
             case "dairy":
@@ -181,12 +181,12 @@ app.service('RecipeService', function() {
             ingredientNotFound = true;
             for (var j = 0; ingredientNotFound && j < recipe.ingredients.length; j++) {
                 ingredient = recipe.ingredients[j].toLowerCase();
-                if(!isCategory) {
+                if (!isCategory) {
                     if (ingredient.indexOf(excludeList) != -1) {
                         ingredientNotFound = false;
-                      }
+                    }
                 } else {
-                    for(var k = 0; k<excludeList.length; k++) {
+                    for (var k = 0; k < excludeList.length; k++) {
                         if (ingredient.indexOf(excludeList[k]) != -1) {
                             ingredientNotFound = false;
                             break;
@@ -195,7 +195,7 @@ app.service('RecipeService', function() {
 
                 }
             }
-            if(ingredientNotFound){
+            if (ingredientNotFound) {
                 filteredRecipes.push(recipe)
             }
         }
@@ -456,7 +456,7 @@ app.service('UnitConversionParser', function() {
     function numParse(textArray) {
         var ones = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
         var teens = ["null", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
-        var tens = ["null", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seven", "eight", "nine"];
+        var tens = ["null", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
         var mag = ["null", "null", "hundred"];
         var misc = ["a", "point", "minus", "negative", "and"];
 
@@ -653,10 +653,10 @@ app.service('TimerService', function() {
         }
     }
 
-    this.parseTimerSentence = function(sentence){
+    this.parseTimerSentence = function(sentence) {
 
-		sentence = sentence.toLowerCase();
-		sentence = sentence.trim();
+        sentence = sentence.toLowerCase();
+        sentence = sentence.trim();
         if (sentence.length > 0 && sentence.includes(" ")) {
             var words = sentence.split(' ');
             var TargID;
@@ -664,47 +664,47 @@ app.service('TimerService', function() {
             var words = "ERROR";
         }
 
-		timer.time.seconds = 0
-        timer.time.minutes = 0
-        timer.time.hours = 0
+        timer.time.seconds = 0;
+        timer.time.minutes = 0;
+        timer.time.hours = 0;
 
-		var timeUnits = ["second","minute","hour","seconds","minutes","hours"];
-		var begin = 0;
-		var end = 0;
-		var val = 0;
-		var currentWord = words.indexOf("for")+1;
+        var timeUnits = ["second", "minute", "hour", "seconds", "minutes", "hours"];
+        var numWords = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety", "0", "2", "3", "4", "5", "6", "7", "8", "9"];
+        var begin = 0;
+        var end = 0;
+        var val = 0;
 
-		while(currentWord < words.length){
-			begin = currentWord;
-			while(timeUnits.indexOf(words[currentWord]) == -1){
-				currentWord++;
-			}
-			end = currentWord;
-			numStr = words.slice(begin,end);
-			var val = numParse(numStr);
-			if(timeUnits.indexOf(words[currentWord]) % 3 == 0){
-				timer.time.seconds = val
-			}
-			else if(timeUnits.indexOf(words[currentWord]) % 3 == 1){
-				timer.time.minutes = val
-			}
-			else if(timeUnits.indexOf(words[currentWord]) % 3 == 2){
-				timer.time.hours = val
-			}
+        var currentWord = 0;
+        while (currentWord <= words.length && numWords.indexOf(words[currentWord]) == -1) {
+            currentWord++;
+        }
+        while (currentWord < words.length) {
+            begin = currentWord;
+            while (currentWord <= words.length && timeUnits.indexOf(words[currentWord]) == -1) {
+                currentWord++;
+            }
+            end = currentWord;
+            numStr = words.slice(begin, end);
+            var val = numParse(numStr);
+            if (timeUnits.indexOf(words[currentWord]) % 3 == 0) {
+                timer.time.seconds = val
+            } else if (timeUnits.indexOf(words[currentWord]) % 3 == 1) {
+                timer.time.minutes = val
+            } else if (timeUnits.indexOf(words[currentWord]) % 3 == 2) {
+                timer.time.hours = val
+            }
 
-			currentWord++;
-			if(words[currentWord] == "and"){
-				currentWord++;
-			}
-		}
-        console.log("finished");
-
+            currentWord++;
+            if (words[currentWord] == "and") {
+                currentWord++;
+            }
+        }
     }
 
-	function numParse(textArray) {
+    function numParse(textArray) {
         var ones = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
         var teens = ["null", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
-        var tens = ["null", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seven", "eight", "nine"];
+        var tens = ["null", "ten", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
         var mag = ["null", "null", "hundred"];
         var misc = ["a", "point", "minus", "negative", "and"];
 
@@ -887,7 +887,7 @@ app.service('ListenerService', function($http) {
             console.log("successfully captured microphone");
             var context = new AudioContext();
             var mediaStreamSource = context.createMediaStreamSource(stream);
-            
+
             listener.recorder = new Recorder(mediaStreamSource);
             listener.recorder.record();
         }
@@ -953,7 +953,7 @@ app.service('ListenerService', function($http) {
                     setSpeechResults("");
                 }
                 listener.watsonSocket.close();
-            } else{
+            } else {
                 console.log("No results in data");
             }
         };
@@ -1006,13 +1006,13 @@ app.service('SubstitutionService', function($http) {
 
     this.getSubstitutions = function(input) {
         // return "Try this";
-    var substitution = "Sorry I can't find a substitution";
-    for (term in substitutioner.substitutions){
-      if(input.includes(term)){
-        substitution = "You can substitute " + substitutioner.substitutions[term]['sub'] + " for " + substitutioner.substitutions[term]['amount'] + " of " + term;
-      }
-    }
-    substitutioner.result = substitution;
+        var substitution = "Sorry I can't find a substitution";
+        for (term in substitutioner.substitutions) {
+            if (input.includes(term)) {
+                substitution = "You can substitute " + substitutioner.substitutions[term]['sub'] + " for " + substitutioner.substitutions[term]['amount'] + " of " + term;
+            }
+        }
+        substitutioner.result = substitution;
         return substitutioner.result;
     }
 
@@ -1020,7 +1020,7 @@ app.service('SubstitutionService', function($http) {
         return substitutioner;
     }
 
-    this.clearQuery = function(){
+    this.clearQuery = function() {
         substitutioner.sentence = "";
     }
 

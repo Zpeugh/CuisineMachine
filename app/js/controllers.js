@@ -163,6 +163,7 @@ app.controller("cuisineMachineController", function($scope, $http, $rootScope, $
         if (sentence && sentence != ""){
             console.log("GOT THE TIMER SENTENCE: "+ sentence);
             TimerService.parseTimerSentence(sentence);
+			console.log("finished parsing");
             $scope.startTimer();
         } else{
             // Let the user interact
