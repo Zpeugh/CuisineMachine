@@ -14,13 +14,13 @@ Narrator: Well the new Cuisine Machine personal chef assistant, working in the k
 
 [Cook walks up to laptop, camera behind laptop]
 
-Narrator: Search for recipes with a simple voice command
+Cook: Find me a recipe with steak and potatoes
 
 [screen view, click on voice button]
 
-Cook: Find me a Summer recipe with chicken and lemons
-
 [recipes appear on screen]
+
+Narrator: Search for recipes with a simple voice command
 
 [Shot of cook]
 
@@ -46,7 +46,7 @@ Cuisine Machine: {Read off instruction with quantity of ingredients}
 
 [shot of cook]
 
-Cook: Shoot, I'm out of [ingredient].
+Cook: Shoot, I'm out of oil.
 
 Narrator: Not to worry, Cuisine Machine can offer substitutions for any ingredients you might not have.
 
@@ -58,15 +58,13 @@ Cook: What's something I can use instead of [ingredient]
 
 [Shot of cook]
 
-Cook: Hmm... I don't have any tablespoons. Cuisine Machine, how many teaspoons are in 3 tablespoons?
+Cook: Hmm... I don't have any tablespoons. [clicks space bar] how many teaspoons are in 3 tablespoons?
 
 [Shot of conversion unit with results]
 
-[Shot of cook]
+[Shot of cook with teaspoons]
 
 Cook: Perfect!
-
-[Cook goes to grab teaspoons]
 
 Cook: Alright, what's next?
 
@@ -78,13 +76,9 @@ Narrator: Start a timer to keep track of your dish.
 
 [Shot of cook putting dish in oven, then walking over to laptop]
 
-Cook: Start a timer.
+Cook: Start a timer for .
 
 [Screen view, enter desired time]
-
-[Cut to timer going off and cook taking food out of oven]
-
-Cook: It's so easy!
 
 [Shot of homepage]
 
